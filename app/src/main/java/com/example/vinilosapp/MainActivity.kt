@@ -4,10 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksViewModel
 import com.example.vinilosapp.navigation.AppNavigation
+import com.example.vinilosapp.ui.components.ScreenWrapper
+import com.example.vinilosapp.ui.screens.LoginScreen
 import com.example.vinilosapp.ui.theme.VinilosAppTheme
+import com.example.vinilosapp.utils.TipoUsuario
+import com.example.vinilosapp.viewmodel.AppViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,10 +23,25 @@ class MainActivity : ComponentActivity() {
         Mavericks.initialize(this)
         enableEdgeToEdge()
         setContent {
-            VinilosAppTheme {
-                val navController = rememberNavController()
+            MainContent()
+        }
+    }
+}
+
+@Composable
+fun MainContent() {
+    val appViewModel: AppViewModel = mavericksViewModel()
+    val state by appViewModel.collectAsState()
+    val currentTipoUsuario: TipoUsuario? = state.tipoUsuario
+    VinilosAppTheme {
+        val navController = rememberNavController()
+        appViewModel.setNavController(navController)
+        if (currentTipoUsuario != null) {
+            ScreenWrapper {
                 AppNavigation(navController)
             }
+        } else {
+            LoginScreen()
         }
     }
 }

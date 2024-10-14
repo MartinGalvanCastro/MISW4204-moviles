@@ -16,15 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.compose.mavericksViewModel
-import com.example.vinilosapp.navigation.Routes
 import com.example.vinilosapp.ui.components.AppLogo
 import com.example.vinilosapp.viewmodel.AppViewModel
 
 @Composable
-fun LoginScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun LoginScreen(modifier: Modifier = Modifier) {
     val appViewModel: AppViewModel = mavericksViewModel()
 
     Column(
@@ -47,7 +44,6 @@ fun LoginScreen(navController: NavController, modifier: Modifier = Modifier) {
         OutlinedButton(
             onClick = {
                 appViewModel.loginInvitado()
-                navController.navigate(Routes.ALBUMES.route)
             },
         ) {
             Text("Invitado")
@@ -58,6 +54,5 @@ fun LoginScreen(navController: NavController, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    val navController = rememberNavController()
-    LoginScreen(navController)
+    LoginScreen()
 }

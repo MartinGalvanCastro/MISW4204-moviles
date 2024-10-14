@@ -17,14 +17,17 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksViewModel
 import com.example.vinilosapp.navigation.Routes
 import com.example.vinilosapp.ui.theme.VinilosAppTheme
+import com.example.vinilosapp.viewmodel.AppViewModel
 
 data class NavbarItem(
     val label: String,
@@ -34,35 +37,39 @@ data class NavbarItem(
 )
 
 @Composable
-fun Navbar(navController: NavController) {
+fun Navbar() {
+    val appViewModel: AppViewModel = mavericksViewModel()
+    val state by appViewModel.collectAsState()
+    val navController = state.navController
+
     val items = listOf(
         NavbarItem(
             label = "Álbumes",
             outlinedIcon = Icons.Outlined.MusicNote,
             filledIcon = Icons.Filled.MusicNote,
-            route = Routes.ALBUMES.route,
+            route = Routes.ALBUMS_SCREEN,
         ),
         NavbarItem(
             label = "Artistas",
             outlinedIcon = Icons.Outlined.Mic,
             filledIcon = Icons.Filled.Mic,
-            route = Routes.ARTISTAS.route,
+            route = Routes.ARTISTAS_SCREEN,
         ),
         NavbarItem(
             label = "Bandas",
             outlinedIcon = Icons.Outlined.Groups,
             filledIcon = Icons.Filled.Groups,
-            route = Routes.BANDAS.route,
+            route = Routes.BANDAS_SCREEN,
         ),
         NavbarItem(
             label = "Coleccionistas",
             outlinedIcon = Icons.Outlined.Person,
             filledIcon = Icons.Filled.Person,
-            route = Routes.COLECCIONISTAS.route,
+            route = Routes.COLECCIONISTAS_SCREEN,
         ),
     )
 
-    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val currentRoute = navController?.currentBackStackEntryAsState()?.value?.destination?.route
 
     NavigationBar {
         items.forEach { item ->
@@ -79,7 +86,7 @@ fun Navbar(navController: NavController) {
                 selected = isSelected,
                 onClick = {
                     if (!isSelected) {
-                        navController.navigate(item.route) {
+                        navController?.navigate(item.route) {
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
                             }
@@ -102,7 +109,7 @@ fun NavbarPreview() {
     VinilosAppTheme {
         Scaffold(
             bottomBar = {
-                Navbar(navController = navController)
+                Navbar()
             },
         ) {
             Box(modifier = Modifier.padding(it)) {
