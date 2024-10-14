@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -49,7 +50,22 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.text.google.fonts)
+
+    implementation(libs.coil.compose)
+    implementation(libs.coil)
+    implementation(libs.coil.svg)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.android.mavericks)
+    implementation(libs.mavericks.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material.icons.extended)
+
     testImplementation(libs.junit)
+    testImplementation(libs.coil.test)
+    testImplementation(libs.mvrx.testing)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

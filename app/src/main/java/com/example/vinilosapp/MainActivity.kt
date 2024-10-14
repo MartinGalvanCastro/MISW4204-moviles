@@ -4,44 +4,44 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.getValue
+import androidx.navigation.compose.rememberNavController
+import com.airbnb.mvrx.Mavericks
+import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksViewModel
+import com.example.vinilosapp.navigation.AppNavigation
+import com.example.vinilosapp.ui.components.ScreenWrapper
+import com.example.vinilosapp.ui.screens.LoginScreen
 import com.example.vinilosapp.ui.theme.VinilosAppTheme
+import com.example.vinilosapp.utils.TipoUsuario
+import com.example.vinilosapp.viewmodel.AppViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Mavericks.initialize(this)
         enableEdgeToEdge()
         setContent {
-            VinilosAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            MainContent()
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
+fun MainContent() {
+    val appViewModel: AppViewModel = mavericksViewModel()
+    val state by appViewModel.collectAsState()
+    val currentTipoUsuario: TipoUsuario? = state.tipoUsuario
     VinilosAppTheme {
-        Greeting("Android")
+        val navController = rememberNavController()
+        appViewModel.setNavController(navController)
+        if (currentTipoUsuario != null) {
+            ScreenWrapper {
+                AppNavigation(navController)
+            }
+        } else {
+            LoginScreen()
+        }
     }
 }
