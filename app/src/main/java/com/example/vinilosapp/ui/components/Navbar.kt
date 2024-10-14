@@ -17,8 +17,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +35,6 @@ data class NavbarItem(
 
 @Composable
 fun Navbar(navController: NavController) {
-    // Define the navbar items with route information
     val items = listOf(
         NavbarItem(
             label = "Álbumes",
@@ -65,7 +62,6 @@ fun Navbar(navController: NavController) {
         ),
     )
 
-    // Get the current route from the NavController
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     NavigationBar {
@@ -100,10 +96,8 @@ fun Navbar(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun NavbarPreview() {
-    val navController = rememberNavController() // Simulate a NavController for the preview
-
-    // Mock the back stack entry for preview purposes (e.g., simulate that we are on the "albumes" route)
-    navController.navigate("albumes") // Mock navigation to a specific route for the preview
+    val navController = rememberNavController()
+    navController.navigate("albumes")
 
     VinilosAppTheme {
         Scaffold(

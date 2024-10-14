@@ -53,14 +53,13 @@ fun TopBar(onBackClick: () -> Unit = {}) {
 fun TopBarPreview() {
     VinilosAppTheme {
         Scaffold(
-            topBar = { }, // Include TopBar inside Scaffold
+            topBar = { },
         ) { innerPadding ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
             ) {
-                // Placeholder content to show below the AppBar
                 Text("Content goes here", modifier = Modifier.padding(16.dp))
             }
         }

@@ -17,12 +17,10 @@ fun AppNavigation(navController: NavHostController) {
         navController = navController,
         startDestination = Routes.LOGIN.route,
     ) {
-        // Handle LoginScreen separately without ScreenWrapper
         composable(Routes.LOGIN.route) {
             LoginScreen(navController = navController)
         }
 
-        // Wrap all other screens inside ScreenWrapper
         composable(Routes.ALBUMES.route) {
             ScreenWrapper(navController = navController) {
                 AlbumesScreen()
