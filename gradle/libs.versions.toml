@@ -1,5 +1,11 @@
 [versions]
 agp = "8.7.0"
+coilCompose = "3.0.0-rc01"
+coilComposeAndroid = "3.0.0-rc01"
+coilSvg = "3.0.0-rc01"
+coilTest = "3.0.0-rc01"
+coilVersion = "3.0.0-rc01"
+coreSplashscreen = "1.0.1"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -8,12 +14,26 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.2"
 composeBom = "2024.04.01"
+materialIconsExtended = "1.7.3"
+mavericksVersion = "2.7.0"
+navigationCompose = "2.8.2"
 uiTextGoogleFonts = "1.7.3"
+coil = "3.0.0-rc01"
+volley = "1.2.1"
+junitJupiter = "5.8.1"
 
 
 [libraries]
+android-mavericks = { module = "com.airbnb.android:mavericks", version.ref = "mavericksVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coilVersion" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coilSvg" }
+coil-test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coilTest" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -27,6 +47,9 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+mavericks-compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericksVersion" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
