@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.spotless) apply false
     alias(libs.plugins.githooks) apply false
+    alias(libs.plugins.dotenv) apply false
+    alias(libs.plugins.openapi.generator) apply false
 }
 
 subprojects {

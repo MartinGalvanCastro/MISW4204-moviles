@@ -7,4 +7,5 @@ import com.example.vinilosapp.utils.TipoUsuario
 data class AppState(
     val tipoUsuario: TipoUsuario? = null,
     val navController: NavController? = null,
+    val nombreUsuario: String? = null,
 ) : MavericksState

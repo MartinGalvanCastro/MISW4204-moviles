@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.vinilosapp.ui.screens.AlbumDetalleScreen
 import com.example.vinilosapp.ui.screens.AlbumesScreen
 import com.example.vinilosapp.ui.screens.ArtistasScreen
 import com.example.vinilosapp.ui.screens.BandasScreen
@@ -26,6 +27,9 @@ fun AppNavigation(navController: NavHostController) {
         }
         composable(Routes.COLECCIONISTAS_SCREEN) {
             ColeccionistasScreen()
+        }
+        composable(Routes.ALBUM_DETALLE) {
+            AlbumDetalleScreen()
         }
     }
 }
