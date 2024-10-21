@@ -6,4 +6,5 @@ object Routes {
     const val ARTISTAS_SCREEN = "artistasScreen"
     const val BANDAS_SCREEN = "bandasScreen"
     const val COLECCIONISTAS_SCREEN = "coleccionistasScreen"
+    const val ALBUM_DETALLE = "albumDetalleScreen"
 }
