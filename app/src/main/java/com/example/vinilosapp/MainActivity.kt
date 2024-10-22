@@ -16,7 +16,9 @@ import com.example.vinilosapp.ui.screens.LoginScreen
 import com.example.vinilosapp.ui.theme.VinilosAppTheme
 import com.example.vinilosapp.utils.TipoUsuario
 import com.example.vinilosapp.viewmodel.AppViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

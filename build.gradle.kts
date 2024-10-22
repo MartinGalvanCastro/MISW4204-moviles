@@ -7,10 +7,19 @@ plugins {
     alias(libs.plugins.githooks) apply false
     alias(libs.plugins.dotenv) apply false
     alias(libs.plugins.openapi.generator) apply false
+    alias(libs.plugins.hilt) apply false
+    id("jacoco")
 }
+
 
 subprojects {
     afterEvaluate {
         project.apply("../gradleScripts/spotless.gradle")
+    }
+}
+
+buildscript {
+    dependencies {
+        classpath(libs.org.jacoco.core) // Jacoco library
     }
 }

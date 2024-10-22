@@ -3,7 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.spotless)
-    alias(libs.plugins.openapi.generator)  // OpenAPI Generator plugin
+    alias(libs.plugins.openapi.generator)
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
+    id("jacoco")
 }
 
 android {
@@ -16,7 +19,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -51,23 +53,84 @@ android {
     }
 
     sourceSets {
-        getByName("main").java.srcDir("build/generated/src/main/kotlin")  // Specify where the generated code will go
+        getByName("main") {
+            java.srcDir(layout.buildDirectory.dir("generated/src/main/kotlin").get())
+        }
     }
 }
 
-openApiGenerate {
-    generatorName.set("kotlin")                                 // Specify generator type
-    inputSpec.set("$rootDir/open-api.json")             // Path to OpenAPI JSON file
-    outputDir.set(layout.buildDirectory.dir("generated").get().asFile.path)                     // Directory for generated code
-    apiPackage.set("com.example.api")                           // API package
-    modelPackage.set("com.example.models")                      // Models package
-    invokerPackage.set("com.example.invoker")                   // Invoker package
-    library.set("jvm-retrofit2")                                    // Use Retrofit2 as the library
+jacoco {
+    toolVersion = "0.8.8"
 }
+
+openApiGenerate {
+    generatorName.set("kotlin")
+    inputSpec.set("$rootDir/open-api.json")
+    outputDir.set(layout.buildDirectory.dir("generated").get().asFile.path)
+    apiPackage.set("com.example.api")
+    modelPackage.set("com.example.models")
+    invokerPackage.set("com.example.invoker")
+    library.set("jvm-retrofit2")
+}
+
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacocoHtml"))
+    }
+
+    classDirectories.setFrom(
+        fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+            exclude(
+                // Exclude common generated Android classes
+                "**/R.class",
+                "**/R$*.class",
+                "**/BuildConfig.*",
+                "**/Manifest*.*",
+                "**/*Test*.*",                    // Exclude test classes
+
+                // Exclude specific packages
+                "com/example/api/**",             // Exclude API package
+                "com/example/models/**",          // Exclude Models package
+                "org/openapitools/client/infrastructure/**", // Exclude OpenAPI infrastructure
+                "hilt_aggregated_deps/**",        // Exclude Hilt aggregated dependencies
+
+                // Exclude DataBinding and Hilt-generated files
+                "android/databinding/**",         // Exclude DataBinding generated classes
+                "**/databinding/**",
+                "**/*_Factory.class",             // Exclude Dagger/Hilt factories
+                "**/*_HiltModules*.*",            // Exclude Dagger/Hilt modules
+                "**/*_GeneratedInjector.class",   // Exclude Hilt Injector generated classes
+                "**/MainActivity_GeneratedInjector*.*", // Exclude specific generated Injector
+
+                // Exclude all files inside the build directory
+                "**/build/**"
+            )
+        }
+    )
+
+    sourceDirectories.setFrom(files("src/main/java", "src/main/kotlin"))
+    executionData.setFrom(fileTree(layout.buildDirectory) {
+        include("jacoco/testDebugUnitTest.exec")
+    })
+}
+
+
+
+
 
 tasks.named("preBuild") {
     dependsOn("openApiGenerate")
 }
+
+tasks.withType<Test> {
+    finalizedBy(tasks.named("jacocoTestReport"))
+}
+
 
 
 dependencies {
@@ -99,16 +162,36 @@ dependencies {
     implementation(libs.moshi.kotlin)
     implementation(libs.converter.moshi)
     implementation(libs.retrofit2.converter.scalars)
+    implementation(libs.hilt.android)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     testImplementation(libs.junit)
     testImplementation(libs.coil.test)
     testImplementation(libs.mvrx.testing)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.okhttp3.mockwebserver)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.hamcrest.library)
+
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+
+kapt {
+    correctErrorTypes = true
 }
