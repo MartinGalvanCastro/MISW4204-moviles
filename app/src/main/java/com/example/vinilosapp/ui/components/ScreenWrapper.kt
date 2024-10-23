@@ -5,26 +5,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import com.example.vinilosapp.LocalAppState
 import com.example.vinilosapp.navigation.Routes
 
 @Composable
 fun ScreenWrapper(
-    navController: NavController,
-    goBackFunction: () -> Unit,
     content: @Composable () -> Unit,
 ) {
+    val appState = LocalAppState.current
     Scaffold(
         topBar = {
             TopBar(
                 onBackClick = {
-                    navController.navigate(Routes.ALBUMS_SCREEN)
-                    goBackFunction()
+                    appState.navController.navigate(Routes.ALBUMS_SCREEN)
+                    appState.tipoUsuario.value = null
                 },
             )
         },
         bottomBar = {
-            Navbar(navController)
+            Navbar()
         },
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {

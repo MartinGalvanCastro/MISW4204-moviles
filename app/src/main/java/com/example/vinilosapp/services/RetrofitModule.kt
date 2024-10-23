@@ -1,6 +1,5 @@
 package com.example.vinilosapp.services
 
-import com.example.vinilosapp.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +16,7 @@ object RetrofitModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl("http://54.242.71.56:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

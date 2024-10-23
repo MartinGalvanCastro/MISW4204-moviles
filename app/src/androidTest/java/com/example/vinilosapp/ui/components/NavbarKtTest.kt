@@ -1,5 +1,6 @@
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -9,8 +10,11 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.testing.TestNavHostController
+import com.example.vinilosapp.LocalAppState
+import com.example.vinilosapp.models.AppState
 import com.example.vinilosapp.navigation.Routes
 import com.example.vinilosapp.ui.components.Navbar
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -31,17 +35,23 @@ class NavbarKtTest {
         }
     }
 
-    @Test
-    fun navbar_displaysItemsCorrectlyTest() {
+    @Before
+    fun setup() {
         composeTestRule.setContent {
             testNavController = TestNavHostController(LocalContext.current).apply {
                 navigatorProvider.addNavigator(ComposeNavigator())
             }
-            TestNavGraph(testNavController)
-            Navbar(navController = testNavController)
-        }
 
-        // Assert that the Navbar items are displayed
+            val appState = AppState(testNavController)
+            CompositionLocalProvider(LocalAppState provides appState) {
+                TestNavGraph(testNavController)
+                Navbar()
+            }
+        }
+    }
+
+    @Test
+    fun navbar_displaysItemsCorrectlyTest() {
         composeTestRule
             .onNodeWithTag("navbar-item-Albumes")
             .assertIsDisplayed()
@@ -61,14 +71,6 @@ class NavbarKtTest {
 
     @Test
     fun navbar_navigatesOnClickTest() {
-        composeTestRule.setContent {
-            testNavController = TestNavHostController(LocalContext.current).apply {
-                navigatorProvider.addNavigator(ComposeNavigator())
-            }
-            TestNavGraph(testNavController)
-            Navbar(navController = testNavController)
-        }
-
         composeTestRule
             .onNodeWithTag("navbar-item-Artistas")
             .performClick()

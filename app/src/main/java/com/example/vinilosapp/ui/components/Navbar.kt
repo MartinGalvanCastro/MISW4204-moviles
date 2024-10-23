@@ -1,7 +1,5 @@
 package com.example.vinilosapp.ui.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Mic
@@ -14,18 +12,14 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import com.example.vinilosapp.LocalAppState
 import com.example.vinilosapp.navigation.Routes
-import com.example.vinilosapp.ui.theme.VinilosAppTheme
 
 data class NavbarItem(
     val label: String,
@@ -36,9 +30,8 @@ data class NavbarItem(
 )
 
 @Composable
-fun Navbar(
-    navController: NavController,
-) {
+fun Navbar() {
+    val navController = LocalAppState.current.navController
     val items = listOf(
         NavbarItem(
             label = "Álbumes",
@@ -100,25 +93,6 @@ fun Navbar(
                     }
                 },
             )
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NavbarPreview() {
-    val navController = rememberNavController()
-    navController.navigate("albumes")
-
-    VinilosAppTheme {
-        Scaffold(
-            bottomBar = {
-                Navbar(navController)
-            },
-        ) {
-            Box(modifier = Modifier.padding(it)) {
-                Text("Navbar Preview")
-            }
         }
     }
 }
