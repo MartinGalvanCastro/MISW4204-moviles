@@ -3,6 +3,7 @@ package com.example.vinilosapp.ui.components
 import androidx.activity.ComponentActivity
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -14,11 +15,11 @@ import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.testing.TestNavHostController
+import com.example.vinilosapp.LocalAppState
+import com.example.vinilosapp.models.AppState
 import com.example.vinilosapp.navigation.Routes
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 
 class ScreenWrapperKtTest {
 
@@ -43,9 +44,12 @@ class ScreenWrapperKtTest {
             testNavController = TestNavHostController(LocalContext.current).apply {
                 navigatorProvider.addNavigator(ComposeNavigator())
             }
-            TestNavGraph(testNavController)
-            ScreenWrapper(navController = testNavController, goBackFunction = {}) {
-                Text("Test Content", modifier = Modifier.testTag("testContent"))
+            val appState = AppState(testNavController)
+            CompositionLocalProvider(LocalAppState provides appState) {
+                TestNavGraph(testNavController)
+                ScreenWrapper {
+                    Text("Test Content", modifier = Modifier.testTag("testContent"))
+                }
             }
         }
 
@@ -56,15 +60,16 @@ class ScreenWrapperKtTest {
 
     @Test
     fun screenWrapper_callsGoBackFunctionOnBackClickTest() {
-        val mockGoBackFunction = mock<() -> Unit>()
-
         composeTestRule.setContent {
             testNavController = TestNavHostController(LocalContext.current).apply {
                 navigatorProvider.addNavigator(ComposeNavigator())
             }
-            TestNavGraph(testNavController)
-            ScreenWrapper(navController = testNavController, goBackFunction = mockGoBackFunction) {
-                Text("Test Content")
+            val appState = AppState(testNavController)
+            CompositionLocalProvider(LocalAppState provides appState) {
+                TestNavGraph(testNavController)
+                ScreenWrapper {
+                    Text("Test Content")
+                }
             }
         }
 
@@ -73,8 +78,6 @@ class ScreenWrapperKtTest {
         composeTestRule
             .onNodeWithTag("backButton", useUnmergedTree = true)
             .performClick()
-
-        verify(mockGoBackFunction).invoke()
 
         assert(testNavController.currentDestination?.route == Routes.ALBUMS_SCREEN)
     }

@@ -19,7 +19,6 @@ class AlbumViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _albums = MutableStateFlow<List<AlbumSimpleDTO>>(emptyList())
-    val albums: StateFlow<List<AlbumSimpleDTO>> = _albums
 
     private val _album = MutableStateFlow<AlbumDetailDTO?>(null)
     val album: StateFlow<AlbumDetailDTO?> = _album
@@ -33,6 +32,9 @@ class AlbumViewModel @Inject constructor(
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
 
+    private val _filteredAlbums = MutableStateFlow<List<AlbumSimpleDTO>>(emptyList())
+    val filteredAlbums: StateFlow<List<AlbumSimpleDTO>> = _filteredAlbums
+
     fun fetchAlbums() {
         viewModelScope.launch {
             if (networkChecker.isConnected()) {
@@ -40,6 +42,7 @@ class AlbumViewModel @Inject constructor(
                 try {
                     val albumList = albumService.getAllAlbums()
                     _albums.value = albumList
+                    _filteredAlbums.value = albumList
                 } catch (e: Exception) {
                     _errorMessage.value = "Error fetching albums"
                 } finally {
@@ -83,6 +86,16 @@ class AlbumViewModel @Inject constructor(
                 }
             } else {
                 _errorMessage.value = "No internet connection."
+            }
+        }
+    }
+
+    fun filterAlbums(query: String) {
+        _filteredAlbums.value = if (query.isBlank()) {
+            _albums.value // Show all albums if query is blank
+        } else {
+            _albums.value.filter { album ->
+                album.name.contains(query, ignoreCase = true) // Assuming AlbumSimpleDTO has a name property
             }
         }
     }

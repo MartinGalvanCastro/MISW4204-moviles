@@ -111,19 +111,6 @@ fun ImageAndText(
     }
 }
 
-@Composable
-fun MockImageAndText(
-    imageText: String,
-) {
-    ImageAndText(
-        imageShape = ImageShape.CUADRADO,
-        imageUrl = "https://picsum.photos/100",
-        imageText = imageText,
-        textAlign = TextAlign.Center,
-        onSelect = { println("Circle Image Clicked") },
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 fun ImageAndTextPreview() {

@@ -60,7 +60,7 @@ class AlbumViewModelTest {
         albumViewModel.fetchAlbums()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertThat(albumViewModel.albums.value, `is`(mockAlbumList))
+        assertThat(albumViewModel.filteredAlbums.value, `is`(mockAlbumList))
         assertThat(albumViewModel.loading.value, `is`(false))
     }
 
@@ -119,7 +119,7 @@ class AlbumViewModelTest {
         val albumId = 1
 
         `when`(networkChecker.isConnected()).thenReturn(true)
-        `when`(albumService.getAlbumById(albumId)).thenThrow(Exception("API error"))
+        `when`(albumService.getAlbumById(albumId)).thenThrow(RuntimeException("API error"))
 
         albumViewModel.fetchAlbumById(albumId)
         testDispatcher.scheduler.advanceUntilIdle()
@@ -131,11 +131,10 @@ class AlbumViewModelTest {
     @Test
     fun `Given network is available When createAlbum is called Then successMessage is set and loading is false`() = runTest {
         val newAlbum = mock(AlbumSimpleDTO::class.java)
-        val createdAlbum = mock(AlbumSimpleDTO::class.java)
 
         `when`(newAlbum.name).thenReturn("Test Album")
         `when`(networkChecker.isConnected()).thenReturn(true)
-        `when`(albumService.createAlbum(newAlbum)).thenReturn(createdAlbum)
+        `when`(albumService.createAlbum(newAlbum)).thenReturn(newAlbum)
 
         albumViewModel.createAlbum(newAlbum)
         testDispatcher.scheduler.advanceUntilIdle()
@@ -162,12 +161,79 @@ class AlbumViewModelTest {
         val newAlbum = mock(AlbumSimpleDTO::class.java)
 
         `when`(networkChecker.isConnected()).thenReturn(true)
-        `when`(albumService.createAlbum(newAlbum)).thenThrow(Exception("API error"))
+        `when`(albumService.createAlbum(newAlbum)).thenThrow(RuntimeException("API error"))
 
         albumViewModel.createAlbum(newAlbum)
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertThat(albumViewModel.errorMessage.value, `is`("Error creating album"))
         assertThat(albumViewModel.loading.value, `is`(false))
+    }
+
+    @Test
+    fun `Given albums exist When filterAlbums is called with matching query Then filteredAlbums is updated`() = runTest {
+        val album1 = mock(AlbumSimpleDTO::class.java).apply {
+            `when`(name).thenReturn("Album One")
+        }
+        val album2 = mock(AlbumSimpleDTO::class.java).apply {
+            `when`(name).thenReturn("Album Two")
+        }
+        val album3 = mock(AlbumSimpleDTO::class.java).apply {
+            `when`(name).thenReturn("Album Three")
+        }
+
+        `when`(networkChecker.isConnected()).thenReturn(true)
+        `when`(albumService.getAllAlbums()).thenReturn(listOf(album1, album2, album3))
+
+        albumViewModel.fetchAlbums()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        albumViewModel.filterAlbums("One")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertThat(albumViewModel.filteredAlbums.value, `is`(listOf(album1)))
+    }
+
+    @Test
+    fun `Given albums exist When filterAlbums is called with non-matching query Then filteredAlbums is empty`() = runTest {
+        val album1 = mock(AlbumSimpleDTO::class.java).apply {
+            `when`(name).thenReturn("Album One")
+        }
+        val album2 = mock(AlbumSimpleDTO::class.java).apply {
+            `when`(name).thenReturn("Album Two")
+        }
+        val album3 = mock(AlbumSimpleDTO::class.java).apply {
+            `when`(name).thenReturn("Album Three")
+        }
+
+        `when`(networkChecker.isConnected()).thenReturn(true)
+        `when`(albumService.getAllAlbums()).thenReturn(listOf(album1, album2, album3))
+
+        albumViewModel.fetchAlbums()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        albumViewModel.filterAlbums("Non-existing album")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertThat(albumViewModel.filteredAlbums.value, `is`(emptyList()))
+    }
+
+    @Test
+    fun `Given albums exist When filterAlbums is called with blank query Then all albums are shown`() = runTest {
+        val album1 = mock(AlbumSimpleDTO::class.java)
+        val album2 = mock(AlbumSimpleDTO::class.java)
+        `when`(networkChecker.isConnected()).thenReturn(true)
+        `when`(albumService.getAllAlbums()).thenReturn(listOf(album1, album2))
+
+        albumViewModel.fetchAlbums()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertThat(albumViewModel.filteredAlbums.value.size, `is`(2)) // Check that two albums are fetched
+
+        albumViewModel.filterAlbums("")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // Verify that all albums are returned when query is blank
+        assertThat(albumViewModel.filteredAlbums.value, `is`(listOf(album1, album2)))
     }
 }

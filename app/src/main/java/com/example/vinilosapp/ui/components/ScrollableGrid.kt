@@ -6,15 +6,20 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.example.vinilosapp.models.GridItemProps
 
 @Composable
-fun GridLayout(items: List<String>) {
+fun GridLayout(items: List<GridItemProps>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
     ) {
         items(items) { item ->
-            MockImageAndText(imageText = item)
+            ImageAndText(
+                imageUrl = item.imageUrl,
+                imageText = item.name,
+                onSelect = { println("Selected ${item.name}") },
+            )
         }
     }
 }
