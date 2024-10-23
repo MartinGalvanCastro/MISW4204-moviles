@@ -15,7 +15,14 @@ class AppViewModel(initialState: AppState) : MavericksViewModel<AppState>(initia
         setState { copy(tipoUsuario = null) }
     }
 
-    fun setNavController(newNavController: NavController) {
-        setState { copy(navController = newNavController) }
-    }
+    // Private property to hold the NavController
+    private var _navController: NavController? = null
+
+    // Public getter and setter for external access
+    var navController: NavController?
+        get() = _navController
+        set(value) {
+            _navController = value
+            setState { copy(navController = value) } // Also update the state
+        }
 }

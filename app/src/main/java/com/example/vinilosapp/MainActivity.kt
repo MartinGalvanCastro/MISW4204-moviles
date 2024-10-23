@@ -37,9 +37,8 @@ fun MainContent() {
     val currentTipoUsuario: TipoUsuario? = state.tipoUsuario
     VinilosAppTheme {
         val navController = rememberNavController()
-        appViewModel.setNavController(navController)
         if (currentTipoUsuario != null) {
-            ScreenWrapper {
+            ScreenWrapper(navController, { appViewModel.logout() }) {
                 AppNavigation(navController)
             }
         } else {

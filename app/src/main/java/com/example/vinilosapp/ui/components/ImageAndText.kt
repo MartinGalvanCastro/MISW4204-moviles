@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,21 +67,22 @@ fun ImageAndText(
             modifier = Modifier
                 .then(shapeModifier)
                 .pointerInput(onSelect) {
-                    if (onSelect != null) {
+                    onSelect?.let {
                         detectTapGestures(
                             onPress = {
                                 isPressed = true
                                 try {
                                     awaitRelease()
                                     isPressed = false
-                                    onSelect()
+                                    it()
                                 } catch (e: Exception) {
                                     isPressed = false
                                 }
                             },
                         )
                     }
-                },
+                }
+                .testTag("ImageBox"),
         ) {
             Image(
                 painter = rememberAsyncImagePainter(model = imageUrl),
@@ -89,11 +91,12 @@ fun ImageAndText(
                 contentScale = ContentScale.Crop,
             )
 
-            if (onSelect != null && isPressed) {
+            if (isPressed) {
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .background(Color.Black.copy(alpha = 0.5f)),
+                        .background(Color.Black.copy(alpha = 0.5f))
+                        .testTag("ImageOverlay"),
                 )
             }
         }

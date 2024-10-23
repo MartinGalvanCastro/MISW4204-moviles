@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ fun TopBar(onBackClick: () -> Unit = {}) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.testTag("title"),
             )
         },
         actions = {
@@ -42,6 +44,7 @@ fun TopBar(onBackClick: () -> Unit = {}) {
                     imageVector = Icons.AutoMirrored.Filled.Logout,
                     contentDescription = "Log out",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.testTag("backButton"),
                 )
             }
         },

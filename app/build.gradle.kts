@@ -15,12 +15,13 @@ android {
 
     defaultConfig {
         applicationId = "com.example.vinilosapp"
-        minSdk = 30
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         debug {
@@ -165,6 +166,7 @@ dependencies {
     implementation(libs.hilt.android)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.junit)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -178,6 +180,8 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.hamcrest.library)
+    testImplementation(libs.mavericks.mocking)
+
 
 
     androidTestImplementation(libs.androidx.junit)
@@ -186,6 +190,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.hilt.android.testing)
     kaptAndroidTest(libs.hilt.android.compiler)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.mockito.kotlin)
+    androidTestImplementation(libs.mvrx.testing)
+    androidTestImplementation(libs.mavericks.mocking)
+    androidTestImplementation(libs.androidx.navigation.testing)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
