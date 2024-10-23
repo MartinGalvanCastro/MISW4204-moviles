@@ -25,14 +25,14 @@ jobs:
 
       - name: Upload Unit Test Reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: unit-test-results
           path: app/build/reports/tests/
 
       - name: Upload Instrumented Test Reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: android-test-results
           path: app/build/reports/androidTests/
