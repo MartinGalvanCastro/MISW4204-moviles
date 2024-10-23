@@ -1,6 +1,6 @@
 package com.example.vinilosapp.ui.components
 
-import androidx.compose.foundation.Image
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +28,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
+import com.example.vinilosapp.R
 import com.example.vinilosapp.ui.theme.VinilosAppTheme
 
 enum class ImageShape {
@@ -44,20 +46,23 @@ fun ImageAndText(
     textAlign: TextAlign = TextAlign.Start,
     onSelect: (() -> Unit)? = null,
 ) {
-    var isPressed by remember { mutableStateOf(false) }
-
     val shapeModifier = when (imageShape) {
         ImageShape.CIRCULO ->
             Modifier
                 .size(100.dp)
-                .shadow(32.dp, CircleShape)
+                .shadow(8.dp, RoundedCornerShape(10.dp))
+                .background(Color.Transparent)
                 .clip(CircleShape)
         ImageShape.CUADRADO ->
             Modifier
                 .size(165.dp, 150.dp)
-                .shadow(32.dp, RoundedCornerShape(10.dp))
+                .shadow(8.dp, RoundedCornerShape(10.dp))
+                .background(Color.Transparent)
                 .clip(RoundedCornerShape(10.dp))
     }
+
+    var isPressed by remember { mutableStateOf(false) }
+    val defaultImage = rememberAsyncImagePainter(model = R.drawable.default_album_image_background)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,29 +70,35 @@ fun ImageAndText(
     ) {
         Box(
             modifier = Modifier
-                .then(shapeModifier)
-                .pointerInput(onSelect) {
-                    onSelect?.let {
-                        detectTapGestures(
-                            onPress = {
-                                isPressed = true
-                                try {
-                                    awaitRelease()
-                                    isPressed = false
-                                    it()
-                                } catch (e: Exception) {
-                                    isPressed = false
-                                }
-                            },
-                        )
-                    }
-                }
                 .testTag("ImageBox"),
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = imageUrl),
+            AsyncImage(
+                model = imageUrl,
+                placeholder = defaultImage,
+                error = defaultImage,
+                onError = {
+                        state ->
+                    state.result.throwable.message?.let { Log.e("ImageAndText", it) }
+                    state.result.throwable.printStackTrace()
+                },
                 contentDescription = null,
-                modifier = Modifier.matchParentSize(),
+                modifier = Modifier.then(shapeModifier)
+                    .pointerInput(onSelect) {
+                        onSelect?.let {
+                            detectTapGestures(
+                                onPress = {
+                                    isPressed = true
+                                    try {
+                                        awaitRelease()
+                                        isPressed = false
+                                        it()
+                                    } catch (e: Exception) {
+                                        isPressed = false
+                                    }
+                                },
+                            )
+                        }
+                    },
                 contentScale = ContentScale.Crop,
             )
 

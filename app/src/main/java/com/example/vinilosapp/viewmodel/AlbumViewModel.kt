@@ -1,5 +1,6 @@
 package com.example.vinilosapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.models.AlbumDetailDTO
@@ -41,9 +42,12 @@ class AlbumViewModel @Inject constructor(
                 _loading.value = true
                 try {
                     val albumList = albumService.getAllAlbums()
+                    Log.d("FetchAlbums", "Album List: $albumList")
                     _albums.value = albumList
                     _filteredAlbums.value = albumList
                 } catch (e: Exception) {
+                    Log.e("FetchAlbums", "Error: ${e.message}")
+                    e.printStackTrace()
                     _errorMessage.value = "Error fetching albums"
                 } finally {
                     _loading.value = false

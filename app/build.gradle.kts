@@ -78,6 +78,13 @@ openApiGenerate {
     modelPackage.set("com.example.models")
     invokerPackage.set("com.example.invoker")
     library.set("jvm-retrofit2")
+
+
+    configOptions.set(
+        mapOf(
+            "dateLibrary" to "string"
+        )
+    )
 }
 
 
@@ -154,6 +161,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil)
     implementation(libs.coil.svg)
+    implementation(libs.coil.cache)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.android.mavericks)
     implementation(libs.mavericks.compose)
@@ -162,6 +170,7 @@ dependencies {
     implementation(libs.kotlin.faker)
     implementation(libs.coil.network.okhttp)
     implementation(libs.okhttp)
+    implementation(libs.okhttp.tls)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)

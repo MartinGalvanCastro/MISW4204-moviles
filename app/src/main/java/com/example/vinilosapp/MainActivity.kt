@@ -12,7 +12,6 @@ import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.Mavericks
 import com.example.vinilosapp.models.AppState
 import com.example.vinilosapp.navigation.AppNavigation
-import com.example.vinilosapp.ui.components.ScreenWrapper
 import com.example.vinilosapp.ui.screens.LoginScreen
 import com.example.vinilosapp.ui.theme.VinilosAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,9 +40,7 @@ fun MainContent() {
 
         CompositionLocalProvider(LocalAppState provides appState) {
             if (appState.tipoUsuario.value != null) {
-                ScreenWrapper {
-                    AppNavigation(navController)
-                }
+                AppNavigation(navController)
             } else {
                 LoginScreen()
             }
