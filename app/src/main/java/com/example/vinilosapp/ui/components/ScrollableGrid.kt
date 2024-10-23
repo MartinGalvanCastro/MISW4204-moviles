@@ -18,7 +18,7 @@ fun GridLayout(items: List<GridItemProps>) {
             ImageAndText(
                 imageUrl = item.imageUrl,
                 imageText = item.name,
-                onSelect = { println("Selected ${item.name}") },
+                onSelect = item.onSelect,
             )
         }
     }

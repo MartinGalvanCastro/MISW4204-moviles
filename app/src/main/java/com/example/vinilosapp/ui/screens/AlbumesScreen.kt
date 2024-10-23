@@ -20,17 +20,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.vinilosapp.LocalAppState
 import com.example.vinilosapp.models.GridItemProps
+import com.example.vinilosapp.navigation.DetailRoutePrefix
 import com.example.vinilosapp.ui.components.GridLayout
 import com.example.vinilosapp.viewmodel.AlbumViewModel
 
 @Composable
 fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
-    val navController = LocalAppState.current
+    val navController = LocalAppState.current.navController
 
     val albums by albumViewModel.filteredAlbums.collectAsState()
     var filterText by remember { mutableStateOf("") }
@@ -40,7 +40,9 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
     }
 
     val gridItems = filteredAlbums.map { album ->
-        GridItemProps(name = album.name, imageUrl = album.cover)
+        GridItemProps(name = album.name, imageUrl = album.cover, onSelect = {
+            navController.navigate("${DetailRoutePrefix.ALBUM_DETALLE_SCREEN}/${album.id}")
+        })
     }
 
     LaunchedEffect(Unit) {
@@ -69,13 +71,7 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
             modifier = Modifier.fillMaxHeight(),
             contentAlignment = Alignment.Center,
         ) {
-            GridLayout(items = gridItems) // Pass the transformed items
+            GridLayout(items = gridItems)
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewAlbumesScreen() {
-    AlbumesScreen()
 }

@@ -75,7 +75,7 @@ class AlbumViewModelTest {
     }
 
     @Test
-    fun `Given network is available When fetchAlbums fails Then loading is set to true and false correctly`() = runTest {
+    fun `Given network is available When fetchAlbums fails Then errorMessage is set`() = runTest {
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumService.getAllAlbums()).thenThrow(RuntimeException("API error"))
 
@@ -87,7 +87,7 @@ class AlbumViewModelTest {
     }
 
     @Test
-    fun `Given network is available When fetchAlbumById is called Then album is updated and loading is false`() = runTest {
+    fun `Given network is available When fetchAlbumById is called Then album is updated`() = runTest {
         val mockAlbum = mock(AlbumDetailDTO::class.java)
         val albumId = 1
 
@@ -115,7 +115,7 @@ class AlbumViewModelTest {
     }
 
     @Test
-    fun `Given network is available When fetchAlbumById throws an exception Then errorMessage is set`() = runTest {
+    fun `Given network is available When fetchAlbumById fails Then errorMessage is set`() = runTest {
         val albumId = 1
 
         `when`(networkChecker.isConnected()).thenReturn(true)
@@ -129,7 +129,7 @@ class AlbumViewModelTest {
     }
 
     @Test
-    fun `Given network is available When createAlbum is called Then successMessage is set and loading is false`() = runTest {
+    fun `Given network is available When createAlbum is called Then successMessage is set`() = runTest {
         val newAlbum = mock(AlbumSimpleDTO::class.java)
 
         `when`(newAlbum.name).thenReturn("Test Album")
@@ -157,7 +157,7 @@ class AlbumViewModelTest {
     }
 
     @Test
-    fun `Given network is available When createAlbum throws an exception Then errorMessage is set`() = runTest {
+    fun `Given network is available When createAlbum fails Then errorMessage is set`() = runTest {
         val newAlbum = mock(AlbumSimpleDTO::class.java)
 
         `when`(networkChecker.isConnected()).thenReturn(true)
@@ -228,12 +228,11 @@ class AlbumViewModelTest {
         albumViewModel.fetchAlbums()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertThat(albumViewModel.filteredAlbums.value.size, `is`(2)) // Check that two albums are fetched
+        assertThat(albumViewModel.filteredAlbums.value.size, `is`(2))
 
         albumViewModel.filterAlbums("")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Verify that all albums are returned when query is blank
         assertThat(albumViewModel.filteredAlbums.value, `is`(listOf(album1, album2)))
     }
 }

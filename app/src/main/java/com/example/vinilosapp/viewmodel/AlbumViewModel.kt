@@ -44,6 +44,7 @@ class AlbumViewModel @Inject constructor(
                     _albums.value = albumList
                     _filteredAlbums.value = albumList
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     _errorMessage.value = "Error fetching albums"
                 } finally {
                     _loading.value = false
