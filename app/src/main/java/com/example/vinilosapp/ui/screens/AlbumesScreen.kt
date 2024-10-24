@@ -26,6 +26,7 @@ import com.example.vinilosapp.LocalAppState
 import com.example.vinilosapp.models.GridItemProps
 import com.example.vinilosapp.navigation.DetailRoutePrefix
 import com.example.vinilosapp.ui.components.GridLayout
+import com.example.vinilosapp.ui.components.ScreenSkeleton
 import com.example.vinilosapp.viewmodel.AlbumViewModel
 
 @Composable
@@ -33,6 +34,9 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
     val albums by albumViewModel.filteredAlbums.collectAsState()
+    val loading by albumViewModel.loading.collectAsState()
+    val error by albumViewModel.errorMessage.collectAsState()
+
     var filterText by remember { mutableStateOf("") }
 
     val filteredAlbums = albums.filter {
@@ -71,7 +75,13 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
             modifier = Modifier.fillMaxHeight(),
             contentAlignment = Alignment.Center,
         ) {
-            GridLayout(items = gridItems)
+            if (loading) {
+                ScreenSkeleton("Cargando...")
+            } else if (error != null) {
+                ScreenSkeleton(error!!)
+            } else {
+                GridLayout(gridItems)
+            }
         }
     }
 }

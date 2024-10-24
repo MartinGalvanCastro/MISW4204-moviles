@@ -10,6 +10,7 @@ import com.example.vinilosapp.ui.components.ScreenWrapper
 import com.example.vinilosapp.ui.screens.AlbumDetalleScreen
 import com.example.vinilosapp.ui.screens.AlbumesScreen
 import com.example.vinilosapp.ui.screens.ArtistasScreen
+import com.example.vinilosapp.ui.screens.BandasDetalleScreen
 import com.example.vinilosapp.ui.screens.BandasScreen
 import com.example.vinilosapp.ui.screens.ColeccionistasScreen
 
@@ -45,6 +46,20 @@ fun AppNavigation(navController: NavHostController) {
         ) { backStackEntry ->
             val albumId = backStackEntry.arguments?.getString("albumId")
             AlbumDetalleScreen(albumId)
+        }
+        composable(
+            route = Routes.ARTISTA_DETALLE_SCREEN,
+            arguments = listOf(navArgument("artistaId") { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val albumId = backStackEntry.arguments?.getString("albumId")
+            AlbumDetalleScreen(albumId)
+        }
+        composable(
+            route = Routes.BAND_DETALLE_SCREEN,
+            arguments = listOf(navArgument("bandaId") { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val bandaId = backStackEntry.arguments?.getString("bandaId")
+            BandasDetalleScreen(bandaId)
         }
     }
 }

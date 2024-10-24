@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -50,13 +51,13 @@ fun ImageAndText(
         ImageShape.CIRCULO ->
             Modifier
                 .size(100.dp)
-                .shadow(8.dp, RoundedCornerShape(10.dp))
+                .shadow(12.dp, shape = CircleShape)
                 .background(Color.Transparent)
                 .clip(CircleShape)
         ImageShape.CUADRADO ->
             Modifier
                 .size(165.dp, 150.dp)
-                .shadow(8.dp, RoundedCornerShape(10.dp))
+                .shadow(12.dp, RoundedCornerShape(10.dp))
                 .background(Color.Transparent)
                 .clip(RoundedCornerShape(10.dp))
     }
@@ -70,6 +71,13 @@ fun ImageAndText(
     ) {
         Box(
             modifier = Modifier
+                .clip(
+                    if (imageShape == ImageShape.CUADRADO) {
+                        RoundedCornerShape(10.dp)
+                    } else {
+                        CircleShape
+                    },
+                )
                 .testTag("ImageBox"),
         ) {
             AsyncImage(
@@ -116,8 +124,17 @@ fun ImageAndText(
             text = imageText,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp),
+                .padding(top = 4.dp)
+                .widthIn(max = 100.dp),
             textAlign = textAlign,
+            minLines = when (imageShape) {
+                ImageShape.CIRCULO -> 2
+                ImageShape.CUADRADO -> 1
+            },
+            maxLines = when (imageShape) {
+                ImageShape.CIRCULO -> 2
+                ImageShape.CUADRADO -> 1
+            },
         )
     }
 }

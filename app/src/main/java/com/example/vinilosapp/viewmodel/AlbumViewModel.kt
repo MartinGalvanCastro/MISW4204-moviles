@@ -55,7 +55,7 @@ class AlbumViewModel @Inject constructor(
         }
     }
 
-    fun fetchAlbumById(id: Int) {
+    fun fetchAlbumById(id: String) {
         viewModelScope.launch {
             if (networkChecker.isConnected()) {
                 _loading.value = true

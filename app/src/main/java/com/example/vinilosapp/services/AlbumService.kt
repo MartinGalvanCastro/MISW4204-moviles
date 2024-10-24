@@ -12,7 +12,7 @@ interface AlbumService {
     suspend fun getAllAlbums(): List<AlbumSimpleDTO>
 
     @GET("albums/{id}")
-    suspend fun getAlbumById(@Path("id") id: Int): AlbumDetailDTO
+    suspend fun getAlbumById(@Path("id") id: String): AlbumDetailDTO
 
     @POST("albums")
     suspend fun createAlbum(newAlbum: AlbumSimpleDTO): AlbumSimpleDTO
