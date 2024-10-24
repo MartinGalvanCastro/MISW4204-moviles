@@ -89,7 +89,7 @@ class AlbumViewModelTest {
     @Test
     fun `Given network is available When fetchAlbumById is called Then album is updated`() = runTest {
         val mockAlbum = mock(AlbumDetailDTO::class.java)
-        val albumId = 1
+        val albumId = "1"
 
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumService.getAlbumById(albumId)).thenReturn(mockAlbum)
@@ -103,7 +103,7 @@ class AlbumViewModelTest {
 
     @Test
     fun `Given network is not available When fetchAlbumById is called Then errorMessage is set`() = runTest {
-        val albumId = 1
+        val albumId = "1"
 
         `when`(networkChecker.isConnected()).thenReturn(false)
 
@@ -116,7 +116,7 @@ class AlbumViewModelTest {
 
     @Test
     fun `Given network is available When fetchAlbumById fails Then errorMessage is set`() = runTest {
-        val albumId = 1
+        val albumId = "1"
 
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumService.getAlbumById(albumId)).thenThrow(RuntimeException("API error"))
