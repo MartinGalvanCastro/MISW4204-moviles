@@ -1,4 +1,4 @@
-package com.example.vinilosapp.services
+package com.example.vinilosapp.services.api
 
 import com.example.models.AlbumDetailDTO
 import com.example.models.AlbumSimpleDTO
@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface AlbumService {
+interface AlbumAPI {
 
     @GET("albums")
     suspend fun getAllAlbums(): List<AlbumSimpleDTO>
