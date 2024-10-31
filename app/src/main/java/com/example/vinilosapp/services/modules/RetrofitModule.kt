@@ -1,4 +1,4 @@
-package com.example.vinilosapp.services
+package com.example.vinilosapp.services.modules
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -38,11 +38,5 @@ object RetrofitModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi)) // Use MoshiConverterFactory
             .client(OkHttpClient.Builder().addInterceptor(logging).build())
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAlbumService(retrofit: Retrofit): AlbumService {
-        return retrofit.create(AlbumService::class.java)
     }
 }

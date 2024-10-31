@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.models.AlbumDetailDTO
 import com.example.models.AlbumSimpleDTO
-import com.example.vinilosapp.services.AlbumService
-import com.example.vinilosapp.utils.NetworkChecker
+import com.example.vinilosapp.repository.AlbumRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,11 +13,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
-    private val albumService: AlbumService,
-    private val networkChecker: NetworkChecker,
+    private val albumRepository: AlbumRepository,
 ) : ViewModel() {
 
     private val _albums = MutableStateFlow<List<AlbumSimpleDTO>>(emptyList())
+    val albums: StateFlow<List<AlbumSimpleDTO>> = _albums
 
     private val _album = MutableStateFlow<AlbumDetailDTO?>(null)
     val album: StateFlow<AlbumDetailDTO?> = _album
@@ -37,66 +36,50 @@ class AlbumViewModel @Inject constructor(
 
     fun fetchAlbums() {
         viewModelScope.launch {
-            if (networkChecker.isConnected()) {
-                _loading.value = true
-                try {
-                    val albumList = albumService.getAllAlbums()
-                    _albums.value = albumList
-                    _filteredAlbums.value = albumList
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    _errorMessage.value = "Error fetching albums"
-                } finally {
-                    _loading.value = false
-                }
-            } else {
-                _errorMessage.value = "No internet connection."
+            _loading.value = true
+            val result = albumRepository.fetchAlbums()
+            result.onSuccess { albumList ->
+                _albums.value = albumList
+                _filteredAlbums.value = albumList
+            }.onFailure {
+                _errorMessage.value = "Error fetching albums"
             }
+            _loading.value = false
         }
     }
 
     fun fetchAlbumById(id: String) {
         viewModelScope.launch {
-            if (networkChecker.isConnected()) {
-                _loading.value = true
-                try {
-                    val album = albumService.getAlbumById(id)
-                    _album.value = album
-                } catch (e: Exception) {
-                    _errorMessage.value = "Error fetching album details"
-                } finally {
-                    _loading.value = false
-                }
-            } else {
-                _errorMessage.value = "No internet connection."
+            _loading.value = true
+            val result = albumRepository.fetchAlbumById(id)
+            result.onSuccess { albumDetail ->
+                _album.value = albumDetail
+            }.onFailure {
+                _errorMessage.value = "Error fetching album details"
             }
+            _loading.value = false
         }
     }
 
     fun createAlbum(newAlbum: AlbumSimpleDTO) {
         viewModelScope.launch {
-            if (networkChecker.isConnected()) {
-                _loading.value = true
-                try {
-                    val createdAlbum = albumService.createAlbum(newAlbum)
-                    _successMessage.value = "Album '${createdAlbum.name}' created successfully!"
-                } catch (e: Exception) {
-                    _errorMessage.value = "Error creating album"
-                } finally {
-                    _loading.value = false
-                }
-            } else {
-                _errorMessage.value = "No internet connection."
+            _loading.value = true
+            val result = albumRepository.createAlbum(newAlbum)
+            result.onSuccess { createdAlbum ->
+                _successMessage.value = "Album '${createdAlbum.name}' created successfully!"
+            }.onFailure {
+                _errorMessage.value = "Error creating album"
             }
+            _loading.value = false
         }
     }
 
     fun filterAlbums(query: String) {
         _filteredAlbums.value = if (query.isBlank()) {
-            _albums.value // Show all albums if query is blank
+            _albums.value
         } else {
             _albums.value.filter { album ->
-                album.name.contains(query, ignoreCase = true) // Assuming AlbumSimpleDTO has a name property
+                album.name.contains(query, ignoreCase = true)
             }
         }
     }
