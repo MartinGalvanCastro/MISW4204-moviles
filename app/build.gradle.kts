@@ -64,6 +64,11 @@ android {
             java.srcDir(layout.buildDirectory.dir("generated/src/main/kotlin").get())
         }
     }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
 }
 
 jacoco {
