@@ -14,15 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.airbnb.mvrx.compose.mavericksViewModel
+import com.example.vinilosapp.LocalAppState
 import com.example.vinilosapp.ui.components.AppLogo
-import com.example.vinilosapp.viewmodel.AppViewModel
+import com.example.vinilosapp.utils.TipoUsuario
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
-    val appViewModel: AppViewModel = mavericksViewModel()
+    val appState = LocalAppState.current
 
     Column(
         modifier = modifier
@@ -43,16 +42,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
         OutlinedButton(
             onClick = {
-                appViewModel.loginInvitado()
+                appState.tipoUsuario.value = TipoUsuario.INVITADO
             },
         ) {
             Text("Invitado")
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen()
 }

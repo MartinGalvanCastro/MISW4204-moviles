@@ -5,18 +5,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.Mavericks
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
+import com.example.vinilosapp.models.AppState
 import com.example.vinilosapp.navigation.AppNavigation
-import com.example.vinilosapp.ui.components.ScreenWrapper
 import com.example.vinilosapp.ui.screens.LoginScreen
 import com.example.vinilosapp.ui.theme.VinilosAppTheme
-import com.example.vinilosapp.utils.TipoUsuario
-import com.example.vinilosapp.viewmodel.AppViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,20 +27,22 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+val LocalAppState = staticCompositionLocalOf<AppState> {
+    error("No AppState provided")
+}
+
 @Composable
 fun MainContent() {
-    val appViewModel: AppViewModel = mavericksViewModel()
-    val state by appViewModel.collectAsState()
-    val currentTipoUsuario: TipoUsuario? = state.tipoUsuario
     VinilosAppTheme {
         val navController = rememberNavController()
-        appViewModel.setNavController(navController)
-        if (currentTipoUsuario != null) {
-            ScreenWrapper {
+        val appState = AppState(navController)
+
+        CompositionLocalProvider(LocalAppState provides appState) {
+            if (appState.tipoUsuario.value != null) {
                 AppNavigation(navController)
+            } else {
+                LoginScreen()
             }
-        } else {
-            LoginScreen()
         }
     }
 }
