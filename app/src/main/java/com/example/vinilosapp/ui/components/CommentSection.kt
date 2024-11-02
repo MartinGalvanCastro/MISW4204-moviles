@@ -22,7 +22,7 @@ import com.example.vinilosapp.ui.theme.VinilosAppTheme
 import java.math.BigDecimal
 
 @Composable
-fun CommentSection(comentarios: List<CommentSimpleDTO>) {
+fun CommentSection(comentarios: List<CommentSimpleDTO>, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {

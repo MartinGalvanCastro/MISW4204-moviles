@@ -25,7 +25,7 @@ import com.example.vinilosapp.utils.TipoUsuario
 import java.math.BigDecimal
 
 @Composable
-fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario) {
+fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,

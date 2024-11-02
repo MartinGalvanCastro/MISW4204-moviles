@@ -19,7 +19,10 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.vinilosapp.config.CucumberTestRunner"
+        testInstrumentationRunnerArguments += mapOf(
+            "optionsAnnotationPackage" to "com.example.vinilosapp.config",
+        )
     }
 
     java {
@@ -62,6 +65,9 @@ android {
     sourceSets {
         getByName("main") {
             java.srcDir(layout.buildDirectory.dir("generated/src/main/kotlin").get())
+        }
+        getByName("androidTest"){
+            resources.srcDirs("src/androidTest/resources")
         }
     }
 
@@ -140,8 +146,6 @@ tasks.register<JacocoReport>("jacocoTestReport") {
 
 
 
-
-
 tasks.named("preBuild") {
     dependsOn("openApiGenerate")
 }
@@ -186,7 +190,6 @@ dependencies {
     implementation(libs.hilt.android)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit)
-    testImplementation(libs.junit.junit)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -203,7 +206,7 @@ dependencies {
     testImplementation(libs.mavericks.mocking)
 
 
-
+    androidTestImplementation(libs.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -215,6 +218,10 @@ dependencies {
     androidTestImplementation(libs.mvrx.testing)
     androidTestImplementation(libs.mavericks.mocking)
     androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.cucumber.android)
+    androidTestImplementation(libs.cucumber.cucumber.picocontainer)
+    testImplementation(libs.cucumber.junit)
+    implementation(libs.cucumber.core)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

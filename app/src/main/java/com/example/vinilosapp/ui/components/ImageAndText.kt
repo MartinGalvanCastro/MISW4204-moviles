@@ -46,6 +46,7 @@ fun ImageAndText(
     imageText: String,
     textAlign: TextAlign = TextAlign.Start,
     onSelect: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     val shapeModifier = when (imageShape) {
         ImageShape.CIRCULO ->
@@ -67,7 +68,7 @@ fun ImageAndText(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp),
     ) {
         Box(
             modifier = Modifier
@@ -84,8 +85,7 @@ fun ImageAndText(
                 model = imageUrl,
                 placeholder = defaultImage,
                 error = defaultImage,
-                onError = {
-                        state ->
+                onError = { state ->
                     state.result.throwable.message?.let { Log.e("ImageAndText", it) }
                     state.result.throwable.printStackTrace()
                 },
@@ -125,7 +125,8 @@ fun ImageAndText(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 4.dp)
-                .widthIn(max = 100.dp),
+                .widthIn(max = 100.dp)
+                .testTag("ImageText"),
             textAlign = textAlign,
             minLines = when (imageShape) {
                 ImageShape.CIRCULO -> 2
