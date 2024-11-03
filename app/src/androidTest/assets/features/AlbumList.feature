@@ -11,4 +11,4 @@ Feature: Album List
     When Un usuario invitado ingresa a Vinilos App
     Then Puede ver el listado de albumes
     When Ingresa la palabra "Buscando"
-    Then Solo puede los albumes que contengan la palabra "Buscando"
+    Then Solo puede ver el album "Buscando America"
