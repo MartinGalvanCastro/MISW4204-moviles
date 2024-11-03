@@ -159,6 +159,7 @@ tasks.withType<Test> {
 
 
 dependencies {
+    implementation(libs.androidx.ui.test.android)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.r8)
@@ -214,7 +215,6 @@ dependencies {
 
 
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.hilt.android.testing)
