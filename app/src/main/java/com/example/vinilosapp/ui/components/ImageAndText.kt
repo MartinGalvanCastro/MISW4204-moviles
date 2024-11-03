@@ -3,7 +3,6 @@ package com.example.vinilosapp.ui.components
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,12 +26,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
 import com.example.vinilosapp.R
-import com.example.vinilosapp.ui.theme.VinilosAppTheme
 
 enum class ImageShape {
     CIRCULO,
@@ -46,6 +43,7 @@ fun ImageAndText(
     imageText: String,
     textAlign: TextAlign = TextAlign.Start,
     onSelect: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     val shapeModifier = when (imageShape) {
         ImageShape.CIRCULO ->
@@ -67,7 +65,7 @@ fun ImageAndText(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp),
     ) {
         Box(
             modifier = Modifier
@@ -84,8 +82,7 @@ fun ImageAndText(
                 model = imageUrl,
                 placeholder = defaultImage,
                 error = defaultImage,
-                onError = {
-                        state ->
+                onError = { state ->
                     state.result.throwable.message?.let { Log.e("ImageAndText", it) }
                     state.result.throwable.printStackTrace()
                 },
@@ -125,7 +122,8 @@ fun ImageAndText(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 4.dp)
-                .widthIn(max = 100.dp),
+                .widthIn(max = 100.dp)
+                .testTag("ImageText"),
             textAlign = textAlign,
             minLines = when (imageShape) {
                 ImageShape.CIRCULO -> 2
@@ -136,33 +134,5 @@ fun ImageAndText(
                 ImageShape.CUADRADO -> 1
             },
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ImageAndTextPreview() {
-    VinilosAppTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            ImageAndText(
-                imageShape = ImageShape.CIRCULO,
-                imageUrl = "https://picsum.photos/100",
-                imageText = "Banda (Circle)",
-                textAlign = TextAlign.Center,
-                onSelect = { println("Circle Image Clicked") },
-            )
-
-            ImageAndText(
-                imageShape = ImageShape.CUADRADO,
-                imageUrl = "https://picsum.photos/165/150",
-                imageText = "Banda (Square)",
-                textAlign = TextAlign.Center,
-            )
-        }
     }
 }

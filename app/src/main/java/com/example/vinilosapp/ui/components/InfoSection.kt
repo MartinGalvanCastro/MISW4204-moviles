@@ -40,6 +40,7 @@ sealed class DetailDTO {
 @Composable
 fun InfoSection(
     item: DetailDTO,
+    modifier: Modifier = Modifier,
 ) {
     var listaInfo: List<ListItemValueItem>? = null
     var descriptionText: String? = null

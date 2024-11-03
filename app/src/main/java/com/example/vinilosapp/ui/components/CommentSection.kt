@@ -15,14 +15,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.models.CommentSimpleDTO
-import com.example.vinilosapp.ui.theme.VinilosAppTheme
-import java.math.BigDecimal
 
 @Composable
-fun CommentSection(comentarios: List<CommentSimpleDTO>) {
+fun CommentSection(comentarios: List<CommentSimpleDTO>, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -48,19 +45,5 @@ fun CommentSection(comentarios: List<CommentSimpleDTO>) {
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CommentSectionPreview() {
-    val comentarios = listOf<CommentSimpleDTO>(
-        CommentSimpleDTO(BigDecimal(1), "Lorem Ipsum", BigDecimal(4)),
-        CommentSimpleDTO(BigDecimal(2), "Lorem Ipsum", BigDecimal(4)),
-        CommentSimpleDTO(BigDecimal(3), "Lorem Ipsum", BigDecimal(4)),
-    )
-
-    VinilosAppTheme {
-        CommentSection(comentarios)
     }
 }

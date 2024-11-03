@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.models.AlbumDetailDTO
@@ -28,7 +29,7 @@ import com.example.vinilosapp.utils.TipoUsuario
 import com.example.vinilosapp.viewmodel.AlbumViewModel
 
 @Composable
-fun AlbumDetalleInternalSCreen(album: AlbumDetailDTO) {
+fun AlbumDetalleInternalScreen(album: AlbumDetailDTO) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,21 +39,22 @@ fun AlbumDetalleInternalSCreen(album: AlbumDetailDTO) {
     ) {
         InfoSection(
             item = DetailDTO.AlbumDetail(album),
+            modifier = Modifier.testTag("infoSection"),
         )
 
         if (album.tracks.isNotEmpty()) {
             Spacer(Modifier.height(5.dp))
-            CancionesSection(album.tracks, TipoUsuario.INVITADO)
+            CancionesSection(album.tracks, TipoUsuario.INVITADO, Modifier.testTag("tracksSection"))
         }
 
         if (album.performers.isNotEmpty()) {
             Spacer(Modifier.height(5.dp))
-            ArtistSection(album.performers)
+            ArtistSection(album.performers, Modifier.testTag("performersSection"))
         }
 
         if (album.comments.isNotEmpty()) {
             Spacer(Modifier.height(5.dp))
-            CommentSection(album.comments)
+            CommentSection(album.comments, Modifier.testTag("commentsSection"))
         }
     }
 }
@@ -74,7 +76,7 @@ fun AlbumDetalleScreen(albumId: String?, albumViewModel: AlbumViewModel = hiltVi
             if (album == null) {
                 DetailedTopBar("")
             } else {
-                DetailedTopBar(album!!.name)
+                DetailedTopBar(album!!.name, Modifier.testTag("topBarTitle"))
             }
         },
     ) { innerPadding ->
@@ -87,12 +89,16 @@ fun AlbumDetalleScreen(albumId: String?, albumViewModel: AlbumViewModel = hiltVi
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             item {
-                if (error != null || (!loading && album == null)) {
-                    error?.let { ScreenSkeleton(it) }
-                } else if (loading) {
-                    ScreenSkeleton("Cargando...")
-                } else {
-                    album?.let { AlbumDetalleInternalSCreen(it) }
+                when {
+                    error != null || (!loading && album == null) -> {
+                        error?.let { ScreenSkeleton(it, Modifier.testTag("errorMessage")) }
+                    }
+                    loading -> {
+                        ScreenSkeleton("Cargando...", Modifier.testTag("loadingMessage"))
+                    }
+                    else -> {
+                        album?.let { AlbumDetalleInternalScreen(it) }
+                    }
                 }
             }
         }

@@ -18,6 +18,7 @@ import com.example.vinilosapp.LocalAppState
 @Composable
 fun DetailedTopBar(
     text: String,
+    modifier: Modifier = Modifier,
 ) {
     val navController = LocalAppState.current.navController
     CenterAlignedTopAppBar(
