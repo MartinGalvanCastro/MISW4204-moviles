@@ -11,7 +11,6 @@ hiltNavigationCompose = "1.2.0"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-espressoCore = "3.6.1"
 kotlinxCoroutinesTest = "1.9.0"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.3"
@@ -31,13 +30,14 @@ orgJacocoAgent = "0.8.10"
 orgJacocoCore = "0.8.12"
 r8 = "8.5.35"
 retrofit = "2.9.0"
-rules = "1.6.1"
+rules = "1.5.0"
 uiautomator = "2.3.0"
 uiTextGoogleFonts = "1.7.4"
 junitJupiter = "5.10.0"
 junitVersion = "4.13.2"
 navigationTesting = "2.8.3"
 benchmarkMacro = "1.3.3"
+uiTestAndroid = "1.7.5"
 
 [libraries]
 android-mavericks = { module = "com.airbnb.android:mavericks", version.ref = "mavericksVersion" }
@@ -62,7 +62,6 @@ converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.r
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
 cucumber-hilt = { module = "io.cucumber:cucumber-android-hilt", version.ref = "cucumberAndroid" }
 cucumber-junit-rules-support = { module = "io.cucumber:cucumber-junit-rules-support", version.ref = "cucumberAndroid" }
-cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 hamcrest-library = { module = "org.hamcrest:hamcrest-library", version.ref = "hamcrestLibrary" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
@@ -70,7 +69,6 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -104,6 +102,7 @@ retrofit2-converter-scalars = { module = "com.squareup.retrofit2:converter-scala
 junit-junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro", version.ref = "benchmarkMacro" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
