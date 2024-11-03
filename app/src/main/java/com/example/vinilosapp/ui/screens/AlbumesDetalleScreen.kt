@@ -29,9 +29,9 @@ import com.example.vinilosapp.utils.TipoUsuario
 import com.example.vinilosapp.viewmodel.AlbumViewModel
 
 @Composable
-fun AlbumDetalleInternalScreen(album: AlbumDetailDTO, modifier: Modifier = Modifier) {
+fun AlbumDetalleInternalScreen(album: AlbumDetailDTO) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -39,7 +39,7 @@ fun AlbumDetalleInternalScreen(album: AlbumDetailDTO, modifier: Modifier = Modif
     ) {
         InfoSection(
             item = DetailDTO.AlbumDetail(album),
-            modifier = modifier.testTag("infoSection"),
+            modifier = Modifier.testTag("infoSection"),
         )
 
         if (album.tracks.isNotEmpty()) {
