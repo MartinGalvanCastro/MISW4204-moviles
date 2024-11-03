@@ -1,13 +1,16 @@
 package com.example.vinilosapp.screens
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import com.example.vinilosapp.MainActivity
+import com.example.vinilosapp.steps.ComposeRuleHolder
+import javax.inject.Inject
 
-class LoginScreenPage(val composeRule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>) {
+class LoginScreenPage@Inject constructor(
+    private val composeRuleHolder: ComposeRuleHolder,
+) {
+
+    private val composeRule = composeRuleHolder.composeRule
 
     // Test tags
     private val appLogoTag = "AppLogo"
