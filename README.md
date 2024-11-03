@@ -3,9 +3,8 @@
 ## Como Correr VinilosApp
 
 ### Pre requisitos:
-- Tener instalado Android Studio
+- Tener instalado Andriod Studio
 - Tener el emulador del dispositivo deseado configurado
-- Tener Java 11 instalado
 
 
 ### Pasos:
