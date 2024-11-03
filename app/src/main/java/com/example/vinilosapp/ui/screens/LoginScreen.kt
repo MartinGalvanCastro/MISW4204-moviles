@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.vinilosapp.LocalAppState
@@ -31,19 +32,20 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        AppLogo(modifier = Modifier.size(250.dp))
+        AppLogo(modifier = Modifier.size(250.dp).testTag("AppLogo"))
 
         Text(
             text = "¿Como quieres ingresar?",
             style = MaterialTheme.typography.displaySmall,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag("LoginPrompt"),
         )
 
         OutlinedButton(
             onClick = {
                 appState.tipoUsuario.value = TipoUsuario.INVITADO
             },
+            modifier = Modifier.testTag("InvitadoButton"),
         ) {
             Text("Invitado")
         }

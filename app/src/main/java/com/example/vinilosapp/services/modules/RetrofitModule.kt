@@ -34,7 +34,7 @@ object RetrofitModule {
     @Singleton
     fun provideRetrofit(moshi: Moshi): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://54.242.71.56:3000/")
+            .baseUrl("https://movilbackend.juanandresdeveloper.com/")
             .addConverterFactory(MoshiConverterFactory.create(moshi)) // Use MoshiConverterFactory
             .client(OkHttpClient.Builder().addInterceptor(logging).build())
             .build()
