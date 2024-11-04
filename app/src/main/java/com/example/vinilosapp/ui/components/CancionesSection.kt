@@ -53,7 +53,11 @@ fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario, 
         ) {
             val listaCanciones = canciones.map {
                     cancion ->
-                ListItemValueItem(item = cancion.name, value = cancion.duration)
+                ListItemValueItem(
+                    item = cancion.name,
+                    value = cancion.duration,
+                    modifier = Modifier,
+                )
             }
             ListItemValue(listaCanciones, extraSpacing = true)
         }
