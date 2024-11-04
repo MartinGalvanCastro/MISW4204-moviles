@@ -12,14 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 data class ListItemValueItem(
     val item: String,
     val value: String? = null,
-    val testTag: String = "", // Allows custom tag per item for finer control
+    val modifier: Modifier,
 )
 
 @Composable
@@ -29,15 +28,10 @@ fun ListItemValue(
     extraSpacing: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier,
-    ) {
-        for (index in items.indices) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        items.forEach { item ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(items[index].testTag),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
@@ -45,28 +39,21 @@ fun ListItemValue(
                     modifier = if (extraSpacing) Modifier.weight(2f) else Modifier.wrapContentWidth(),
                 ) {
                     if (showBulletPoint) {
-                        Text(
-                            text = "•",
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.testTag("${items[index].testTag}_bullet"),
-                        )
+                        Text(text = "•", style = MaterialTheme.typography.bodyMedium)
                         Spacer(modifier = Modifier.width(4.dp))
                     }
                     Text(
-                        text = items[index].item,
+                        text = item.item,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.testTag("${items[index].testTag}_itemText"),
                     )
                 }
 
-                items[index].value?.let { valueText ->
+                if (item.value != null) {
                     Text(
-                        text = valueText,
+                        text = item.value,
                         style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .testTag("${items[index].testTag}_itemValue"),
+                        modifier = if (extraSpacing) Modifier else Modifier.align(Alignment.CenterVertically),
                     )
                 }
             }
