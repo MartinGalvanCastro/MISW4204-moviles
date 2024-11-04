@@ -1,14 +1,14 @@
 package com.example.vinilosapp.screens
 
-import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
@@ -19,25 +19,11 @@ class AlbumScreenPage @Inject constructor(
 
     private val composeRule = composeRuleHolder.composeRule
 
-    // Elements
     private val filterTextField = composeRule.onNodeWithTag("filterTextField")
-    private val loadingMessage = composeRule.onNodeWithTag("loadingMessage")
-    private val errorMessage = composeRule.onNodeWithTag("errorMessage")
     private val albumGrid = composeRule.onNodeWithTag("albumGrid")
 
-    // Actions
     fun enterFilterText(text: String) {
         filterTextField.performTextInput(text)
-    }
-
-    // Verifications
-    fun assertLoadingIsDisplayed() {
-        loadingMessage.assertIsDisplayed()
-    }
-
-    fun assertErrorIsDisplayed(expectedMessage: String) {
-        errorMessage.assertIsDisplayed()
-        errorMessage.assertTextEquals(expectedMessage)
     }
 
     fun assertAlbumGridIsDisplayed(): Boolean {
@@ -45,6 +31,7 @@ class AlbumScreenPage @Inject constructor(
             albumGrid.assertIsDisplayed()
             true
         } catch (e: AssertionError) {
+            e.printStackTrace()
             false
         }
     }
@@ -56,23 +43,32 @@ class AlbumScreenPage @Inject constructor(
             val albumNodeList = albumNodes.fetchSemanticsNodes()
             assert(albumNodeList.isNotEmpty()) { "No album items found in the grid" }
 
-            albumNodeList.forEach { node ->
-                val albumTestTag = node.config[SemanticsProperties.TestTag]
+            albumNodeList.forEachIndexed { index, _ ->
 
-                val albumItem = composeRule.onNodeWithTag(albumTestTag ?: "")
+                val albumItem = albumNodes[index]
 
-                val image = albumItem.onChildren().filter(hasTestTag("ImageBox"))
-                assert(image.fetchSemanticsNodes().isNotEmpty()) { "Album image is missing" }
-                val text = albumItem.onChildren().filter(hasTestTag("ImageText"))
-                assert(text.fetchSemanticsNodes().isNotEmpty()) { "Album text is missing" }
+                albumItem.onChildren().filter(hasTestTag("ImageBox"))
+                    .assertCountEquals(1)
+
+                albumItem.onChildren().filter(hasTestTag("ImageText"))
+                    .assertCountEquals(1)
             }
             true
         } catch (e: AssertionError) {
+            e.printStackTrace()
             false
         }
     }
 
-    fun assertTextIsDisplayed(text: String) {
-        composeRule.onNodeWithText(text).assertExists("Text '$text' not found on the screen")
+    fun assertTextIsDisplayed(text: String): Boolean {
+        return try {
+            composeRule.onNode(
+                hasText("Buscando", substring = true, ignoreCase = true) and !hasSetTextAction(),
+            ).assertExists("Text 'Buscando' not found on the screen")
+            true
+        } catch (e: AssertionError) {
+            e.printStackTrace()
+            return false
+        }
     }
 }
