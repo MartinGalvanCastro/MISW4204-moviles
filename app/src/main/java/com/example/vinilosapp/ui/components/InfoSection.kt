@@ -56,21 +56,9 @@ fun InfoSection(
             val formattedDate = "%02d/%02d/%d".format(localDate.dayOfMonth, localDate.monthNumber, localDate.year)
 
             listaInfo = listOf(
-                ListItemValueItem(
-                    "Fecha de Publicación: ",
-                    formattedDate,
-                    "albumReleaseDate",
-                ),
-                ListItemValueItem(
-                    "Disquera: ",
-                    "SONY",
-                    "albumLabel",
-                ),
-                ListItemValueItem(
-                    "Género: ",
-                    "Rock",
-                    "albumGenre",
-                ),
+                ListItemValueItem("Fecha de Publicacion: ", formattedDate),
+                ListItemValueItem("Disquera: ", "SONY"), // Example data
+                ListItemValueItem("Genero: ", "Rock"), // Example data
             )
         }
         is DetailDTO.BandDetail -> {
@@ -81,25 +69,13 @@ fun InfoSection(
             val formattedDate = "%02d/%02d/%d".format(localDate.dayOfMonth, localDate.monthNumber, localDate.year)
 
             listaInfo = listOf(
-                ListItemValueItem(
-                    "Formada en: ",
-                    formattedDate,
-                    "bandCreationDate",
-                ),
+                ListItemValueItem("Formada en: ", formattedDate),
             )
         }
         is DetailDTO.ColeccionistaDetail -> {
             listaInfo = listOf(
-                ListItemValueItem(
-                    "Correo: ",
-                    item.coleccionistaDetail.email,
-                    "collectorEmail",
-                ),
-                ListItemValueItem(
-                    "Teléfono: ",
-                    item.coleccionistaDetail.telephone,
-                    "collectorPhone",
-                ),
+                ListItemValueItem("Correo: ", item.coleccionistaDetail.email),
+                ListItemValueItem("Telefono: ", item.coleccionistaDetail.telephone),
             )
         }
         is DetailDTO.MusicianDetail -> {
@@ -110,18 +86,15 @@ fun InfoSection(
             val formattedDate = "%02d/%02d/%d".format(localDate.dayOfMonth, localDate.monthNumber, localDate.year)
 
             listaInfo = listOf(
-                ListItemValueItem(
-                    "Fecha de Nacimiento: ",
-                    formattedDate,
-                    "musicianBirthDate",
-                ),
+                ListItemValueItem("Fecha de Nacimiento: ", formattedDate),
             )
         }
     }
 
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
     ) {
+        // Conditionally render the image if imageUrl is not null
         imageUrl?.let {
             Box(
                 modifier = Modifier.fillMaxWidth(),
@@ -148,12 +121,10 @@ fun InfoSection(
                 "\"$it\"",
                 textAlign = TextAlign.Justify,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .testTag("Description"),
+                modifier = Modifier.padding(vertical = 8.dp).testTag("albumDescription"),
             )
         }
 
-        ListItemValue(listaInfo, modifier = Modifier.testTag("InfoList"))
+        ListItemValue(listaInfo)
     }
 }
