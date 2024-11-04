@@ -1,15 +1,15 @@
 package com.example.vinilosapp.steps
 
-import com.example.vinilosapp.screens.AlbumDetalleScreenPage
-import com.example.vinilosapp.screens.AlbumScreenPage
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Then
+import com.example.vinilosapp.screens.AlbumDetalleScreenPage
+import com.example.vinilosapp.screens.AlbumScreenPage
 import javax.inject.Inject
 
 class AlbumDetalleSteps @Inject constructor(
     private val composeRuleHolder: ComposeRuleHolder,
     private val albumScreenPage: AlbumScreenPage,
-    private val albumDetalleScreenPage: AlbumDetalleScreenPage,
+    private val albumDetalleScreenPage: AlbumDetalleScreenPage
 ) {
 
     @Then("Puede ingresar a ver el detalle de un album")
