@@ -121,7 +121,7 @@ fun InfoSection(
                 "\"$it\"",
                 textAlign = TextAlign.Justify,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(vertical = 8.dp).testTag("albumDescription"),
             )
         }
 
