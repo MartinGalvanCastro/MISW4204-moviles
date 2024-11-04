@@ -12,26 +12,14 @@ class LoginScreenPage@Inject constructor(
 
     private val composeRule = composeRuleHolder.composeRule
 
-    // Test tags
     private val appLogoTag = "AppLogo"
     private val loginPromptTag = "LoginPrompt"
     private val invitadoButtonTag = "InvitadoButton"
 
     /**
-     * Asserts that the login prompt text is displayed.
-     */
-    fun assertLoginPromptIsDisplayed() {
-        composeRule.onNodeWithTag(loginPromptTag).assertIsDisplayed()
-    }
-
-    /**
      * Asserts that the app logo is displayed.
      */
     fun assertAppLogoIsDisplayed() {
-        composeRule.onNodeWithTag(appLogoTag).assertIsDisplayed()
-    }
-
-    fun assertInvitadoButtonIsDisplayed() {
         composeRule.onNodeWithTag(appLogoTag).assertIsDisplayed()
     }
 
