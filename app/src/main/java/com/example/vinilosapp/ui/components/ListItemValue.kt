@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 data class ListItemValueItem(
     val item: String,
     val value: String? = null,
+    val modifier: Modifier,
 )
 
 @Composable
@@ -25,6 +26,7 @@ fun ListItemValue(
     items: List<ListItemValueItem>,
     showBulletPoint: Boolean = false,
     extraSpacing: Boolean = false,
+    modifier: Modifier = Modifier,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items.forEach { item ->

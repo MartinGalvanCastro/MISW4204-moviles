@@ -14,7 +14,7 @@ import com.example.models.PerformerSimpleDTO
 import com.example.vinilosapp.LocalAppState
 
 @Composable
-fun ArtistSection(artistas: List<PerformerSimpleDTO>) {
+fun ArtistSection(artistas: List<PerformerSimpleDTO>, modifier: Modifier = Modifier) {
     val navController = LocalAppState.current.navController
 
     Column(

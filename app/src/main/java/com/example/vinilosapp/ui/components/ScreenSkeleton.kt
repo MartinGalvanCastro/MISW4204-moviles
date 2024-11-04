@@ -13,7 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ScreenSkeleton(screenName: String) {
+fun ScreenSkeleton(
+    screenName: String,
+    modifier: Modifier = Modifier,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()

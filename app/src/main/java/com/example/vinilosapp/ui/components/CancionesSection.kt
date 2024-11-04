@@ -1,7 +1,6 @@
 package com.example.vinilosapp.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,15 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.models.TrackSimpleDTO
-import com.example.vinilosapp.ui.theme.VinilosAppTheme
 import com.example.vinilosapp.utils.TipoUsuario
-import java.math.BigDecimal
 
 @Composable
-fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario) {
+fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario, modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,27 +53,13 @@ fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario) 
         ) {
             val listaCanciones = canciones.map {
                     cancion ->
-                ListItemValueItem(item = cancion.name, value = cancion.duration)
+                ListItemValueItem(
+                    item = cancion.name,
+                    value = cancion.duration,
+                    modifier = Modifier,
+                )
             }
             ListItemValue(listaCanciones, extraSpacing = true)
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CancionesSectionPreview() {
-    val listaCanciones = listOf(
-        TrackSimpleDTO(BigDecimal(1), "Cancion 1", "4:20"),
-        TrackSimpleDTO(BigDecimal(2), "Cancion 2", "4:20"),
-        TrackSimpleDTO(BigDecimal(3), "Cancion 3", "4:20"),
-        TrackSimpleDTO(BigDecimal(4), "Cancion 4", "4:20"),
-    )
-    VinilosAppTheme() {
-        Box(
-            modifier = Modifier.padding(15.dp),
-        ) {
-            CancionesSection(listaCanciones, TipoUsuario.INVITADO)
         }
     }
 }

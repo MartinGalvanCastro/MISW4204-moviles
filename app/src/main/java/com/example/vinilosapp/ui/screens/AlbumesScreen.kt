@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.vinilosapp.LocalAppState
@@ -66,7 +67,9 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
             value = filterText,
             onValueChange = { filterText = it },
             label = { Text("Filtro") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("filterTextField"),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -75,12 +78,16 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
             modifier = Modifier.fillMaxHeight(),
             contentAlignment = Alignment.Center,
         ) {
-            if (loading) {
-                ScreenSkeleton("Cargando...")
-            } else if (error != null) {
-                ScreenSkeleton(error!!)
-            } else {
-                GridLayout(gridItems)
+            when {
+                loading -> {
+                    ScreenSkeleton("Cargando...", modifier = Modifier.testTag("loadingMessage"))
+                }
+                error != null -> {
+                    ScreenSkeleton(error!!, modifier = Modifier.testTag("errorMessage"))
+                }
+                else -> {
+                    GridLayout(gridItems, modifier = Modifier.testTag("albumGrid"))
+                }
             }
         }
     }

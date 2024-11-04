@@ -19,7 +19,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        testInstrumentationRunner = "com.example.vinilosapp.config.VinilosAndroidJUnitRunner"
+        testInstrumentationRunnerArguments["optionsAnnotationPackage"] = "com.example.vinilosapp.config"
+        testInstrumentationRunnerArguments["glue"] = "com.example.vinilosapp.steps"
+
     }
 
     java {
@@ -48,6 +53,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -153,6 +159,10 @@ tasks.withType<Test> {
 
 
 dependencies {
+    implementation(libs.androidx.ui.test.android)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    implementation(libs.r8)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -205,7 +215,6 @@ dependencies {
 
 
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.hilt.android.testing)
@@ -215,6 +224,13 @@ dependencies {
     androidTestImplementation(libs.mvrx.testing)
     androidTestImplementation(libs.mavericks.mocking)
     androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.cucumber.android)
+    androidTestImplementation(libs.cucumber.hilt)
+    androidTestImplementation(libs.cucumber.junit.rules.support)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.uiautomator)
+    androidTestImplementation(libs.androidx.core)
+
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
