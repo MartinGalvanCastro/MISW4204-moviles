@@ -23,7 +23,7 @@ import com.example.vinilosapp.utils.TipoUsuario
 @Composable
 fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
@@ -56,7 +56,7 @@ fun CancionesSection(canciones: List<TrackSimpleDTO>, tipoUsuario: TipoUsuario, 
                 ListItemValueItem(
                     item = cancion.name,
                     value = cancion.duration,
-                    testTag = "songs_list",
+                    modifier = Modifier,
                 )
             }
             ListItemValue(listaCanciones, extraSpacing = true)

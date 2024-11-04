@@ -56,9 +56,9 @@ fun InfoSection(
             val formattedDate = "%02d/%02d/%d".format(localDate.dayOfMonth, localDate.monthNumber, localDate.year)
 
             listaInfo = listOf(
-                ListItemValueItem("Fecha de Publicacion: ", formattedDate),
-                ListItemValueItem("Disquera: ", "SONY"), // Example data
-                ListItemValueItem("Genero: ", "Rock"), // Example data
+                ListItemValueItem("Fecha de Publicacion: ", formattedDate, modifier = Modifier.testTag("albumReleaseDate")),
+                ListItemValueItem("Disquera: ", "SONY", modifier = Modifier.testTag("albumLabel")), // Example data
+                ListItemValueItem("Genero: ", "Rock", modifier = Modifier.testTag("albumGenre")), // Example data
             )
         }
         is DetailDTO.BandDetail -> {
@@ -69,13 +69,13 @@ fun InfoSection(
             val formattedDate = "%02d/%02d/%d".format(localDate.dayOfMonth, localDate.monthNumber, localDate.year)
 
             listaInfo = listOf(
-                ListItemValueItem("Formada en: ", formattedDate),
+                ListItemValueItem("Formada en: ", formattedDate, Modifier),
             )
         }
         is DetailDTO.ColeccionistaDetail -> {
             listaInfo = listOf(
-                ListItemValueItem("Correo: ", item.coleccionistaDetail.email),
-                ListItemValueItem("Telefono: ", item.coleccionistaDetail.telephone),
+                ListItemValueItem("Correo: ", item.coleccionistaDetail.email, Modifier),
+                ListItemValueItem("Telefono: ", item.coleccionistaDetail.telephone, Modifier),
             )
         }
         is DetailDTO.MusicianDetail -> {
@@ -86,7 +86,7 @@ fun InfoSection(
             val formattedDate = "%02d/%02d/%d".format(localDate.dayOfMonth, localDate.monthNumber, localDate.year)
 
             listaInfo = listOf(
-                ListItemValueItem("Fecha de Nacimiento: ", formattedDate),
+                ListItemValueItem("Fecha de Nacimiento: ", formattedDate, Modifier),
             )
         }
     }
@@ -125,6 +125,6 @@ fun InfoSection(
             )
         }
 
-        ListItemValue(listaInfo)
+        ListItemValue(listaInfo, modifier = Modifier.testTag("InfoList"))
     }
 }
