@@ -9,6 +9,8 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
@@ -21,9 +23,20 @@ class AlbumScreenPage @Inject constructor(
 
     private val filterTextField = composeRule.onNodeWithTag("filterTextField")
     private val albumGrid = composeRule.onNodeWithTag("albumGrid")
+    private val albumItemTag = "albumItem"
 
     fun enterFilterText(text: String) {
         filterTextField.performTextInput(text)
+    }
+
+    fun clickOnAlbum() {
+        val albums = composeRule.onAllNodesWithTag(albumItemTag)
+
+        if (albums.fetchSemanticsNodes().isNotEmpty()) {
+            albums[0].performClick()
+        } else {
+            throw AssertionError("No albums found to click on")
+        }
     }
 
     fun assertAlbumGridIsDisplayed(): Boolean {
