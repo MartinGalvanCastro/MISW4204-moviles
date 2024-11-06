@@ -1,14 +1,11 @@
 package com.example.vinilosapp.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.models.BandDetailDTO
 import com.example.models.BandSimpleDTO
-import com.example.models.PrizeDetailDTO
-import com.example.vinilosapp.models.ViewModelState
 import com.example.vinilosapp.repository.BandRepository
-import com.example.vinilosapp.repository.PrizeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,35 +13,56 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BandViewModel @Inject constructor(
-    bandRepository: BandRepository,
-    private val prizeRepository: PrizeRepository,
-) : BaseViewModel<BandSimpleDTO, BandDetailDTO>(bandRepository) {
+    private val bandRepository: BandRepository,
+) : ViewModel() {
 
-    constructor(
-        bandRepository: BandRepository,
-        prizeRepository: PrizeRepository,
-        ioDispatcher: CoroutineDispatcher,
-        defaultDispatcher: CoroutineDispatcher,
-    ) : this(bandRepository, prizeRepository) {
-        this.ioDispatcher = ioDispatcher
-        this.defaultDispatcher = defaultDispatcher
+    private val _bands = MutableStateFlow<List<BandSimpleDTO>>(emptyList())
+
+    private val _filteredBands = MutableStateFlow<List<BandSimpleDTO>>(emptyList())
+    val filteredBands: StateFlow<List<BandSimpleDTO>> = _filteredBands
+
+    private val _band = MutableStateFlow<BandDetailDTO?>(null)
+    val band: StateFlow<BandDetailDTO?> = _band
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
+
+    private val _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading
+
+    fun fetchBands() {
+        viewModelScope.launch {
+            _loading.value = true
+            val result = bandRepository.fetchBands()
+            result.onSuccess { bandList ->
+                _bands.value = bandList
+                _filteredBands.value = bandList
+            }.onFailure {
+                _errorMessage.value = "Error fetching bands"
+            }
+            _loading.value = false
+        }
     }
 
-    private val _prizesState = MutableStateFlow(ViewModelState<PrizeDetailDTO, PrizeDetailDTO>(isLoading = true))
-    val prizesState: StateFlow<ViewModelState<PrizeDetailDTO, PrizeDetailDTO>> = _prizesState
+    fun fetchBandById(id: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            val result = bandRepository.fetchBandById(id)
+            result.onSuccess { bandDetail ->
+                _band.value = bandDetail
+            }.onFailure {
+                _errorMessage.value = "Error fetching band details"
+            }
+            _loading.value = false
+        }
+    }
 
     fun filterBands(query: String) {
-        filterItems(query) { it.name }
-    }
-
-    fun fetchPrizesForPerformer(prizeIds: List<String>) {
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                _prizesState.value = _prizesState.value.copy(isLoading = true)
-                val prizes = prizeRepository.fetchPrizes(prizeIds) // Directly fetches the list of prizes
-                _prizesState.value = _prizesState.value.copy(items = prizes, isLoading = false)
-            } catch (e: Exception) {
-                _prizesState.value = _prizesState.value.copy(errorMessage = e.message, isLoading = false)
+        _filteredBands.value = if (query.isBlank()) {
+            _bands.value
+        } else {
+            _bands.value.filter { band ->
+                band.name.contains(query, ignoreCase = true)
             }
         }
     }
