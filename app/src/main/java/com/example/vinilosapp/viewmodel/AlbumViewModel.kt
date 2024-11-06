@@ -17,7 +17,6 @@ class AlbumViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _albums = MutableStateFlow<List<AlbumSimpleDTO>>(emptyList())
-    val albums: StateFlow<List<AlbumSimpleDTO>> = _albums
 
     private val _album = MutableStateFlow<AlbumDetailDTO?>(null)
     val album: StateFlow<AlbumDetailDTO?> = _album
