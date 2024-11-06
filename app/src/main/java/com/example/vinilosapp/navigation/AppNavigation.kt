@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.example.vinilosapp.ui.components.ScreenWrapper
 import com.example.vinilosapp.ui.screens.AlbumDetalleScreen
 import com.example.vinilosapp.ui.screens.AlbumesScreen
+import com.example.vinilosapp.ui.screens.ArtistasDetalleScreen
 import com.example.vinilosapp.ui.screens.ArtistasScreen
 import com.example.vinilosapp.ui.screens.BandasDetalleScreen
 import com.example.vinilosapp.ui.screens.BandasScreen
@@ -52,7 +53,7 @@ fun AppNavigation(navController: NavHostController) {
             arguments = listOf(navArgument("artistaId") { type = NavType.StringType }),
         ) { backStackEntry ->
             val albumId = backStackEntry.arguments?.getString("albumId")
-            AlbumDetalleScreen(albumId)
+            ArtistasDetalleScreen(albumId)
         }
         composable(
             route = Routes.BAND_DETALLE_SCREEN,
