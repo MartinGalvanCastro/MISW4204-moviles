@@ -86,7 +86,7 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
                     ScreenSkeleton(error!!, modifier = Modifier.testTag("errorMessage"))
                 }
                 else -> {
-                    GridLayout(gridItems, modifier = Modifier.testTag("albumGrid"))
+                    GridLayout(gridItems, "albumItem", modifier = Modifier.testTag("albumGrid"))
                 }
             }
         }
