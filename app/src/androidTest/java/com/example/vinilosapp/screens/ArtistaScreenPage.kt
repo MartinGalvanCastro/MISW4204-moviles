@@ -13,28 +13,28 @@ import androidx.compose.ui.test.performClick
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
 
-class AlbumScreenPage @Inject constructor(
+class ArtistaScreenPage @Inject constructor(
     composeRuleHolder: ComposeRuleHolder,
 ) {
 
     private val composeRule = composeRuleHolder.composeRule
 
-    private val albumGrid = composeRule.onNodeWithTag("albumGrid")
-    private val albumItemTag = "albumItem"
+    private val musicianGrid = composeRule.onNodeWithTag("musicianGrid")
+    private val musicianItemTag = "musicianItem"
 
-    fun clickOnAlbum() {
-        val albums = composeRule.onAllNodesWithTag(albumItemTag)
+    fun clickOnMusician() {
+        val musicians = composeRule.onAllNodesWithTag(musicianItemTag)
 
-        if (albums.fetchSemanticsNodes().isNotEmpty()) {
-            albums[0].performClick()
+        if (musicians.fetchSemanticsNodes().isNotEmpty()) {
+            musicians[0].performClick()
         } else {
-            throw AssertionError("No albums found to click on")
+            throw AssertionError("No musicians found to click on")
         }
     }
 
-    fun assertAlbumGridIsDisplayed(): Boolean {
+    fun assertMusicianGridIsDisplayed(): Boolean {
         return try {
-            albumGrid.assertIsDisplayed()
+            musicianGrid.assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
@@ -42,21 +42,21 @@ class AlbumScreenPage @Inject constructor(
         }
     }
 
-    fun assertEachAlbumHasImageAndText(): Boolean {
+    fun assertEachMusicianHasImageAndText(): Boolean {
         return try {
-            val albumNodes = composeRule.onAllNodesWithTag("albumItem")
+            val musicianNodes = composeRule.onAllNodesWithTag(musicianItemTag)
 
-            val albumNodeList = albumNodes.fetchSemanticsNodes()
-            assert(albumNodeList.isNotEmpty()) { "No album items found in the grid" }
+            val musicianNodeList = musicianNodes.fetchSemanticsNodes()
+            assert(musicianNodeList.isNotEmpty()) { "No musician items found in the grid" }
 
-            albumNodeList.forEachIndexed { index, _ ->
+            musicianNodeList.forEachIndexed { index, _ ->
 
-                val albumItem = albumNodes[index]
+                val musicianItem = musicianNodes[index]
 
-                albumItem.onChildren().filter(hasTestTag("ImageBox"))
+                musicianItem.onChildren().filter(hasTestTag("ImageBox"))
                     .assertCountEquals(1)
 
-                albumItem.onChildren().filter(hasTestTag("ImageText"))
+                musicianItem.onChildren().filter(hasTestTag("ImageText"))
                     .assertCountEquals(1)
             }
             true
@@ -69,12 +69,12 @@ class AlbumScreenPage @Inject constructor(
     fun assertTextIsDisplayed(text: String): Boolean {
         return try {
             composeRule.onNode(
-                hasText("Buscando", substring = true, ignoreCase = true) and !hasSetTextAction(),
-            ).assertExists("Text 'Buscando' not found on the screen")
+                hasText(text, substring = true, ignoreCase = true) and !hasSetTextAction(),
+            ).assertExists("Text '$text' not found on the screen")
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
-            return false
+            false
         }
     }
 }
