@@ -37,7 +37,7 @@ class BandasListSteps @Inject constructor(
     @Then("Solo puede ver las bandas que contengan la palabra {string}")
     fun soloPuedeVerLasBandasConNombre(bandName: String) {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
             bandScreenPage.assertTextIsDisplayed(bandName)
         }
     }
