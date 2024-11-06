@@ -30,6 +30,5 @@ class CommonSteps @Inject constructor(
         composeRuleHolder.composeRule.waitForIdle()
         helperPage.enterFilterText(palabra)
         composeRuleHolder.composeRule.waitForIdle()
-        // helperPage.hideKeyboard()
     }
 }

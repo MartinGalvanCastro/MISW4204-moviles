@@ -7,6 +7,7 @@ Feature: Album List
     And Cada album tiene su nombre, su foto
 
 
+
   Scenario: Poder filtrar un album por nombre como invitado
     When Un usuario invitado ingresa a Vinilos App
     Then Puede ver el listado de albumes
