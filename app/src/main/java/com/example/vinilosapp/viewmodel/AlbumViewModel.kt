@@ -1,5 +1,6 @@
 package com.example.vinilosapp.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.models.AlbumDetailDTO
 import com.example.models.AlbumSimpleDTO
@@ -13,25 +14,72 @@ import javax.inject.Inject
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository,
-) : BaseViewModel<AlbumSimpleDTO, AlbumDetailDTO>(albumRepository) {
+) : ViewModel() {
+
+    private val _albums = MutableStateFlow<List<AlbumSimpleDTO>>(emptyList())
+
+    private val _album = MutableStateFlow<AlbumDetailDTO?>(null)
+    val album: StateFlow<AlbumDetailDTO?> = _album
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage
 
     private val _successMessage = MutableStateFlow<String?>(null)
     val successMessage: StateFlow<String?> = _successMessage
 
+    private val _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading
+
+    private val _filteredAlbums = MutableStateFlow<List<AlbumSimpleDTO>>(emptyList())
+    val filteredAlbums: StateFlow<List<AlbumSimpleDTO>> = _filteredAlbums
+
+    fun fetchAlbums() {
+        viewModelScope.launch {
+            _loading.value = true
+            val result = albumRepository.fetchAlbums()
+            result.onSuccess { albumList ->
+                _albums.value = albumList
+                _filteredAlbums.value = albumList
+            }.onFailure {
+                _errorMessage.value = "Error fetching albums"
+            }
+            _loading.value = false
+        }
+    }
+
+    fun fetchAlbumById(id: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            val result = albumRepository.fetchAlbumById(id)
+            result.onSuccess { albumDetail ->
+                _album.value = albumDetail
+            }.onFailure {
+                _errorMessage.value = "Error fetching album details"
+            }
+            _loading.value = false
+        }
+    }
+
     fun createAlbum(newAlbum: AlbumSimpleDTO) {
         viewModelScope.launch {
-            setLoading(true)
+            _loading.value = true
             val result = albumRepository.createAlbum(newAlbum)
             result.onSuccess { createdAlbum ->
                 _successMessage.value = "Album '${createdAlbum.name}' created successfully!"
             }.onFailure {
-                setErrorMessage("Error creating album")
+                _errorMessage.value = "Error creating album"
             }
-            setLoading(false)
+            _loading.value = false
         }
     }
 
     fun filterAlbums(query: String) {
-        filterItems(query) { it.name }
+        _filteredAlbums.value = if (query.isBlank()) {
+            _albums.value
+        } else {
+            _albums.value.filter { album ->
+                album.name.contains(query, ignoreCase = true)
+            }
+        }
     }
 }

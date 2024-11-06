@@ -29,41 +29,41 @@ class BandRepositoryTest {
     private lateinit var bandRepository: BandRepository
 
     @Test
-    fun `Given network is connected and service success When fetchAll is called Then it should return a list of bands`() = runBlocking {
+    fun `Given network is connected and service success When fetchBands is called Then it should return a list of bands`() = runBlocking {
         val mockBands = listOf(mock(BandSimpleDTO::class.java), mock(BandSimpleDTO::class.java))
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(bandServiceAdapter.getBands()).thenReturn(Result.success(mockBands))
 
-        val result = bandRepository.fetchAll()
+        val result = bandRepository.fetchBands()
 
         assertTrue(result.isSuccess)
         assertEquals(mockBands, result.getOrNull())
     }
 
     @Test
-    fun `Given network is connected and service failure When fetchAll is called Then it should return failure`() = runBlocking {
+    fun `Given network is connected and service failure When fetchBands is called Then it should return failure`() = runBlocking {
         val exception = RuntimeException("Service error")
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(bandServiceAdapter.getBands()).thenReturn(Result.failure(exception))
 
-        val result = bandRepository.fetchAll()
+        val result = bandRepository.fetchBands()
 
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
     }
 
     @Test
-    fun `Given no network connection When fetchAll is called Then it should return network failure`() = runBlocking {
+    fun `Given no network connection When fetchBands is called Then it should return network failure`() = runBlocking {
         `when`(networkChecker.isConnected()).thenReturn(false)
 
-        val result = bandRepository.fetchAll()
+        val result = bandRepository.fetchBands()
 
         assertTrue(result.isFailure)
         assertEquals("No internet connection", result.exceptionOrNull()?.message)
     }
 
     @Test
-    fun `Given network is connected and service success When fetchById is called Then it should return band details`() = runBlocking {
+    fun `Given network is connected and service success When fetchBandById is called Then it should return band details`() = runBlocking {
         val bandId = "1"
         val mockBandDetail = BandDetailDTO(
             id = BigDecimal(bandId),
@@ -79,31 +79,31 @@ class BandRepositoryTest {
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(bandServiceAdapter.getBandById(bandId)).thenReturn(Result.success(mockBandDetail))
 
-        val result = bandRepository.fetchById(bandId)
+        val result = bandRepository.fetchBandById(bandId)
 
         assertTrue(result.isSuccess)
         assertEquals(mockBandDetail, result.getOrNull())
     }
 
     @Test
-    fun `Given network is connected and service failure When fetchById is called Then it should return failure`() = runBlocking {
+    fun `Given network is connected and service failure When fetchBandById is called Then it should return failure`() = runBlocking {
         val bandId = "1"
         val exception = RuntimeException("Service error")
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(bandServiceAdapter.getBandById(bandId)).thenReturn(Result.failure(exception))
 
-        val result = bandRepository.fetchById(bandId)
+        val result = bandRepository.fetchBandById(bandId)
 
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
     }
 
     @Test
-    fun `Given no network connection When fetchById is called Then it should return network failure`() = runBlocking {
+    fun `Given no network connection When fetchBandById is called Then it should return network failure`() = runBlocking {
         val bandId = "1"
         `when`(networkChecker.isConnected()).thenReturn(false)
 
-        val result = bandRepository.fetchById(bandId)
+        val result = bandRepository.fetchBandById(bandId)
 
         assertTrue(result.isFailure)
         assertEquals("No internet connection", result.exceptionOrNull()?.message)

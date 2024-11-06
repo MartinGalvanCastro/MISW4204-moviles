@@ -34,7 +34,7 @@ class MusicianRepositoryTest {
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(musicianServiceAdapter.getMusicians()).thenReturn(Result.success(mockMusicians))
 
-        val result = musicianRepository.fetchAll()
+        val result = musicianRepository.fetchMusicians()
 
         assertTrue(result.isSuccess)
         assertEquals(mockMusicians, result.getOrNull())
@@ -46,7 +46,7 @@ class MusicianRepositoryTest {
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(musicianServiceAdapter.getMusicians()).thenReturn(Result.failure(exception))
 
-        val result = musicianRepository.fetchAll()
+        val result = musicianRepository.fetchMusicians()
 
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
@@ -56,14 +56,14 @@ class MusicianRepositoryTest {
     fun `Given no network connection When fetchMusicians is called Then it should return network failure`() = runBlocking {
         `when`(networkChecker.isConnected()).thenReturn(false)
 
-        val result = musicianRepository.fetchAll()
+        val result = musicianRepository.fetchMusicians()
 
         assertTrue(result.isFailure)
         assertEquals("No internet connection", result.exceptionOrNull()?.message)
     }
 
     @Test
-    fun `Given network is connected and service success When fetchById is called Then it should return musician details`() = runBlocking {
+    fun `Given network is connected and service success When fetchMusicianById is called Then it should return musician details`() = runBlocking {
         val musicianId = "1"
         val mockMusicianDetail = MusicianDetailDTO(
             id = BigDecimal(musicianId),
@@ -78,31 +78,31 @@ class MusicianRepositoryTest {
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(musicianServiceAdapter.getMusicianById(musicianId)).thenReturn(Result.success(mockMusicianDetail))
 
-        val result = musicianRepository.fetchById(musicianId)
+        val result = musicianRepository.fetchMusicianById(musicianId)
 
         assertTrue(result.isSuccess)
         assertEquals(mockMusicianDetail, result.getOrNull())
     }
 
     @Test
-    fun `Given network is connected and service failure When fetchById is called Then it should return failure`() = runBlocking {
+    fun `Given network is connected and service failure When fetchMusicianById is called Then it should return failure`() = runBlocking {
         val musicianId = "1"
         val exception = RuntimeException("Service error")
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(musicianServiceAdapter.getMusicianById(musicianId)).thenReturn(Result.failure(exception))
 
-        val result = musicianRepository.fetchById(musicianId)
+        val result = musicianRepository.fetchMusicianById(musicianId)
 
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
     }
 
     @Test
-    fun `Given no network connection When fetchById is called Then it should return network failure`() = runBlocking {
+    fun `Given no network connection When fetchMusicianById is called Then it should return network failure`() = runBlocking {
         val musicianId = "1"
         `when`(networkChecker.isConnected()).thenReturn(false)
 
-        val result = musicianRepository.fetchById(musicianId)
+        val result = musicianRepository.fetchMusicianById(musicianId)
 
         assertTrue(result.isFailure)
         assertEquals("No internet connection", result.exceptionOrNull()?.message)

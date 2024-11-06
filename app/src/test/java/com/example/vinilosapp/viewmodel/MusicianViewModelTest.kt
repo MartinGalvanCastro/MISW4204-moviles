@@ -1,9 +1,8 @@
+package com.example.vinilosapp.viewmodel
+
 import com.example.models.MusicianDetailDTO
 import com.example.models.MusicianSimpleDTO
-import com.example.models.PrizeDetailDTO
 import com.example.vinilosapp.repository.MusicianRepository
-import com.example.vinilosapp.repository.PrizeRepository
-import com.example.vinilosapp.viewmodel.MusicianViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -33,9 +32,6 @@ class MusicianViewModelTest {
     @Mock
     private lateinit var musicianRepository: MusicianRepository
 
-    @Mock
-    private lateinit var prizeRepository: PrizeRepository
-
     @InjectMocks
     private lateinit var musicianViewModel: MusicianViewModel
 
@@ -52,30 +48,30 @@ class MusicianViewModelTest {
     }
 
     @Test
-    fun `Given successful repository response When fetchAllItems is called Then items are updated`() = runTest {
+    fun `Given successful repository response When fetchMusicians is called Then musicians are updated`() = runTest {
         val mockMusicianList = listOf(mock(MusicianSimpleDTO::class.java), mock(MusicianSimpleDTO::class.java))
-        `when`(musicianRepository.fetchAll()).thenReturn(Result.success(mockMusicianList))
+        `when`(musicianRepository.fetchMusicians()).thenReturn(Result.success(mockMusicianList))
 
-        musicianViewModel.fetchAllItems()
+        musicianViewModel.fetchMusicians()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockMusicianList, musicianViewModel.filteredItems.first())
+        assertEquals(mockMusicianList, musicianViewModel.filteredMusicians.first())
         assertThat(musicianViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given repository failure When fetchAllItems is called Then errorMessage is set`() = runTest {
-        `when`(musicianRepository.fetchAll()).thenReturn(Result.failure(RuntimeException("API error")))
+    fun `Given repository failure When fetchMusicians is called Then errorMessage is set`() = runTest {
+        `when`(musicianRepository.fetchMusicians()).thenReturn(Result.failure(RuntimeException("API error")))
 
-        musicianViewModel.fetchAllItems()
+        musicianViewModel.fetchMusicians()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching items: API error", musicianViewModel.errorMessage.first())
+        assertEquals("Error fetching musicians", musicianViewModel.errorMessage.first())
         assertThat(musicianViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given successful repository response When fetchDetailById is called Then detail is updated`() = runTest {
+    fun `Given successful repository response When fetchMusicianById is called Then musician is updated`() = runTest {
         val musicianId = "1"
         val mockMusicianDetail = MusicianDetailDTO(
             id = BigDecimal(musicianId),
@@ -87,83 +83,71 @@ class MusicianViewModelTest {
             collectors = emptyList(),
             performerPrizes = emptyList(),
         )
-        `when`(musicianRepository.fetchById(musicianId)).thenReturn(Result.success(mockMusicianDetail))
+        `when`(musicianRepository.fetchMusicianById(musicianId)).thenReturn(Result.success(mockMusicianDetail))
 
-        musicianViewModel.fetchDetailById(musicianId)
+        musicianViewModel.fetchMusicianById(musicianId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockMusicianDetail, musicianViewModel.detail.first())
+        assertEquals(mockMusicianDetail, musicianViewModel.musician.first())
         assertThat(musicianViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given repository failure When fetchDetailById is called Then errorMessage is set`() = runTest {
+    fun `Given repository failure When fetchMusicianById is called Then errorMessage is set`() = runTest {
         val musicianId = "1"
-        `when`(musicianRepository.fetchById(musicianId)).thenReturn(Result.failure(RuntimeException("API error")))
+        `when`(musicianRepository.fetchMusicianById(musicianId)).thenReturn(Result.failure(RuntimeException("API error")))
 
-        musicianViewModel.fetchDetailById(musicianId)
+        musicianViewModel.fetchMusicianById(musicianId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching item details: API error", musicianViewModel.errorMessage.first())
+        assertEquals("Error fetching musician details", musicianViewModel.errorMessage.first())
         assertThat(musicianViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given musicians exist When filterMusicians is called with matching query Then filteredItems is updated`() = runTest {
+    fun `Given musicians exist When filterMusicians is called with matching query Then filteredMusicians is updated`() = runTest {
         val musician1 = mock(MusicianSimpleDTO::class.java).apply { `when`(name).thenReturn("Musician One") }
         val musician2 = mock(MusicianSimpleDTO::class.java).apply { `when`(name).thenReturn("Musician Two") }
         val musician3 = mock(MusicianSimpleDTO::class.java).apply { `when`(name).thenReturn("Musician Three") }
 
-        `when`(musicianRepository.fetchAll()).thenReturn(Result.success(listOf(musician1, musician2, musician3)))
-        musicianViewModel.fetchAllItems()
+        `when`(musicianRepository.fetchMusicians()).thenReturn(Result.success(listOf(musician1, musician2, musician3)))
+        musicianViewModel.fetchMusicians()
         testDispatcher.scheduler.advanceUntilIdle()
 
         musicianViewModel.filterMusicians("One")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(musician1), musicianViewModel.filteredItems.first())
+        assertEquals(listOf(musician1), musicianViewModel.filteredMusicians.first())
     }
 
     @Test
-    fun `Given musicians exist When filterMusicians is called with non-matching query Then filteredItems is empty`() = runTest {
+    fun `Given musicians exist When filterMusicians is called with non-matching query Then filteredMusicians is empty`() = runTest {
         val musician1 = mock(MusicianSimpleDTO::class.java).apply { `when`(name).thenReturn("Musician One") }
         val musician2 = mock(MusicianSimpleDTO::class.java).apply { `when`(name).thenReturn("Musician Two") }
         val musician3 = mock(MusicianSimpleDTO::class.java).apply { `when`(name).thenReturn("Musician Three") }
 
-        `when`(musicianRepository.fetchAll()).thenReturn(Result.success(listOf(musician1, musician2, musician3)))
-        musicianViewModel.fetchAllItems()
+        `when`(musicianRepository.fetchMusicians()).thenReturn(Result.success(listOf(musician1, musician2, musician3)))
+        musicianViewModel.fetchMusicians()
         testDispatcher.scheduler.advanceUntilIdle()
 
         musicianViewModel.filterMusicians("Non-existing musician")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(musicianViewModel.filteredItems.first().isEmpty())
+        assertTrue(musicianViewModel.filteredMusicians.first().isEmpty())
     }
 
     @Test
-    fun `Given musicians exist When filterMusicians is called with blank query Then all items are shown`() = runTest {
+    fun `Given musicians exist When filterMusicians is called with blank query Then all musicians are shown`() = runTest {
         val musician1 = mock(MusicianSimpleDTO::class.java)
         val musician2 = mock(MusicianSimpleDTO::class.java)
-        `when`(musicianRepository.fetchAll()).thenReturn(Result.success(listOf(musician1, musician2)))
+        `when`(musicianRepository.fetchMusicians()).thenReturn(Result.success(listOf(musician1, musician2)))
 
-        musicianViewModel.fetchAllItems()
+        musicianViewModel.fetchMusicians()
         testDispatcher.scheduler.advanceUntilIdle()
 
         musicianViewModel.filterMusicians("")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(musician1, musician2), musicianViewModel.filteredItems.first())
-    }
-
-    @Test
-    fun `Given successful prize fetch When fetchPrizes is called Then prizes are updated`() = runTest {
-        val prizeId = "1"
-        val mockPrize = mock(PrizeDetailDTO::class.java)
-        `when`(prizeRepository.fetchPrizes(listOf(prizeId))).thenReturn(listOf(mockPrize))
-
-        musicianViewModel.fetchPrizes(listOf(prizeId))
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals(listOf(mockPrize), musicianViewModel.prizes.first())
+        assertEquals(listOf(musician1, musician2), musicianViewModel.filteredMusicians.first())
     }
 }
