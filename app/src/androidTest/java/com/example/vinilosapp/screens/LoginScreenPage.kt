@@ -13,7 +13,7 @@ class LoginScreenPage@Inject constructor(
     private val composeRule = composeRuleHolder.composeRule
 
     private val appLogoTag = "AppLogo"
-    private val loginPromptTag = "LoginPrompt"
+
     private val invitadoButtonTag = "InvitadoButton"
 
     /**

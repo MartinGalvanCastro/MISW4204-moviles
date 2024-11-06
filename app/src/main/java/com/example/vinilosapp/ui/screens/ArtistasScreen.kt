@@ -34,12 +34,24 @@ import com.example.vinilosapp.viewmodel.MusicianViewModel
 fun ArtistasScreen(musicianViewModel: MusicianViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
-    val state by musicianViewModel.state.collectAsState()
+    val musicians by musicianViewModel.filteredMusicians.collectAsState()
+    val loading by musicianViewModel.loading.collectAsState()
+    val error by musicianViewModel.errorMessage.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
 
+    val filteredMusicians = musicians.filter {
+        it.name.contains(filterText, ignoreCase = true)
+    }
+
+    val gridItems = filteredMusicians.map { musician ->
+        GridItemProps(name = musician.name, imageUrl = musician.image, onSelect = {
+            navController.navigate("${DetailRoutePrefix.ARTISTA_DETALLE_SCREEN}/${musician.id}")
+        })
+    }
+
     LaunchedEffect(Unit) {
-        musicianViewModel.fetchAllItems()
+        musicianViewModel.fetchMusicians()
     }
 
     LaunchedEffect(filterText) {
@@ -47,9 +59,7 @@ fun ArtistasScreen(musicianViewModel: MusicianViewModel = hiltViewModel()) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {
@@ -69,26 +79,14 @@ fun ArtistasScreen(musicianViewModel: MusicianViewModel = hiltViewModel()) {
             contentAlignment = Alignment.Center,
         ) {
             when {
-                state.isLoading -> {
+                loading -> {
                     ScreenSkeleton("Cargando...", modifier = Modifier.testTag("loadingMessage"))
                 }
-                state.errorMessage != null -> {
-                    ScreenSkeleton(state.errorMessage!!, modifier = Modifier.testTag("errorMessage"))
+                error != null -> {
+                    ScreenSkeleton(error!!, modifier = Modifier.testTag("errorMessage"))
                 }
                 else -> {
-                    GridLayout(
-                        items = state.filteredItems,
-                        itemTestTag = "musicianItem",
-                        modifier = Modifier.testTag("musicianGrid"),
-                    ) { musician ->
-                        GridItemProps(
-                            name = musician.name,
-                            imageUrl = musician.image,
-                            onSelect = {
-                                navController.navigate("${DetailRoutePrefix.ARTISTA_DETALLE_SCREEN}/${musician.id}")
-                            },
-                        )
-                    }
+                    GridLayout(gridItems, "musicianItem", modifier = Modifier.testTag("musicianGrid"))
                 }
             }
         }

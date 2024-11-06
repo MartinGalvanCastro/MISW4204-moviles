@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -29,31 +29,37 @@ import com.example.vinilosapp.navigation.DetailRoutePrefix
 import com.example.vinilosapp.ui.components.GridLayout
 import com.example.vinilosapp.ui.components.ScreenSkeleton
 import com.example.vinilosapp.viewmodel.AlbumViewModel
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 
-@OptIn(FlowPreview::class)
 @Composable
 fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
-    val state by albumViewModel.state.collectAsState()
+
+    val albums by albumViewModel.filteredAlbums.collectAsState()
+    val loading by albumViewModel.loading.collectAsState()
+    val error by albumViewModel.errorMessage.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
 
+    val filteredAlbums = albums.filter {
+        it.name.contains(filterText, ignoreCase = true)
+    }
+
+    val gridItems = filteredAlbums.map { album ->
+        GridItemProps(name = album.name, imageUrl = album.cover, onSelect = {
+            navController.navigate("${DetailRoutePrefix.ALBUM_DETALLE_SCREEN}/${album.id}")
+        })
+    }
+
     LaunchedEffect(Unit) {
-        albumViewModel.fetchAllItems()
+        albumViewModel.fetchAlbums()
     }
 
     LaunchedEffect(filterText) {
-        snapshotFlow { filterText }
-            .debounce(300)
-            .collect { albumViewModel.filterAlbums(it) }
+        albumViewModel.filterAlbums(filterText)
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {
@@ -66,36 +72,21 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
                 .testTag("filterTextField"),
         )
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxHeight(),
             contentAlignment = Alignment.Center,
         ) {
             when {
-                state.isLoading -> {
+                loading -> {
                     ScreenSkeleton("Cargando...", modifier = Modifier.testTag("loadingMessage"))
                 }
-                state.errorMessage != null -> {
-                    ScreenSkeleton(state.errorMessage!!, modifier = Modifier.testTag("errorMessage"))
-                }
-                state.filteredItems.isEmpty() && !state.isLoading -> {
-                    ScreenSkeleton("No se encontraron resultados", modifier = Modifier.testTag("emptyMessage"))
+                error != null -> {
+                    ScreenSkeleton(error!!, modifier = Modifier.testTag("errorMessage"))
                 }
                 else -> {
-                    GridLayout(
-                        items = state.filteredItems,
-                        itemTestTag = "albumItem",
-                        modifier = Modifier.testTag("albumGrid"),
-                    ) { album ->
-                        GridItemProps(
-                            name = album.name,
-                            imageUrl = album.cover,
-                            onSelect = {
-                                navController.navigate("${DetailRoutePrefix.ALBUM_DETALLE_SCREEN}/${album.id}")
-                            },
-                        )
-                    }
+                    GridLayout(gridItems, "albumItem", modifier = Modifier.testTag("albumGrid"))
                 }
             }
         }
