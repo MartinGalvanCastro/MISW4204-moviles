@@ -1,8 +1,9 @@
-package com.example.vinilosapp.viewmodel
-
 import com.example.models.BandDetailDTO
 import com.example.models.BandSimpleDTO
+import com.example.models.PrizeDetailDTO
 import com.example.vinilosapp.repository.BandRepository
+import com.example.vinilosapp.repository.PrizeRepository
+import com.example.vinilosapp.viewmodel.BandViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -32,6 +33,9 @@ class BandViewModelTest {
     @Mock
     private lateinit var bandRepository: BandRepository
 
+    @Mock
+    private lateinit var prizeRepository: PrizeRepository
+
     @InjectMocks
     private lateinit var bandViewModel: BandViewModel
 
@@ -48,30 +52,30 @@ class BandViewModelTest {
     }
 
     @Test
-    fun `Given successful repository response When fetchBands is called Then bands are updated`() = runTest {
+    fun `Given successful repository response When fetchAllItems is called Then items are updated`() = runTest {
         val mockBandList = listOf(mock(BandSimpleDTO::class.java), mock(BandSimpleDTO::class.java))
-        `when`(bandRepository.fetchBands()).thenReturn(Result.success(mockBandList))
+        `when`(bandRepository.fetchAll()).thenReturn(Result.success(mockBandList))
 
-        bandViewModel.fetchBands()
+        bandViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockBandList, bandViewModel.filteredBands.first())
+        assertEquals(mockBandList, bandViewModel.filteredItems.first())
         assertThat(bandViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given repository failure When fetchBands is called Then errorMessage is set`() = runTest {
-        `when`(bandRepository.fetchBands()).thenReturn(Result.failure(RuntimeException("API error")))
+    fun `Given repository failure When fetchAllItems is called Then errorMessage is set`() = runTest {
+        `when`(bandRepository.fetchAll()).thenReturn(Result.failure(RuntimeException("API error")))
 
-        bandViewModel.fetchBands()
+        bandViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching bands", bandViewModel.errorMessage.first())
+        assertEquals("Error fetching items: API error", bandViewModel.errorMessage.first())
         assertThat(bandViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given successful repository response When fetchBandById is called Then band is updated`() = runTest {
+    fun `Given successful repository response When fetchDetailById is called Then detail is updated`() = runTest {
         val bandId = "1"
         val mockBandDetail = BandDetailDTO(
             id = BigDecimal(bandId),
@@ -84,71 +88,83 @@ class BandViewModelTest {
             collectors = emptyList(),
             performerPrizes = emptyList(),
         )
-        `when`(bandRepository.fetchBandById(bandId)).thenReturn(Result.success(mockBandDetail))
+        `when`(bandRepository.fetchById(bandId)).thenReturn(Result.success(mockBandDetail))
 
-        bandViewModel.fetchBandById(bandId)
+        bandViewModel.fetchDetailById(bandId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockBandDetail, bandViewModel.band.first())
+        assertEquals(mockBandDetail, bandViewModel.detail.first())
         assertThat(bandViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given repository failure When fetchBandById is called Then errorMessage is set`() = runTest {
+    fun `Given repository failure When fetchDetailById is called Then errorMessage is set`() = runTest {
         val bandId = "1"
-        `when`(bandRepository.fetchBandById(bandId)).thenReturn(Result.failure(RuntimeException("API error")))
+        `when`(bandRepository.fetchById(bandId)).thenReturn(Result.failure(RuntimeException("API error")))
 
-        bandViewModel.fetchBandById(bandId)
+        bandViewModel.fetchDetailById(bandId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching band details", bandViewModel.errorMessage.first())
+        assertEquals("Error fetching item details: API error", bandViewModel.errorMessage.first())
         assertThat(bandViewModel.loading.first(), `is`(false))
     }
 
     @Test
-    fun `Given bands exist When filterBands is called with matching query Then filteredBands is updated`() = runTest {
+    fun `Given bands exist When filterBands is called with matching query Then filteredItems is updated`() = runTest {
         val band1 = mock(BandSimpleDTO::class.java).apply { `when`(name).thenReturn("Band One") }
         val band2 = mock(BandSimpleDTO::class.java).apply { `when`(name).thenReturn("Band Two") }
         val band3 = mock(BandSimpleDTO::class.java).apply { `when`(name).thenReturn("Band Three") }
 
-        `when`(bandRepository.fetchBands()).thenReturn(Result.success(listOf(band1, band2, band3)))
-        bandViewModel.fetchBands()
+        `when`(bandRepository.fetchAll()).thenReturn(Result.success(listOf(band1, band2, band3)))
+        bandViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
         bandViewModel.filterBands("One")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(band1), bandViewModel.filteredBands.first())
+        assertEquals(listOf(band1), bandViewModel.filteredItems.first())
     }
 
     @Test
-    fun `Given bands exist When filterBands is called with non-matching query Then filteredBands is empty`() = runTest {
+    fun `Given bands exist When filterBands is called with non-matching query Then filteredItems is empty`() = runTest {
         val band1 = mock(BandSimpleDTO::class.java).apply { `when`(name).thenReturn("Band One") }
         val band2 = mock(BandSimpleDTO::class.java).apply { `when`(name).thenReturn("Band Two") }
         val band3 = mock(BandSimpleDTO::class.java).apply { `when`(name).thenReturn("Band Three") }
 
-        `when`(bandRepository.fetchBands()).thenReturn(Result.success(listOf(band1, band2, band3)))
-        bandViewModel.fetchBands()
+        `when`(bandRepository.fetchAll()).thenReturn(Result.success(listOf(band1, band2, band3)))
+        bandViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
         bandViewModel.filterBands("Non-existing band")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(bandViewModel.filteredBands.first().isEmpty())
+        assertTrue(bandViewModel.filteredItems.first().isEmpty())
     }
 
     @Test
-    fun `Given bands exist When filterBands is called with blank query Then all bands are shown`() = runTest {
+    fun `Given bands exist When filterBands is called with blank query Then all items are shown`() = runTest {
         val band1 = mock(BandSimpleDTO::class.java)
         val band2 = mock(BandSimpleDTO::class.java)
-        `when`(bandRepository.fetchBands()).thenReturn(Result.success(listOf(band1, band2)))
+        `when`(bandRepository.fetchAll()).thenReturn(Result.success(listOf(band1, band2)))
 
-        bandViewModel.fetchBands()
+        bandViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
         bandViewModel.filterBands("")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(band1, band2), bandViewModel.filteredBands.first())
+        assertEquals(listOf(band1, band2), bandViewModel.filteredItems.first())
+    }
+
+    @Test
+    fun `Given successful prize fetch When fetchPrizes is called Then prizes are updated`() = runTest {
+        val prizeId = "1"
+        val mockPrize = mock(PrizeDetailDTO::class.java)
+        `when`(prizeRepository.fetchPrizes(listOf(prizeId))).thenReturn(listOf(mockPrize))
+
+        bandViewModel.fetchPrizes(listOf(prizeId))
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(listOf(mockPrize), bandViewModel.prizes.first())
     }
 }
