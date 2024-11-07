@@ -8,25 +8,15 @@ import javax.inject.Inject
 
 class AlbumRepository @Inject constructor(
     private val albumServiceAdapter: AlbumServiceAdapter,
-    private val networkChecker: NetworkChecker,
-) {
+    networkChecker: NetworkChecker,
+) : BaseRepository<AlbumSimpleDTO, AlbumDetailDTO>(networkChecker) {
 
-    suspend fun fetchAlbums(): Result<List<AlbumSimpleDTO>> {
-        return if (networkChecker.isConnected()) {
-            albumServiceAdapter.getAllAlbums()
-        } else {
-            // TODO: Agregar casos de Cache y Local Storage
-            Result.failure(Exception("No internet connection"))
-        }
+    override suspend fun fetchAllItems(): Result<List<AlbumSimpleDTO>> {
+        return albumServiceAdapter.getAllAlbums()
     }
 
-    suspend fun fetchAlbumById(id: String): Result<AlbumDetailDTO> {
-        return if (networkChecker.isConnected()) {
-            albumServiceAdapter.getAlbumById(id)
-        } else {
-            // TODO: Agregar casos de Cache y Local Storage
-            Result.failure(Exception("No internet connection"))
-        }
+    override suspend fun fetchItemById(id: String): Result<AlbumDetailDTO> {
+        return albumServiceAdapter.getAlbumById(id)
     }
 
     suspend fun createAlbum(newAlbum: AlbumSimpleDTO): Result<AlbumSimpleDTO> {

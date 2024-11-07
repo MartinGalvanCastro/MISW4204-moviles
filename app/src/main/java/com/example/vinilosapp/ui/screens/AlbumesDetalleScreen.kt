@@ -31,7 +31,7 @@ import com.example.vinilosapp.viewmodel.AlbumViewModel
 @Composable
 fun AlbumDetalleInternalScreen(album: AlbumDetailDTO, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -39,7 +39,7 @@ fun AlbumDetalleInternalScreen(album: AlbumDetailDTO, modifier: Modifier = Modif
     ) {
         InfoSection(
             item = DetailDTO.AlbumDetail(album),
-            modifier = modifier.testTag("infoSection"),
+            modifier = Modifier.testTag("infoSection"),
         )
 
         if (album.tracks.isNotEmpty()) {
@@ -49,7 +49,7 @@ fun AlbumDetalleInternalScreen(album: AlbumDetailDTO, modifier: Modifier = Modif
 
         if (album.performers.isNotEmpty()) {
             Spacer(Modifier.height(5.dp))
-            ArtistSection(album.performers, Modifier.testTag("performersSection"))
+            ArtistSection(album.performers, fromBandas = false, Modifier.testTag("performersSection"))
         }
 
         if (album.comments.isNotEmpty()) {
@@ -61,13 +61,13 @@ fun AlbumDetalleInternalScreen(album: AlbumDetailDTO, modifier: Modifier = Modif
 
 @Composable
 fun AlbumDetalleScreen(albumId: String?, albumViewModel: AlbumViewModel = hiltViewModel()) {
-    val album by albumViewModel.album.collectAsState()
+    val album by albumViewModel.detail.collectAsState()
     val loading by albumViewModel.loading.collectAsState()
     val error by albumViewModel.errorMessage.collectAsState()
 
     LaunchedEffect(albumId) {
         if (albumId != null) {
-            albumViewModel.fetchAlbumById(albumId)
+            albumViewModel.fetchDetailById(albumId)
         }
     }
 

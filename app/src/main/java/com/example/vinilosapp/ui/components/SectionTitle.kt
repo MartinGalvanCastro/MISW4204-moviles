@@ -12,12 +12,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SectionTitle(title: String) {
+fun SectionTitle(
+    title: String,
+    modifier: Modifier = Modifier,
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(40.dp))
             .border(
                 width = 2.dp,
@@ -25,11 +29,13 @@ fun SectionTitle(title: String) {
                 shape = RoundedCornerShape(8.dp),
             )
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .testTag("sectionTitleBox"), // Added test tag for easier testing
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.testTag("sectionTitleText"), // Added test tag for the title text
         )
     }
 

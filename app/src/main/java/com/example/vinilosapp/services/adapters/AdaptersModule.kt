@@ -33,4 +33,12 @@ object AdaptersModule {
     ): MusicianServiceAdapter {
         return musicianServiceRetrofit
     }
+
+    @Provides
+    @Singleton
+    fun providePrizeServiceAdapter(
+        premioServiceRetrofit: PremioServiceRetrofit,
+    ): PremioServiceAdapter {
+        return premioServiceRetrofit
+    }
 }
