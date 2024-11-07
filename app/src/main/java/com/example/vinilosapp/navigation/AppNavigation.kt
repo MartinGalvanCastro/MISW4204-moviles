@@ -52,8 +52,8 @@ fun AppNavigation(navController: NavHostController) {
             route = Routes.ARTISTA_DETALLE_SCREEN,
             arguments = listOf(navArgument("artistaId") { type = NavType.StringType }),
         ) { backStackEntry ->
-            val albumId = backStackEntry.arguments?.getString("albumId")
-            ArtistasDetalleScreen(albumId)
+            val artistaId = backStackEntry.arguments?.getString("artistaId")
+            ArtistasDetalleScreen(artistaId)
         }
         composable(
             route = Routes.BAND_DETALLE_SCREEN,

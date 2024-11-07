@@ -34,7 +34,7 @@ import com.example.vinilosapp.viewmodel.MusicianViewModel
 fun ArtistasScreen(musicianViewModel: MusicianViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
-    val musicians by musicianViewModel.filteredMusicians.collectAsState()
+    val musicians by musicianViewModel.items.collectAsState()
     val loading by musicianViewModel.loading.collectAsState()
     val error by musicianViewModel.errorMessage.collectAsState()
 
@@ -51,7 +51,7 @@ fun ArtistasScreen(musicianViewModel: MusicianViewModel = hiltViewModel()) {
     }
 
     LaunchedEffect(Unit) {
-        musicianViewModel.fetchMusicians()
+        musicianViewModel.fetchAllItems()
     }
 
     LaunchedEffect(filterText) {
