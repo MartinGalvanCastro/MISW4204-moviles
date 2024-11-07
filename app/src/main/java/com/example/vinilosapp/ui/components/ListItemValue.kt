@@ -12,13 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 data class ListItemValueItem(
     val item: String,
     val value: String? = null,
-    val modifier: Modifier,
+    val testTag: String = "", // Allows custom tag per item for finer control
 )
 
 @Composable
@@ -28,10 +29,15 @@ fun ListItemValue(
     extraSpacing: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier,
+    ) {
         items.forEach { item ->
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(item.testTag),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
@@ -39,21 +45,28 @@ fun ListItemValue(
                     modifier = if (extraSpacing) Modifier.weight(2f) else Modifier.wrapContentWidth(),
                 ) {
                     if (showBulletPoint) {
-                        Text(text = "•", style = MaterialTheme.typography.bodyMedium)
+                        Text(
+                            text = "•",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.testTag("${item.testTag}_bullet"),
+                        )
                         Spacer(modifier = Modifier.width(4.dp))
                     }
                     Text(
                         text = item.item,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
+                        modifier = Modifier.testTag("${item.testTag}_itemText"),
                     )
                 }
 
-                if (item.value != null) {
+                item.value?.let { valueText ->
                     Text(
-                        text = item.value,
+                        text = valueText,
                         style = MaterialTheme.typography.labelMedium,
-                        modifier = if (extraSpacing) Modifier else Modifier.align(Alignment.CenterVertically),
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .testTag("${item.testTag}_itemValue"),
                     )
                 }
             }

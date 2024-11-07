@@ -8,26 +8,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.models.PerformerSimpleDTO
+import com.example.models.AlbumSimpleDTO
 
 @Composable
-fun ArtistSection(
-    artistas: List<PerformerSimpleDTO>,
-    fromBandas: Boolean = false,
-    modifier: Modifier = Modifier,
-) {
+fun AlbumSection(albumes: List<AlbumSimpleDTO>, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .testTag(if (fromBandas) "bandMembersSection" else "artistsSection"),
+        modifier = modifier.fillMaxWidth(),
     ) {
-        SectionTitle(
-            title = if (fromBandas) "Integrantes" else "Artistas",
-            modifier = Modifier.testTag("sectionTitle"),
-        )
+        SectionTitle("Albumes")
 
         Row(
             modifier = Modifier
@@ -35,13 +25,13 @@ fun ArtistSection(
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            artistas.forEachIndexed { index, artista ->
+            albumes.forEach { album ->
+
                 ImageAndText(
                     imageShape = ImageShape.CIRCULO,
-                    imageUrl = artista.image,
-                    imageText = artista.name,
+                    imageUrl = album.cover,
+                    imageText = album.name,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("artistItem-$index"),
                 )
             }
         }

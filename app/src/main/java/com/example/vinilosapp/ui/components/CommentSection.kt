@@ -21,7 +21,7 @@ import com.example.models.CommentSimpleDTO
 @Composable
 fun CommentSection(comentarios: List<CommentSimpleDTO>, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     ) {
         SectionTitle("Comentarios")
 

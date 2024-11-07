@@ -8,24 +8,14 @@ import javax.inject.Inject
 
 class MusicianRepository @Inject constructor(
     private val musicianServiceAdapter: MusicianServiceAdapter,
-    private val networkChecker: NetworkChecker,
-) {
+    networkChecker: NetworkChecker,
+) : BaseRepository<MusicianSimpleDTO, MusicianDetailDTO>(networkChecker) {
 
-    suspend fun fetchMusicians(): Result<List<MusicianSimpleDTO>> {
-        return if (networkChecker.isConnected()) {
-            musicianServiceAdapter.getMusicians()
-        } else {
-            // TODO: Add cases for Cache and Local Storage
-            Result.failure(Exception("No internet connection"))
-        }
+    override suspend fun fetchAllItems(): Result<List<MusicianSimpleDTO>> {
+        return musicianServiceAdapter.getMusicians()
     }
 
-    suspend fun fetchMusicianById(id: String): Result<MusicianDetailDTO> {
-        return if (networkChecker.isConnected()) {
-            musicianServiceAdapter.getMusicianById(id)
-        } else {
-            // TODO: Add cases for Cache and Local Storage
-            Result.failure(Exception("No internet connection"))
-        }
+    override suspend fun fetchItemById(id: String): Result<MusicianDetailDTO> {
+        return musicianServiceAdapter.getMusicianById(id)
     }
 }

@@ -2,8 +2,9 @@ package com.example.vinilosapp.screens
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
 
@@ -13,13 +14,13 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     private val composeRule = composeRuleHolder.composeRule
     private val albumCoverTag = "Detail_Cover_Image"
-    private val albumDescriptionTag = "albumDescription"
-    private val albumReleaseDateLabel = "Fecha de Publicacion"
-    private val albumLabelTag = "Disquera"
-    private val albumGenreTag = "Genero"
-    private val tracksSectionTag = "Canciones"
-    private val performersSectionTag = "Artistas"
-    private val commentsSectionTag = "Comentarios"
+    private val albumDescriptionTag = "Description"
+    private val albumReleaseDateTag = "albumReleaseDate"
+    private val albumLabelTag = "albumLabel"
+    private val albumGenreTag = "albumGenre"
+    private val tracksSectionTag = "tracksSection"
+    private val performersSectionTag = "performersSection"
+    private val commentsSectionTag = "commentsSection"
 
     fun assertAlbumCoverIsDisplayed(): Boolean {
         return try {
@@ -43,7 +44,7 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     fun assertAlbumReleaseDateIsDisplayed(): Boolean {
         return try {
-            composeRule.onNodeWithText(albumReleaseDateLabel, useUnmergedTree = true, substring = true, ignoreCase = true).performScrollTo().assertIsDisplayed()
+            composeRule.onNodeWithTag(albumReleaseDateTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
@@ -53,7 +54,8 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     fun assertAlbumLabelIsDisplayed(): Boolean {
         return try {
-            composeRule.onNodeWithText(albumLabelTag, useUnmergedTree = true, substring = true, ignoreCase = true).performScrollTo().assertIsDisplayed()
+            composeRule.onRoot().printToLog("TAG")
+            composeRule.onNodeWithTag(albumLabelTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
@@ -63,7 +65,8 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     fun assertAlbumGenreIsDisplayed(): Boolean {
         return try {
-            composeRule.onNodeWithText(albumGenreTag, useUnmergedTree = true, substring = true, ignoreCase = true).performScrollTo().assertIsDisplayed()
+            composeRule.onRoot().printToLog("TAG")
+            composeRule.onNodeWithTag(albumGenreTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
@@ -73,7 +76,8 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     fun assertTracksSectionIsDisplayed(): Boolean {
         return try {
-            composeRule.onNodeWithText(tracksSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
+            composeRule.onRoot().printToLog("TAG")
+            composeRule.onNodeWithTag(tracksSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
@@ -83,7 +87,8 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     fun assertPerformersSectionIsDisplayed(): Boolean {
         return try {
-            composeRule.onNodeWithText(performersSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
+            composeRule.onRoot().printToLog("TAG")
+            composeRule.onNodeWithTag(performersSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
@@ -93,7 +98,8 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     fun assertCommentsSectionIsDisplayed(): Boolean {
         return try {
-            composeRule.onNodeWithText(commentsSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
+            composeRule.onRoot().printToLog("TAG")
+            composeRule.onNodeWithTag(commentsSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
