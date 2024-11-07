@@ -54,8 +54,8 @@ class BandaDetalleSteps @Inject constructor(
     @And("La banda tiene albumes")
     fun laBandaTieneAlbumes() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
-            bandaDetalleScreenPage.assertAlbumsSectionIsDisplayed()
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+            bandaDetalleScreenPage.assertPerformersSectionIsDisplayed()
         }
     }
 }
