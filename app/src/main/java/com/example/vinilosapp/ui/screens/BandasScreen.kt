@@ -34,7 +34,7 @@ import com.example.vinilosapp.viewmodel.BandViewModel
 fun BandasScreen(bandViewModel: BandViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
-    val bands by bandViewModel.filteredBands.collectAsState()
+    val bands by bandViewModel.items.collectAsState()
     val loading by bandViewModel.loading.collectAsState()
     val error by bandViewModel.errorMessage.collectAsState()
 
@@ -51,7 +51,7 @@ fun BandasScreen(bandViewModel: BandViewModel = hiltViewModel()) {
     }
 
     LaunchedEffect(Unit) {
-        bandViewModel.fetchBands()
+        bandViewModel.fetchAllItems()
     }
 
     LaunchedEffect(filterText) {
