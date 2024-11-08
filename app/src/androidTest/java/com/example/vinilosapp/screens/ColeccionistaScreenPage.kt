@@ -9,8 +9,6 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
 
@@ -39,7 +37,6 @@ class ColeccionistaScreenPage @Inject constructor(
     }
 
     fun assertAllCollectorsHaveDetails(): Boolean {
-        composeTestRule.onRoot().printToLog("TAG")
         return try {
             val collectorNodes = composeTestRule.onAllNodesWithTag(collectorItemTag)
 
