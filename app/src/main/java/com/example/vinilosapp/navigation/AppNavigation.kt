@@ -13,7 +13,7 @@ import com.example.vinilosapp.ui.screens.ArtistasDetalleScreen
 import com.example.vinilosapp.ui.screens.ArtistasScreen
 import com.example.vinilosapp.ui.screens.BandasDetalleScreen
 import com.example.vinilosapp.ui.screens.BandasScreen
-import com.example.vinilosapp.ui.screens.ColeccionistasScreen
+import com.example.vinilosapp.ui.screens.ColeccionistaScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
@@ -38,7 +38,7 @@ fun AppNavigation(navController: NavHostController) {
         }
         composable(Routes.COLECCIONISTAS_SCREEN) {
             ScreenWrapper {
-                ColeccionistasScreen()
+                ColeccionistaScreen()
             }
         }
         composable(
