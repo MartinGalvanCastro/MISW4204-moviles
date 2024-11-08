@@ -2,11 +2,9 @@ package com.example.vinilosapp.repository
 
 import com.example.models.CollectorDetailDTO
 import com.example.models.CollectorSimpleDTO
-import com.example.vinilosapp.di.Cache
 import com.example.vinilosapp.services.adapters.ColecionistaServiceAdapter
 import com.example.vinilosapp.utils.NetworkChecker
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -14,10 +12,9 @@ import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
+import java.math.BigDecimal
 
 @RunWith(MockitoJUnitRunner::class)
 class ColeccionistaRepositoryTest {
@@ -28,30 +25,12 @@ class ColeccionistaRepositoryTest {
     @Mock
     private lateinit var networkChecker: NetworkChecker
 
-    @Mock
-    private lateinit var cache: Cache
-
     @InjectMocks
     private lateinit var coleccionistaRepository: ColeccionistaRepository
 
     @Test
-    fun fetchAllItemsWithCachedData() = runTest {
-        val cacheKey = "list-CollectorSimpleDTO"
+    fun `Given network is connected and service success When fetchAllItems is called Then it should return a list of collectors`() = runBlocking {
         val mockCollectors = listOf(mock(CollectorSimpleDTO::class.java), mock(CollectorSimpleDTO::class.java))
-        `when`(cache.getList<CollectorSimpleDTO>(cacheKey)).thenReturn(mockCollectors)
-
-        val result = coleccionistaRepository.fetchAll()
-
-        assertTrue(result.isSuccess)
-        assertEquals(mockCollectors, result.getOrNull())
-        verify(coleccionistaServiceAdapter, never()).getColecionistas()
-    }
-
-    @Test
-    fun fetchAllItemsWithoutCachedData() = runTest {
-        val cacheKey = "list-CollectorSimpleDTO"
-        val mockCollectors = listOf(mock(CollectorSimpleDTO::class.java), mock(CollectorSimpleDTO::class.java))
-        `when`(cache.getList<CollectorSimpleDTO>(cacheKey)).thenReturn(null)
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(coleccionistaServiceAdapter.getColecionistas()).thenReturn(Result.success(mockCollectors))
 
@@ -59,14 +38,22 @@ class ColeccionistaRepositoryTest {
 
         assertTrue(result.isSuccess)
         assertEquals(mockCollectors, result.getOrNull())
-        verify(coleccionistaServiceAdapter).getColecionistas()
-        verify(cache).putList(cacheKey, mockCollectors)
     }
 
     @Test
-    fun fetchAllItemsWithoutNetwork() = runBlocking {
-        val cacheKey = "list-CollectorSimpleDTO"
-        `when`(cache.getList<CollectorSimpleDTO>(cacheKey)).thenReturn(null)
+    fun `Given network is connected and service failure When fetchAllItems is called Then it should return failure`() = runBlocking {
+        val exception = RuntimeException("Service error")
+        `when`(networkChecker.isConnected()).thenReturn(true)
+        `when`(coleccionistaServiceAdapter.getColecionistas()).thenReturn(Result.failure(exception))
+
+        val result = coleccionistaRepository.fetchAll()
+
+        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
+    }
+
+    @Test
+    fun `Given no network connection When fetchAllItems is called Then it should return network failure`() = runBlocking {
         `when`(networkChecker.isConnected()).thenReturn(false)
 
         val result = coleccionistaRepository.fetchAll()
@@ -76,25 +63,17 @@ class ColeccionistaRepositoryTest {
     }
 
     @Test
-    fun fetchItemByIdWithCachedData() = runTest {
+    fun `Given network is connected and service success When fetchItemById is called Then it should return collector details`() = runBlocking {
         val collectorId = "1"
-        val cacheKey = "detail-CollectorDetailDTO-$collectorId"
-        val mockCollectorDetail = mock(CollectorDetailDTO::class.java)
-        `when`(cache.getDetail<CollectorDetailDTO>(cacheKey)).thenReturn(mockCollectorDetail)
-
-        val result = coleccionistaRepository.fetchById(collectorId)
-
-        assertTrue(result.isSuccess)
-        assertEquals(mockCollectorDetail, result.getOrNull())
-        verify(coleccionistaServiceAdapter, never()).getColecionistaById(collectorId)
-    }
-
-    @Test
-    fun fetchItemByIdWithoutCachedData() = runTest {
-        val collectorId = "1"
-        val cacheKey = "detail-CollectorDetailDTO-$collectorId"
-        val mockCollectorDetail = mock(CollectorDetailDTO::class.java)
-        `when`(cache.getDetail<CollectorDetailDTO>(cacheKey)).thenReturn(null)
+        val mockCollectorDetail = CollectorDetailDTO(
+            id = BigDecimal(collectorId),
+            name = "Test Collector",
+            email = "collector@test.com",
+            telephone = "123456789",
+            favoritePerformers = emptyList(),
+            comments = emptyList(),
+            collectorAlbums = emptyList(),
+        )
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(coleccionistaServiceAdapter.getColecionistaById(collectorId)).thenReturn(Result.success(mockCollectorDetail))
 
@@ -102,15 +81,24 @@ class ColeccionistaRepositoryTest {
 
         assertTrue(result.isSuccess)
         assertEquals(mockCollectorDetail, result.getOrNull())
-        verify(coleccionistaServiceAdapter).getColecionistaById(collectorId)
-        verify(cache).putDetail(cacheKey, mockCollectorDetail)
     }
 
     @Test
-    fun fetchItemByIdWithoutNetwork() = runBlocking {
+    fun `Given network is connected and service failure When fetchItemById is called Then it should return failure`() = runBlocking {
         val collectorId = "1"
-        val cacheKey = "detail-CollectorDetailDTO-$collectorId"
-        `when`(cache.getDetail<CollectorDetailDTO>(cacheKey)).thenReturn(null)
+        val exception = RuntimeException("Service error")
+        `when`(networkChecker.isConnected()).thenReturn(true)
+        `when`(coleccionistaServiceAdapter.getColecionistaById(collectorId)).thenReturn(Result.failure(exception))
+
+        val result = coleccionistaRepository.fetchById(collectorId)
+
+        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
+    }
+
+    @Test
+    fun `Given no network connection When fetchItemById is called Then it should return network failure`() = runBlocking {
+        val collectorId = "1"
         `when`(networkChecker.isConnected()).thenReturn(false)
 
         val result = coleccionistaRepository.fetchById(collectorId)
