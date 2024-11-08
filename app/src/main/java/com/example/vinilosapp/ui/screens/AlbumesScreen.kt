@@ -34,7 +34,7 @@ import com.example.vinilosapp.viewmodel.AlbumViewModel
 fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
-    val albums by albumViewModel.filteredAlbums.collectAsState()
+    val albums by albumViewModel.filteredItems.collectAsState()
     val loading by albumViewModel.loading.collectAsState()
     val error by albumViewModel.errorMessage.collectAsState()
 
@@ -51,7 +51,7 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
     }
 
     LaunchedEffect(Unit) {
-        albumViewModel.fetchAlbums()
+        albumViewModel.fetchAllItems()
     }
 
     LaunchedEffect(filterText) {
@@ -86,7 +86,7 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
                     ScreenSkeleton(error!!, modifier = Modifier.testTag("errorMessage"))
                 }
                 else -> {
-                    GridLayout(gridItems, modifier = Modifier.testTag("albumGrid"))
+                    GridLayout(gridItems, "albumItem", modifier = Modifier.testTag("albumGrid"))
                 }
             }
         }

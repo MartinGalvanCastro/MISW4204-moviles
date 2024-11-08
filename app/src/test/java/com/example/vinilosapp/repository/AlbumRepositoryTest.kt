@@ -29,34 +29,34 @@ class AlbumRepositoryTest {
     private lateinit var albumRepository: AlbumRepository
 
     @Test
-    fun `Given network is connected and service success When fetchAlbums is called Then it should return a list of albums`() = runBlocking {
+    fun `Given network is connected and service success When fetchAll() is called Then it should return a list of albums`() = runBlocking {
         val mockAlbums = listOf(mock(AlbumSimpleDTO::class.java), mock(AlbumSimpleDTO::class.java))
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumServiceAdapter.getAllAlbums()).thenReturn(Result.success(mockAlbums))
 
-        val result = albumRepository.fetchAlbums()
+        val result = albumRepository.fetchAll()
 
         assertTrue(result.isSuccess)
         assertEquals(mockAlbums, result.getOrNull())
     }
 
     @Test
-    fun `Given network is connected and service failure When fetchAlbums is called Then it should return failure`() = runBlocking {
+    fun `Given network is connected and service failure When fetchAll() is called Then it should return failure`() = runBlocking {
         val exception = RuntimeException("Service error")
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumServiceAdapter.getAllAlbums()).thenReturn(Result.failure(exception))
 
-        val result = albumRepository.fetchAlbums()
+        val result = albumRepository.fetchAll()
 
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
     }
 
     @Test
-    fun `Given no network connection When fetchAlbums is called Then it should return network failure`() = runBlocking {
+    fun `Given no network connection When fetchAll() is called Then it should return network failure`() = runBlocking {
         `when`(networkChecker.isConnected()).thenReturn(false)
 
-        val result = albumRepository.fetchAlbums()
+        val result = albumRepository.fetchAll()
 
         assertTrue(result.isFailure)
         assertEquals("No internet connection", result.exceptionOrNull()?.message)
@@ -78,7 +78,7 @@ class AlbumRepositoryTest {
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumServiceAdapter.getAlbumById(albumId)).thenReturn(Result.success(mockAlbumDetail))
 
-        val result = albumRepository.fetchAlbumById(albumId)
+        val result = albumRepository.fetchById(albumId)
 
         assertTrue(result.isSuccess)
         assertEquals(mockAlbumDetail, result.getOrNull())
@@ -91,7 +91,7 @@ class AlbumRepositoryTest {
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumServiceAdapter.getAlbumById(albumId)).thenReturn(Result.failure(exception))
 
-        val result = albumRepository.fetchAlbumById(albumId)
+        val result = albumRepository.fetchById(albumId)
 
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
@@ -102,7 +102,7 @@ class AlbumRepositoryTest {
         val albumId = "1"
         `when`(networkChecker.isConnected()).thenReturn(false)
 
-        val result = albumRepository.fetchAlbumById(albumId)
+        val result = albumRepository.fetchById(albumId)
 
         assertTrue(result.isFailure)
         assertEquals("No internet connection", result.exceptionOrNull()?.message)

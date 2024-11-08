@@ -603,7 +603,7 @@
             "description":"Prizes awarded to the performer",
             "type":"array",
             "items":{
-              "$ref":"#/components/schemas/PerformerPrizeDTO"
+              "$ref":"#/components/schemas/PerformerPrizeSimpleDTO"
             }
           },
           "creationDate":{
@@ -669,7 +669,7 @@
             "description":"Prizes awarded to the performer",
             "type":"array",
             "items":{
-              "$ref":"#/components/schemas/PerformerPrizeDTO"
+              "$ref":"#/components/schemas/PerformerPrizeSimpleDTO"
             }
           },
           "creationDate":{

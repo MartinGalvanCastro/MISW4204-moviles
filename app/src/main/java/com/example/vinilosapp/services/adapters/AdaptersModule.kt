@@ -17,4 +17,36 @@ object AdaptersModule {
     ): AlbumServiceAdapter {
         return albumServiceRetrofit
     }
+
+    @Provides
+    @Singleton
+    fun provideBandServiceAdapter(
+        bandServiceRetrofit: BandServiceRetrofit,
+    ): BandServiceAdapter {
+        return bandServiceRetrofit
+    }
+
+    @Provides
+    @Singleton
+    fun provideMusicianServiceAdapter(
+        musicianServiceRetrofit: MusicianServiceRetrofit,
+    ): MusicianServiceAdapter {
+        return musicianServiceRetrofit
+    }
+
+    @Provides
+    @Singleton
+    fun providePrizeServiceAdapter(
+        premioServiceRetrofit: PremioServiceRetrofit,
+    ): PremioServiceAdapter {
+        return premioServiceRetrofit
+    }
+
+    @Provides
+    @Singleton
+    fun provideCollecionistaServiceAdapter(
+        collecionistaServiceRetrofit: ColecionistaServiceRetrofit,
+    ): ColecionistaServiceAdapter {
+        return collecionistaServiceRetrofit
+    }
 }
