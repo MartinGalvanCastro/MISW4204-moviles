@@ -41,4 +41,12 @@ object AdaptersModule {
     ): PremioServiceAdapter {
         return premioServiceRetrofit
     }
+
+    @Provides
+    @Singleton
+    fun provideCollecionistaServiceAdapter(
+        collecionistaServiceRetrofit: ColecionistaServiceRetrofit,
+    ): ColecionistaServiceAdapter {
+        return collecionistaServiceRetrofit
+    }
 }
