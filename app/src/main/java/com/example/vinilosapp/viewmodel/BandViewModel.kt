@@ -7,6 +7,7 @@ import com.example.models.PrizeDetailDTO
 import com.example.vinilosapp.repository.BandRepository
 import com.example.vinilosapp.repository.PrizeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -15,8 +16,18 @@ import javax.inject.Inject
 @HiltViewModel
 class BandViewModel @Inject constructor(
     bandRepository: BandRepository,
-    val prizeRepository: PrizeRepository,
+    private val prizeRepository: PrizeRepository,
 ) : BaseViewModel<BandSimpleDTO, BandDetailDTO>(bandRepository) {
+
+    constructor(
+        bandRepository: BandRepository,
+        prizeRepository: PrizeRepository,
+        ioDispatcher: CoroutineDispatcher,
+        defaultDispatcher: CoroutineDispatcher,
+    ) : this(bandRepository, prizeRepository) {
+        this.ioDispatcher = ioDispatcher
+        this.defaultDispatcher = defaultDispatcher
+    }
 
     private val _prizes = MutableStateFlow<List<PrizeDetailDTO>>(emptyList())
     val prizes: StateFlow<List<PrizeDetailDTO>> = _prizes
@@ -26,7 +37,7 @@ class BandViewModel @Inject constructor(
     }
 
     fun fetchPrizes(prizeIds: List<String>) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             _prizes.value = prizeRepository.fetchPrizes(prizeIds)
         }
     }

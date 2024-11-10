@@ -34,17 +34,13 @@ import com.example.vinilosapp.viewmodel.BandViewModel
 fun BandasScreen(bandViewModel: BandViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
-    val bands by bandViewModel.items.collectAsState()
+    val bands by bandViewModel.filteredItems.collectAsState()
     val loading by bandViewModel.loading.collectAsState()
     val error by bandViewModel.errorMessage.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
 
-    val filteredBands = bands.filter {
-        it.name.contains(filterText, ignoreCase = true)
-    }
-
-    val gridItems = filteredBands.map { band ->
+    val gridItems = bands.map { band ->
         GridItemProps(name = band.name, imageUrl = band.image, onSelect = {
             navController.navigate("${DetailRoutePrefix.BAND_DETALLE_SCREEN}/${band.id}")
         })

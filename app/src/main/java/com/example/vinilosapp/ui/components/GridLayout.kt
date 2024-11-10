@@ -15,17 +15,21 @@ fun GridLayout(
     itemTestTag: String,
     modifier: Modifier = Modifier,
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = modifier.fillMaxSize(),
-    ) {
-        items(items) { item ->
-            ImageAndText(
-                imageUrl = item.imageUrl,
-                imageText = item.name,
-                onSelect = item.onSelect,
-                modifier = Modifier.testTag(itemTestTag),
-            )
+    if (items.isEmpty()) {
+        ScreenSkeleton("No se encontro la informacion requerida")
+    } else {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = modifier.fillMaxSize(),
+        ) {
+            items(items) { item ->
+                ImageAndText(
+                    imageUrl = item.imageUrl,
+                    imageText = item.name,
+                    onSelect = item.onSelect,
+                    modifier = Modifier.testTag(itemTestTag),
+                )
+            }
         }
     }
 }

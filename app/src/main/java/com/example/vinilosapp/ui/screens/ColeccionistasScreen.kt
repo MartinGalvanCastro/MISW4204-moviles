@@ -29,15 +29,11 @@ import com.example.vinilosapp.viewmodel.ColeccionistaViewModel
 
 @Composable
 fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltViewModel()) {
-    val collectors by coleccionistaViewModel.items.collectAsState()
+    val collectors by coleccionistaViewModel.filteredItems.collectAsState()
     val loading by coleccionistaViewModel.loading.collectAsState()
     val error by coleccionistaViewModel.errorMessage.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
-
-    val filteredCollectors = collectors.filter {
-        it.name.contains(filterText, ignoreCase = true)
-    }
 
     LaunchedEffect(Unit) {
         coleccionistaViewModel.fetchAllItems()
@@ -77,7 +73,7 @@ fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltVie
                     modifier = Modifier.fillMaxSize().testTag("collectorList"),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    items(filteredCollectors) { collector ->
+                    items(collectors) { collector ->
                         ItemCard(
                             title = collector.name,
                             description = collector.email,

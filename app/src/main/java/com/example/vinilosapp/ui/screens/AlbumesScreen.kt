@@ -40,11 +40,7 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
 
     var filterText by remember { mutableStateOf("") }
 
-    val filteredAlbums = albums.filter {
-        it.name.contains(filterText, ignoreCase = true)
-    }
-
-    val gridItems = filteredAlbums.map { album ->
+    val gridItems = albums.map { album ->
         GridItemProps(name = album.name, imageUrl = album.cover, onSelect = {
             navController.navigate("${DetailRoutePrefix.ALBUM_DETALLE_SCREEN}/${album.id}")
         })
