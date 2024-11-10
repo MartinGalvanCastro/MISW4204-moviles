@@ -3,12 +3,16 @@ package com.example.vinilosapp.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vinilosapp.repository.BaseRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<SimpleDTO, DetailDTO>(
     protected val repository: BaseRepository<SimpleDTO, DetailDTO>,
+    protected var ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    protected var defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
     private val _items = MutableStateFlow<List<SimpleDTO>>(emptyList())
@@ -35,7 +39,7 @@ abstract class BaseViewModel<SimpleDTO, DetailDTO>(
     }
 
     fun fetchAllItems() {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             setLoading(true)
             val result = repository.fetchAll()
             result.onSuccess { itemList ->
@@ -49,7 +53,7 @@ abstract class BaseViewModel<SimpleDTO, DetailDTO>(
     }
 
     fun fetchDetailById(id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             setLoading(true)
             val result = repository.fetchById(id)
             result.onSuccess { detailItem ->
@@ -62,11 +66,13 @@ abstract class BaseViewModel<SimpleDTO, DetailDTO>(
     }
 
     fun filterItems(query: String, nameSelector: (SimpleDTO) -> String) {
-        _filteredItems.value = if (query.isBlank()) {
-            _items.value
-        } else {
-            _items.value.filter { item ->
-                nameSelector(item).contains(query, ignoreCase = true)
+        viewModelScope.launch(defaultDispatcher) {
+            _filteredItems.value = if (query.isBlank()) {
+                _items.value
+            } else {
+                _items.value.filter {
+                    nameSelector(it).contains(query, ignoreCase = true)
+                }
             }
         }
     }

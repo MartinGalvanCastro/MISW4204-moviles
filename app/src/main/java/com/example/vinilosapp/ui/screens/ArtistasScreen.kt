@@ -34,17 +34,13 @@ import com.example.vinilosapp.viewmodel.MusicianViewModel
 fun ArtistasScreen(musicianViewModel: MusicianViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
-    val musicians by musicianViewModel.items.collectAsState()
+    val musicians by musicianViewModel.filteredItems.collectAsState()
     val loading by musicianViewModel.loading.collectAsState()
     val error by musicianViewModel.errorMessage.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
 
-    val filteredMusicians = musicians.filter {
-        it.name.contains(filterText, ignoreCase = true)
-    }
-
-    val gridItems = filteredMusicians.map { musician ->
+    val gridItems = musicians.map { musician ->
         GridItemProps(name = musician.name, imageUrl = musician.image, onSelect = {
             navController.navigate("${DetailRoutePrefix.ARTISTA_DETALLE_SCREEN}/${musician.id}")
         })
