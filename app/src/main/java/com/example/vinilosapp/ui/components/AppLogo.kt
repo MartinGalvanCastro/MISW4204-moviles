@@ -3,6 +3,7 @@ package com.example.vinilosapp.ui.components
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -15,11 +16,13 @@ import coil3.svg.SvgDecoder
 fun AppLogo(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    val imageLoader = ImageLoader.Builder(context)
-        .components {
-            add(SvgDecoder.Factory())
-        }
-        .build()
+    val imageLoader = remember {
+        ImageLoader.Builder(context)
+            .components {
+                add(SvgDecoder.Factory())
+            }
+            .build()
+    }
 
     val imageRequest = ImageRequest.Builder(context)
         .data("file:///android_asset/logo.svg") // Your SVG file path

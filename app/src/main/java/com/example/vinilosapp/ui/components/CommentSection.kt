@@ -25,20 +25,20 @@ fun CommentSection(comentarios: List<CommentSimpleDTO>, modifier: Modifier = Mod
     ) {
         SectionTitle("Comentarios")
 
-        comentarios.forEach { comentario ->
+        for (index in comentarios.indices) {
             Column {
                 Text(
-                    text = "\"${comentario.description}\"",
+                    text = "\"${comentarios[index].description}\"",
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(start = 8.dp, bottom = 0.dp, top = 4.dp),
                 )
                 Row(
                     modifier = Modifier.padding(start = 8.dp, top = 0.dp),
                 ) {
-                    repeat(comentario.rating.toInt()) {
+                    repeat(comentarios[index].rating.toInt()) {
                         Icon(Icons.Default.Star, contentDescription = "Star", tint = Color.Black)
                     }
-                    repeat(5 - comentario.rating.toInt()) {
+                    repeat(5 - comentarios[index].rating.toInt()) {
                         Icon(Icons.Outlined.StarBorder, contentDescription = "Empty Star", tint = Color.Black)
                     }
                 }

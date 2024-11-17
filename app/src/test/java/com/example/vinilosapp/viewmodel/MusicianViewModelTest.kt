@@ -1,12 +1,12 @@
+package com.example.vinilosapp.viewmodel
+
 import com.example.models.MusicianDetailDTO
 import com.example.models.MusicianSimpleDTO
 import com.example.models.PrizeDetailDTO
 import com.example.vinilosapp.repository.MusicianRepository
 import com.example.vinilosapp.repository.PrizeRepository
-import com.example.vinilosapp.viewmodel.MusicianViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -19,10 +19,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import java.math.BigDecimal
 
@@ -36,14 +36,21 @@ class MusicianViewModelTest {
     @Mock
     private lateinit var prizeRepository: PrizeRepository
 
-    @InjectMocks
     private lateinit var musicianViewModel: MusicianViewModel
 
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
+        MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
+
+        musicianViewModel = MusicianViewModel(
+            musicianRepository = musicianRepository,
+            prizeRepository = prizeRepository,
+            ioDispatcher = testDispatcher,
+            defaultDispatcher = testDispatcher,
+        )
     }
 
     @After
@@ -53,14 +60,14 @@ class MusicianViewModelTest {
 
     @Test
     fun `Given successful repository response When fetchAllItems is called Then items are updated`() = runTest {
-        val mockMusicianList = listOf(mock(MusicianSimpleDTO::class.java), mock(MusicianSimpleDTO::class.java))
-        `when`(musicianRepository.fetchAll()).thenReturn(Result.success(mockMusicianList))
+        val mockMusicians = listOf(mock(MusicianSimpleDTO::class.java), mock(MusicianSimpleDTO::class.java))
+        `when`(musicianRepository.fetchAll()).thenReturn(Result.success(mockMusicians))
 
         musicianViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockMusicianList, musicianViewModel.filteredItems.first())
-        assertThat(musicianViewModel.loading.first(), `is`(false))
+        assertEquals(mockMusicians, musicianViewModel.state.value.filteredItems)
+        assertThat(musicianViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -70,8 +77,8 @@ class MusicianViewModelTest {
         musicianViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching items: API error", musicianViewModel.errorMessage.first())
-        assertThat(musicianViewModel.loading.first(), `is`(false))
+        assertEquals("API error", musicianViewModel.state.value.errorMessage)
+        assertThat(musicianViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -92,8 +99,8 @@ class MusicianViewModelTest {
         musicianViewModel.fetchDetailById(musicianId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockMusicianDetail, musicianViewModel.detail.first())
-        assertThat(musicianViewModel.loading.first(), `is`(false))
+        assertEquals(mockMusicianDetail, musicianViewModel.state.value.detail)
+        assertThat(musicianViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -104,8 +111,8 @@ class MusicianViewModelTest {
         musicianViewModel.fetchDetailById(musicianId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching item details: API error", musicianViewModel.errorMessage.first())
-        assertThat(musicianViewModel.loading.first(), `is`(false))
+        assertEquals("API error", musicianViewModel.state.value.errorMessage)
+        assertThat(musicianViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -121,7 +128,7 @@ class MusicianViewModelTest {
         musicianViewModel.filterMusicians("One")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(musician1), musicianViewModel.filteredItems.first())
+        assertEquals(listOf(musician1), musicianViewModel.state.value.filteredItems)
     }
 
     @Test
@@ -137,7 +144,7 @@ class MusicianViewModelTest {
         musicianViewModel.filterMusicians("Non-existing musician")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(musicianViewModel.filteredItems.first().isEmpty())
+        assertTrue(musicianViewModel.state.value.filteredItems.isEmpty())
     }
 
     @Test
@@ -152,18 +159,31 @@ class MusicianViewModelTest {
         musicianViewModel.filterMusicians("")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(musician1, musician2), musicianViewModel.filteredItems.first())
+        assertEquals(listOf(musician1, musician2), musicianViewModel.state.value.filteredItems)
     }
 
     @Test
-    fun `Given successful prize fetch When fetchPrizes is called Then prizes are updated`() = runTest {
+    fun `Given successful prize fetch When fetchPrizesForPerformer is called Then prizes are updated`() = runTest {
         val prizeId = "1"
         val mockPrize = mock(PrizeDetailDTO::class.java)
         `when`(prizeRepository.fetchPrizes(listOf(prizeId))).thenReturn(listOf(mockPrize))
 
-        musicianViewModel.fetchPrizes(listOf(prizeId))
+        musicianViewModel.fetchPrizesForPerformer(listOf(prizeId))
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(mockPrize), musicianViewModel.prizes.first())
+        assertEquals(listOf(mockPrize), musicianViewModel.prizesState.value.items)
+        assertThat(musicianViewModel.prizesState.value.isLoading, `is`(false))
+    }
+
+    @Test
+    fun `Given repository failure When fetchPrizesForPerformer is called Then errorMessage is set`() = runTest {
+        val prizeId = "1"
+        `when`(prizeRepository.fetchPrizes(listOf(prizeId))).thenThrow(RuntimeException("API error"))
+
+        musicianViewModel.fetchPrizesForPerformer(listOf(prizeId))
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("API error", musicianViewModel.prizesState.value.errorMessage)
+        assertThat(musicianViewModel.prizesState.value.isLoading, `is`(false))
     }
 }
