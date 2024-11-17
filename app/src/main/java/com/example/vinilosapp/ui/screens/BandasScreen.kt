@@ -34,21 +34,9 @@ import com.example.vinilosapp.viewmodel.BandViewModel
 fun BandasScreen(bandViewModel: BandViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
 
-    val bands by bandViewModel.items.collectAsState()
-    val loading by bandViewModel.loading.collectAsState()
-    val error by bandViewModel.errorMessage.collectAsState()
+    val state by bandViewModel.state.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
-
-    val filteredBands = bands.filter {
-        it.name.contains(filterText, ignoreCase = true)
-    }
-
-    val gridItems = filteredBands.map { band ->
-        GridItemProps(name = band.name, imageUrl = band.image, onSelect = {
-            navController.navigate("${DetailRoutePrefix.BAND_DETALLE_SCREEN}/${band.id}")
-        })
-    }
 
     LaunchedEffect(Unit) {
         bandViewModel.fetchAllItems()
@@ -59,7 +47,9 @@ fun BandasScreen(bandViewModel: BandViewModel = hiltViewModel()) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {
@@ -79,14 +69,26 @@ fun BandasScreen(bandViewModel: BandViewModel = hiltViewModel()) {
             contentAlignment = Alignment.Center,
         ) {
             when {
-                loading -> {
+                state.isLoading -> {
                     ScreenSkeleton("Cargando...", modifier = Modifier.testTag("loadingMessage"))
                 }
-                error != null -> {
-                    ScreenSkeleton(error!!, modifier = Modifier.testTag("errorMessage"))
+                state.errorMessage != null -> {
+                    ScreenSkeleton(state.errorMessage!!, modifier = Modifier.testTag("errorMessage"))
                 }
                 else -> {
-                    GridLayout(gridItems, "bandItem", modifier = Modifier.testTag("bandGrid"))
+                    GridLayout(
+                        items = state.filteredItems,
+                        itemTestTag = "bandItem",
+                        modifier = Modifier.testTag("bandGrid"),
+                    ) { band ->
+                        GridItemProps(
+                            name = band.name,
+                            imageUrl = band.image,
+                            onSelect = {
+                                navController.navigate("${DetailRoutePrefix.BAND_DETALLE_SCREEN}/${band.id}")
+                            },
+                        )
+                    }
                 }
             }
         }
