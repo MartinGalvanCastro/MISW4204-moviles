@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.vinilosapp.test">
+
+    <application>
+        <activity
+            android:name="com.example.vinilosapp.testingUtil.NavTestActivity"
+            android:exported="true" />
+    </application>
+
+</manifest>

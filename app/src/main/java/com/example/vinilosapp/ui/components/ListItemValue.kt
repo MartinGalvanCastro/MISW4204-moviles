@@ -33,11 +33,11 @@ fun ListItemValue(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier,
     ) {
-        for (index in items.indices) {
+        items.forEach { item ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag(items[index].testTag),
+                    .testTag(item.testTag),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
@@ -48,25 +48,25 @@ fun ListItemValue(
                         Text(
                             text = "•",
                             style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.testTag("${items[index].testTag}_bullet"),
+                            modifier = Modifier.testTag("${item.testTag}_bullet"),
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                     }
                     Text(
-                        text = items[index].item,
+                        text = item.item,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.testTag("${items[index].testTag}_itemText"),
+                        modifier = Modifier.testTag("${item.testTag}_itemText"),
                     )
                 }
 
-                items[index].value?.let { valueText ->
+                item.value?.let { valueText ->
                     Text(
                         text = valueText,
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
-                            .testTag("${items[index].testTag}_itemValue"),
+                            .testTag("${item.testTag}_itemValue"),
                     )
                 }
             }

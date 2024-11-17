@@ -25,11 +25,12 @@ fun AlbumSection(albumes: List<AlbumSimpleDTO>, modifier: Modifier = Modifier) {
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            for (index in albumes.indices) {
+            albumes.forEach { album ->
+
                 ImageAndText(
                     imageShape = ImageShape.CIRCULO,
-                    imageUrl = albumes[index].cover,
-                    imageText = albumes[index].name,
+                    imageUrl = album.cover,
+                    imageText = album.name,
                     textAlign = TextAlign.Center,
                 )
             }
