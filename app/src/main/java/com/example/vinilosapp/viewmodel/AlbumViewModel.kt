@@ -14,9 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository,
-) : BaseViewModel<AlbumSimpleDTO, AlbumDetailDTO>(
-    repository = albumRepository,
-) {
+) : BaseViewModel<AlbumSimpleDTO, AlbumDetailDTO>(albumRepository) {
 
     constructor(
         albumRepository: AlbumRepository,
@@ -31,20 +29,15 @@ class AlbumViewModel @Inject constructor(
     val successMessage: StateFlow<String?> = _successMessage
 
     fun createAlbum(newAlbum: AlbumSimpleDTO) {
-        viewModelScope.launch(ioDispatcher) {
-            _state.value = _state.value.copy(isLoading = true)
-
+        viewModelScope.launch {
+            setLoading(true)
             val result = albumRepository.createAlbum(newAlbum)
             result.onSuccess { createdAlbum ->
                 _successMessage.value = "Album '${createdAlbum.name}' created successfully!"
             }.onFailure {
-                _state.value = _state.value.copy(
-                    errorMessage = "Error creating album: ${it.message}",
-                    isLoading = false,
-                )
+                setErrorMessage("Error creating album")
             }
-
-            _state.value = _state.value.copy(isLoading = false)
+            setLoading(false)
         }
     }
 

@@ -1,8 +1,10 @@
 package com.example.vinilosapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -15,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.models.AlbumDetailDTO
 import com.example.vinilosapp.ui.components.ArtistSection
 import com.example.vinilosapp.ui.components.CancionesSection
 import com.example.vinilosapp.ui.components.CommentSection
@@ -26,92 +29,75 @@ import com.example.vinilosapp.utils.TipoUsuario
 import com.example.vinilosapp.viewmodel.AlbumViewModel
 
 @Composable
-fun AlbumDetalleScreen(
-    albumId: String?,
-    albumViewModel: AlbumViewModel = hiltViewModel(),
-) {
-    val state by albumViewModel.state.collectAsState()
+fun AlbumDetalleInternalScreen(album: AlbumDetailDTO, modifier: Modifier = Modifier) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        InfoSection(
+            item = DetailDTO.AlbumDetail(album),
+            modifier = Modifier.testTag("infoSection"),
+        )
+
+        if (album.tracks.isNotEmpty()) {
+            Spacer(Modifier.height(5.dp))
+            CancionesSection(album.tracks, TipoUsuario.INVITADO, Modifier.testTag("tracksSection"))
+        }
+
+        if (album.performers.isNotEmpty()) {
+            Spacer(Modifier.height(5.dp))
+            ArtistSection(album.performers, fromBandas = false, Modifier.testTag("performersSection"))
+        }
+
+        if (album.comments.isNotEmpty()) {
+            Spacer(Modifier.height(5.dp))
+            CommentSection(album.comments, Modifier.testTag("commentsSection"))
+        }
+    }
+}
+
+@Composable
+fun AlbumDetalleScreen(albumId: String?, albumViewModel: AlbumViewModel = hiltViewModel()) {
+    val album by albumViewModel.detail.collectAsState()
+    val loading by albumViewModel.loading.collectAsState()
+    val error by albumViewModel.errorMessage.collectAsState()
 
     LaunchedEffect(albumId) {
-        albumId?.let { albumViewModel.fetchDetailById(it) }
+        if (albumId != null) {
+            albumViewModel.fetchDetailById(albumId)
+        }
     }
 
     Scaffold(
         topBar = {
-            DetailedTopBar(
-                text = state.detail?.name.orEmpty(),
-                modifier = Modifier.testTag("topBarTitle"),
-            )
+            if (album == null) {
+                DetailedTopBar("")
+            } else {
+                DetailedTopBar(album!!.name, Modifier.testTag("topBarTitle"))
+            }
         },
     ) { innerPadding ->
-        when {
-            state.errorMessage != null -> {
-                ScreenSkeleton(
-                    screenName = state.errorMessage!!,
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize()
-                        .testTag("errorMessage"),
-                )
-            }
-            state.isLoading -> {
-                ScreenSkeleton(
-                    screenName = "Cargando...",
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize()
-                        .testTag("loadingMessage"),
-                )
-            }
-            state.detail != null -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .padding(horizontal = 32.dp)
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    item(key = "infoSection") {
-                        InfoSection(
-                            item = DetailDTO.AlbumDetail(state.detail!!),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag("infoSection"),
-                        )
+        LazyColumn(
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 32.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+        ) {
+            item {
+                when {
+                    error != null || (!loading && album == null) -> {
+                        error?.let { ScreenSkeleton(it, Modifier.testTag("errorMessage")) }
                     }
-
-                    if (state.detail!!.tracks.isNotEmpty()) {
-                        item(key = "tracksSection") {
-                            CancionesSection(
-                                state.detail!!.tracks,
-                                TipoUsuario.INVITADO,
-                                Modifier
-                                    .fillMaxWidth()
-                                    .testTag("tracksSection"),
-                            )
-                        }
+                    loading -> {
+                        ScreenSkeleton("Cargando...", Modifier.testTag("loadingMessage"))
                     }
-
-                    if (state.detail!!.performers.isNotEmpty()) {
-                        item(key = "performersSection") {
-                            ArtistSection(
-                                state.detail!!.performers,
-                                fromBandas = false,
-                                Modifier.testTag("performersSection"),
-                            )
-                        }
-                    }
-
-                    if (state.detail!!.comments.isNotEmpty()) {
-                        item(key = "commentsSection") {
-                            CommentSection(
-                                state.detail!!.comments,
-                                Modifier
-                                    .fillMaxWidth()
-                                    .testTag("commentsSection"),
-                            )
-                        }
+                    else -> {
+                        album?.let { AlbumDetalleInternalScreen(it) }
                     }
                 }
             }
