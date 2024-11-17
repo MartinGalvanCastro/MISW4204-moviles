@@ -1,0 +1,297 @@
+@startuml
+interface com.example.vinilosapp.services.api.MusicianAPI {
++ List<MusicianSimpleDTO> getMusicians()
++ MusicianDetailDTO getMusicianById(String)
+}
+
+class com.example.vinilosapp.ui.theme.ColorFamily {
+}
+class com.example.vinilosapp.config.TrustFactory {
++ Pair<SSLSocketFactory, X509TrustManager> getTrustFactoryManager(Context)
+}
+
+class com.example.vinilosapp.navigation.DetailRoutePrefix {
++  ALBUM_DETALLE_SCREEN
++  ARTISTA_DETALLE_SCREEN
++  BAND_DETALLE_SCREEN
+}
+
+class com.example.vinilosapp.navigation.Routes {
++  ALBUMS_SCREEN
++  ARTISTAS_SCREEN
++  BANDAS_SCREEN
++  COLECCIONISTAS_SCREEN
++  ALBUM_DETALLE_SCREEN
++  ARTISTA_DETALLE_SCREEN
++  BAND_DETALLE_SCREEN
+}
+
+class com.example.vinilosapp.repository.AlbumRepository {
++ Result<List<AlbumSimpleDTO>> fetchAllItems()
++ Result<AlbumDetailDTO> fetchItemById(String)
++ Result<AlbumSimpleDTO> createAlbum(AlbumSimpleDTO)
+}
+
+interface com.example.vinilosapp.services.api.AlbumAPI {
++ List<AlbumSimpleDTO> getAllAlbums()
++ AlbumDetailDTO getAlbumById(String)
++ AlbumSimpleDTO createAlbum(AlbumSimpleDTO)
+}
+
+class com.example.vinilosapp.viewmodel.ColeccionistaViewModel {
++ void filterCollectors(String)
+}
+
+abstract class com.example.vinilosapp.repository.BaseRepository {
+# Result<List<SimpleDTO>> fetchAllItems()
+# Result<DetailDTO> fetchItemById(String)
++ Result<List<SimpleDTO>> fetchAll()
++ Result<DetailDTO> fetchById(String)
+}
+
+interface com.example.vinilosapp.services.adapters.BandServiceAdapter {
++ Result<List<BandSimpleDTO>> getBands()
++ Result<BandDetailDTO> getBandById(String)
+}
+
+class com.example.vinilosapp.services.adapters.PremioServiceRetrofit {
+-  premioAPI
++ Result<PrizeDetailDTO> getPremioById(String)
+}
+
+
+enum com.example.vinilosapp.models.RecordLabel {
+}
+class com.example.vinilosapp.viewmodel.BandViewModel {
+-  _prizes
++ StateFlow<List<PrizeDetailDTO>> prizes
++ void filterBands(String)
++ void fetchPrizes(List<String>)
+}
+
+
+interface com.example.vinilosapp.services.api.PremioAPI {
++ PrizeDetailDTO getPremioById(String)
+}
+
+interface com.example.vinilosapp.services.adapters.MusicianServiceAdapter {
++ Result<List<MusicianSimpleDTO>> getMusicians()
++ Result<MusicianDetailDTO> getMusicianById(String)
+}
+
+class com.example.vinilosapp.services.adapters.MusicianServiceRetrofit {
+-  musicianAPI
++ Result<List<MusicianSimpleDTO>> getMusicians()
++ Result<MusicianDetailDTO> getMusicianById(String)
+}
+
+
+interface com.example.vinilosapp.services.adapters.AlbumServiceAdapter {
++ Result<List<AlbumSimpleDTO>> getAllAlbums()
++ Result<AlbumDetailDTO> getAlbumById(String)
++ Result<AlbumSimpleDTO> createAlbum(AlbumSimpleDTO)
+}
+
+class com.example.vinilosapp.viewmodel.MusicianViewModel {
+-  _prizes
++ StateFlow<List<PrizeDetailDTO>> prizes
++ void filterMusicians(String)
++ void fetchPrizes(List<String>)
+}
+
+
+enum com.example.vinilosapp.models.Genre {
+}
+class com.example.vinilosapp.ui.components.DetailDTO$AlbumDetail {
+}
+class com.example.vinilosapp.ui.components.DetailDTO$BandDetail {
+}
+class com.example.vinilosapp.ui.components.DetailDTO$MusicianDetail {
+}
+class com.example.vinilosapp.ui.components.DetailDTO$ColeccionistaDetail {
+}
+class com.example.vinilosapp.ui.components.DetailDTO {
+}
+class com.example.vinilosapp.services.modules.RetrofitModule {
++ Moshi provideMoshi()
++ Retrofit provideRetrofit(Moshi)
+}
+
+class com.example.vinilosapp.repository.MusicianRepository {
++ Result<List<MusicianSimpleDTO>> fetchAllItems()
++ Result<MusicianDetailDTO> fetchItemById(String)
+}
+
+class com.example.vinilosapp.utils.NetworkChecker {
++ Boolean isConnected()
+}
+
+class com.example.vinilosapp.di.DispatchersModule {
++ CoroutineDispatcher providesIoDispatcher()
++ CoroutineDispatcher providesDefaultDispatcher()
+}
+
+class com.example.vinilosapp.di.IoDispatcher {
+}
+class com.example.vinilosapp.di.DefaultDispatcher {
+}
+class com.example.vinilosapp.services.adapters.AdaptersModule {
++ AlbumServiceAdapter provideAlbumServiceAdapter(void,AlbumServiceRetrofit,void)
++ BandServiceAdapter provideBandServiceAdapter(void,BandServiceRetrofit,void)
++ MusicianServiceAdapter provideMusicianServiceAdapter(void,MusicianServiceRetrofit,void)
++ PremioServiceAdapter providePrizeServiceAdapter(void,PremioServiceRetrofit,void)
++ ColecionistaServiceAdapter provideCollecionistaServiceAdapter(void,ColecionistaServiceRetrofit,void)
+}
+
+class com.example.vinilosapp.services.adapters.ColecionistaServiceRetrofit {
+-  colecionistaAPI
++ Result<List<CollectorSimpleDTO>> getColecionistas()
++ Result<CollectorDetailDTO> getColecionistaById(String)
+}
+
+
+interface com.example.vinilosapp.services.adapters.PremioServiceAdapter {
++ Result<PrizeDetailDTO> getPremioById(String)
+}
+
+class com.example.vinilosapp.services.adapters.AlbumServiceRetrofit {
+-  albumAPI
++ Result<List<AlbumSimpleDTO>> getAllAlbums()
++ Result<AlbumDetailDTO> getAlbumById(String)
++ Result<AlbumSimpleDTO> createAlbum(AlbumSimpleDTO)
+}
+
+
+class com.example.vinilosapp.models.AppState {
+}
+class com.example.vinilosapp.repository.ColeccionistaRepository {
++ Result<List<CollectorSimpleDTO>> fetchAllItems()
++ Result<CollectorDetailDTO> fetchItemById(String)
+}
+
+class com.example.vinilosapp.services.adapters.BandServiceRetrofit {
+-  bandAPI
++ Result<List<BandSimpleDTO>> getBands()
++ Result<BandDetailDTO> getBandById(String)
+}
+
+
+abstract class com.example.vinilosapp.viewmodel.BaseViewModel {
+-  _items
++ StateFlow<List<SimpleDTO>> items
+-  _filteredItems
++ StateFlow<List<SimpleDTO>> filteredItems
+-  _detail
++ StateFlow<DetailDTO?> detail
+-  _errorMessage
++ StateFlow<String?> errorMessage
+-  _loading
++ StateFlow<Boolean> loading
+# void setLoading(Boolean)
+# void setErrorMessage(String?)
++ void fetchAllItems()
++ void fetchDetailById(String)
++ void filterItems(String,(SimpleDTO) -> String)
+}
+
+
+class com.example.vinilosapp.MainActivity {
++ void onCreate(Bundle?)
+}
+
+class com.example.vinilosapp.di.RequestHeaderInterceptor {
++ Response intercept(Interceptor.Chain)
+}
+
+class com.example.vinilosapp.di.NetworkModule {
++ Context provideContext(android.app.Application)
++ ConnectivityManager provideConnectivityManager(Context)
++ OkHttpClient provideOkHttpClient(void,Context,void)
+}
+
+interface com.example.vinilosapp.services.api.ColeccionistaAPI {
++ List<CollectorSimpleDTO> getCollectors()
++ CollectorDetailDTO getCollectors(String)
+}
+
+class com.example.vinilosapp.models.GridItemProps {
+}
+class com.example.vinilosapp.VinilosApplication {
++ ImageLoader imageLoader
++ ImageLoader newImageLoader(PlatformContext)
++ void onCreate()
+}
+
+
+class com.example.vinilosapp.di.ImageModule {
++ void provideImageLoader(void)
++ void null()
+}
+
+enum com.example.vinilosapp.utils.TipoUsuario {
+}
+class com.example.vinilosapp.RoutingActivity {
++ void onCreate(Bundle?)
+- void startSomeNextActivity()
+}
+
+interface com.example.vinilosapp.services.adapters.ColecionistaServiceAdapter {
++ Result<List<CollectorSimpleDTO>> getColecionistas()
++ Result<CollectorDetailDTO> getColecionistaById(String)
+}
+
+class com.example.vinilosapp.repository.BandRepository {
++ Result<List<BandSimpleDTO>> fetchAllItems()
++ Result<BandDetailDTO> fetchItemById(String)
+}
+
+class com.example.vinilosapp.ui.components.ListItemValueItem {
+}
+class com.example.vinilosapp.repository.PrizeRepository {
++ Result<List<PrizeDetailDTO>> fetchAllItems()
++ Result<PrizeDetailDTO> fetchItemById(String)
++ List<PrizeDetailDTO> fetchPrizes(List<String>)
+}
+
+interface com.example.vinilosapp.services.api.BandAPI {
++ List<BandSimpleDTO> getBands()
++ BandDetailDTO getBandById(String)
+}
+
+class com.example.vinilosapp.ui.components.NavbarItem {
+}
+class com.example.vinilosapp.viewmodel.AlbumViewModel {
+}
+enum com.example.vinilosapp.ui.components.ImageShape {
+}
+
+
+com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.AlbumRepository
+com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewmodel.ColeccionistaViewModel
+com.example.vinilosapp.services.adapters.PremioServiceAdapter <|.. com.example.vinilosapp.services.adapters.PremioServiceRetrofit
+com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewmodel.BandViewModel
+com.example.vinilosapp.services.adapters.MusicianServiceAdapter <|.. com.example.vinilosapp.services.adapters.MusicianServiceRetrofit
+com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewmodel.MusicianViewModel
+com.example.vinilosapp.ui.components.DetailDTO +.. com.example.vinilosapp.ui.components.DetailDTO$AlbumDetail
+com.example.vinilosapp.ui.components.DetailDTO <|-- com.example.vinilosapp.ui.components.DetailDTO$AlbumDetail
+com.example.vinilosapp.ui.components.DetailDTO +.. com.example.vinilosapp.ui.components.DetailDTO$BandDetail
+com.example.vinilosapp.ui.components.DetailDTO <|-- com.example.vinilosapp.ui.components.DetailDTO$BandDetail
+com.example.vinilosapp.ui.components.DetailDTO +.. com.example.vinilosapp.ui.components.DetailDTO$MusicianDetail
+com.example.vinilosapp.ui.components.DetailDTO <|-- com.example.vinilosapp.ui.components.DetailDTO$MusicianDetail
+com.example.vinilosapp.ui.components.DetailDTO +.. com.example.vinilosapp.ui.components.DetailDTO$ColeccionistaDetail
+com.example.vinilosapp.ui.components.DetailDTO <|-- com.example.vinilosapp.ui.components.DetailDTO$ColeccionistaDetail
+com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.MusicianRepository
+com.example.vinilosapp.services.adapters.ColecionistaServiceAdapter <|.. com.example.vinilosapp.services.adapters.ColecionistaServiceRetrofit
+com.example.vinilosapp.services.adapters.AlbumServiceAdapter <|.. com.example.vinilosapp.services.adapters.AlbumServiceRetrofit
+com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.ColeccionistaRepository
+com.example.vinilosapp.services.adapters.BandServiceAdapter <|.. com.example.vinilosapp.services.adapters.BandServiceRetrofit
+androidx.lifecycle.ViewModel <|-- com.example.vinilosapp.viewmodel.BaseViewModel
+androidx.activity.ComponentActivity <|-- com.example.vinilosapp.MainActivity
+okhttp3.Interceptor <|.. com.example.vinilosapp.di.RequestHeaderInterceptor
+android.app.Application <|-- com.example.vinilosapp.VinilosApplication
+com.example.vinilosapp.Factory <|.. com.example.vinilosapp.VinilosApplication
+android.app.Activity <|-- com.example.vinilosapp.RoutingActivity
+com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.BandRepository
+com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.PrizeRepository
+com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewmodel.AlbumViewModel
+@enduml
