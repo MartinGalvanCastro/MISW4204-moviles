@@ -13,25 +13,49 @@ import javax.inject.Inject
 @HiltViewModel
 class AlbumViewModel @Inject constructor(
     private val albumRepository: AlbumRepository,
-) : BaseViewModel<AlbumSimpleDTO, AlbumDetailDTO>(albumRepository) {
+) : BaseViewModel<AlbumSimpleDTO, AlbumDetailDTO>(
+    repository = albumRepository,
+) {
 
     private val _successMessage = MutableStateFlow<String?>(null)
     val successMessage: StateFlow<String?> = _successMessage
 
     fun createAlbum(newAlbum: AlbumSimpleDTO) {
-        viewModelScope.launch {
-            setLoading(true)
+        viewModelScope.launch(ioDispatcher) {
+            _state.value = _state.value.copy(isLoading = true)
+
             val result = albumRepository.createAlbum(newAlbum)
             result.onSuccess { createdAlbum ->
                 _successMessage.value = "Album '${createdAlbum.name}' created successfully!"
+                refreshAlbums() // Optionally refresh albums after creation
             }.onFailure {
-                setErrorMessage("Error creating album")
+                _state.value = _state.value.copy(
+                    errorMessage = "Error creating album: ${it.message}",
+                    isLoading = false,
+                )
             }
-            setLoading(false)
+
+            _state.value = _state.value.copy(isLoading = false)
         }
     }
 
     fun filterAlbums(query: String) {
         filterItems(query) { it.name }
+    }
+
+    private suspend fun refreshAlbums() {
+        val result = albumRepository.fetchAll()
+        result.onSuccess { itemList ->
+            _state.value = _state.value.copy(
+                items = itemList,
+                filteredItems = itemList,
+                isLoading = false,
+            )
+        }.onFailure {
+            _state.value = _state.value.copy(
+                errorMessage = "Error refreshing albums: ${it.message}",
+                isLoading = false,
+            )
+        }
     }
 }
