@@ -18,10 +18,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import java.math.BigDecimal
 
@@ -32,14 +32,17 @@ class ColeccionistaViewModelTest {
     @Mock
     private lateinit var coleccionistaRepository: ColeccionistaRepository
 
-    @InjectMocks
     private lateinit var coleccionistaViewModel: ColeccionistaViewModel
 
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
+        MockitoAnnotations.openMocks(this)
+
         Dispatchers.setMain(testDispatcher)
+
+        coleccionistaViewModel = ColeccionistaViewModel(coleccionistaRepository, testDispatcher, testDispatcher)
     }
 
     @After
