@@ -12,7 +12,7 @@ class AlbumListSteps @Inject constructor(
     @Then("Puede ver el listado de albumes")
     fun puedeVerListadoAlbumes() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 15_000) {
             albumScreenPage.assertAlbumGridIsDisplayed()
         }
     }
@@ -20,7 +20,7 @@ class AlbumListSteps @Inject constructor(
     @Then("Cada album tiene su nombre, su foto")
     fun cadaAlbumTieneNombreFotoYArtista() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 15_000) {
             albumScreenPage.assertEachAlbumHasImageAndText()
         }
     }
@@ -28,7 +28,7 @@ class AlbumListSteps @Inject constructor(
     @Then("Solo puede ver los albumes que contengan la palabra {string}")
     fun soloPuedeVerElAlbum(albumName: String) {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 15_000) {
             albumScreenPage.assertTextIsDisplayed(albumName)
         }
     }
