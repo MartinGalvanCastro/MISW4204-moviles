@@ -1,11 +1,9 @@
 package com.example.vinilosapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -18,8 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.models.MusicianDetailDTO
-import com.example.models.PrizeDetailDTO
 import com.example.vinilosapp.ui.components.AlbumSection
 import com.example.vinilosapp.ui.components.DetailDTO
 import com.example.vinilosapp.ui.components.DetailedTopBar
@@ -29,84 +25,84 @@ import com.example.vinilosapp.ui.components.ScreenSkeleton
 import com.example.vinilosapp.viewmodel.MusicianViewModel
 
 @Composable
-fun ArtistaDetalleInternalScreen(
-    artista: MusicianDetailDTO,
-    premios: List<PrizeDetailDTO>,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.Start,
-    ) {
-        InfoSection(
-            item = DetailDTO.MusicianDetail(artista),
-            modifier = Modifier.testTag("infoSection"),
-        )
-
-        if (!artista.performerPrizes.isNullOrEmpty() && premios.isNotEmpty()) {
-            Spacer(Modifier.height(5.dp))
-            Log.d("PREMIOS>>>", premios.toString())
-            PremiosSection(premios, Modifier.testTag("premiosSection"))
-        }
-
-        if (!artista.albums.isNullOrEmpty()) {
-            Spacer(Modifier.height(5.dp))
-            AlbumSection(artista.albums, Modifier.testTag("albumsSection"))
-        }
-    }
-}
-
-@Composable
 fun ArtistasDetalleScreen(
     artistaId: String?,
     artistaViewModel: MusicianViewModel = hiltViewModel(),
 ) {
-    val artista by artistaViewModel.detail.collectAsState()
-    val loadingArtista by artistaViewModel.loading.collectAsState()
-    val errorArtista by artistaViewModel.errorMessage.collectAsState()
-    val premios by artistaViewModel.prizes.collectAsState()
+    val performerState by artistaViewModel.state.collectAsState()
+    val prizesState by artistaViewModel.prizesState.collectAsState()
 
     LaunchedEffect(artistaId) {
-        if (artistaId != null) {
-            artistaViewModel.fetchDetailById(artistaId)
-        }
+        artistaId?.let { artistaViewModel.fetchDetailById(it) }
     }
 
-    LaunchedEffect(artista) {
-        artista?.performerPrizes?.let { prizes ->
-            artistaViewModel.fetchPrizes(prizes.map { prize -> prize.id.toString() })
+    LaunchedEffect(performerState.detail) {
+        performerState.detail?.performerPrizes?.map { it.id.toString() }?.let { prizeIds ->
+            artistaViewModel.fetchPrizesForPerformer(prizeIds)
         }
     }
 
     Scaffold(
         topBar = {
             DetailedTopBar(
-                text = artista?.name.orEmpty(),
+                text = performerState.detail?.name.orEmpty(),
                 modifier = Modifier.testTag("topBarTitle"),
             )
         },
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 32.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopStart,
         ) {
-            item {
-                when {
-                    errorArtista != null || (!loadingArtista && artista == null) -> {
-                        errorArtista?.let { ScreenSkeleton(it, Modifier.testTag("errorMessage")) }
-                    }
-                    loadingArtista -> {
-                        ScreenSkeleton("Cargando...", Modifier.testTag("loadingMessage"))
-                    }
-                    else -> {
-                        artista?.let { ArtistaDetalleInternalScreen(it, premios) }
+            when {
+                performerState.errorMessage != null -> {
+                    ScreenSkeleton(
+                        screenName = performerState.errorMessage!!,
+                        modifier = Modifier.testTag("errorMessage"),
+                    )
+                }
+                performerState.isLoading || prizesState.isLoading -> {
+                    ScreenSkeleton(
+                        screenName = "Cargando...",
+                        modifier = Modifier.testTag("loadingMessage"),
+                    )
+                }
+                performerState.detail != null -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(horizontal = 32.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                    ) {
+                        item(key = "infoSection") {
+                            InfoSection(
+                                item = DetailDTO.MusicianDetail(performerState.detail!!),
+                                modifier = Modifier.testTag("infoSection"),
+                            )
+                        }
+
+                        if (performerState.detail!!.performerPrizes?.isNotEmpty() == true &&
+                            prizesState.items.isNotEmpty()
+                        ) {
+                            item(key = "premiosSection") {
+                                PremiosSection(
+                                    premios = prizesState.items,
+                                    modifier = Modifier.testTag("premiosSection"),
+                                )
+                            }
+                        }
+
+                        if (performerState.detail!!.albums?.isNotEmpty() == true) {
+                            item(key = "albumSection") {
+                                AlbumSection(
+                                    modifier = Modifier.testTag("albumsSection"),
+                                    albumes = performerState.detail!!.albums!!,
+                                )
+                            }
+                        }
                     }
                 }
             }
