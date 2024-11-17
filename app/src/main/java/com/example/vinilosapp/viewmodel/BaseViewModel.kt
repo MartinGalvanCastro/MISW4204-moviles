@@ -2,6 +2,7 @@ package com.example.vinilosapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vinilosapp.models.ViewModelState
 import com.example.vinilosapp.repository.BaseRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -9,71 +10,60 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<SimpleDTO, DetailDTO>(
+abstract class BaseViewModel<SimpleDTO : Any, DetailDTO : Any>(
     protected val repository: BaseRepository<SimpleDTO, DetailDTO>,
-    protected var ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    protected var defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
-    private val _items = MutableStateFlow<List<SimpleDTO>>(emptyList())
-    val items: StateFlow<List<SimpleDTO>> = _items
-
-    private val _filteredItems = MutableStateFlow<List<SimpleDTO>>(emptyList())
-    val filteredItems: StateFlow<List<SimpleDTO>> = _filteredItems
-
-    private val _detail = MutableStateFlow<DetailDTO?>(null)
-    val detail: StateFlow<DetailDTO?> = _detail
-
-    private val _errorMessage = MutableStateFlow<String?>(null)
-    val errorMessage: StateFlow<String?> = _errorMessage
-
-    private val _loading = MutableStateFlow(false)
-    val loading: StateFlow<Boolean> = _loading
-
-    protected fun setLoading(isLoading: Boolean) {
-        _loading.value = isLoading
-    }
-
-    protected fun setErrorMessage(message: String?) {
-        _errorMessage.value = message
-    }
+    protected val _state = MutableStateFlow(ViewModelState<SimpleDTO, DetailDTO>(isLoading = true))
+    val state: StateFlow<ViewModelState<SimpleDTO, DetailDTO>> = _state
 
     fun fetchAllItems() {
         viewModelScope.launch(ioDispatcher) {
-            setLoading(true)
+            _state.value = _state.value.copy(isLoading = true)
             val result = repository.fetchAll()
             result.onSuccess { itemList ->
-                _items.value = itemList
-                _filteredItems.value = itemList
+                _state.value = _state.value.copy(
+                    items = itemList,
+                    filteredItems = itemList,
+                    isLoading = false,
+                )
             }.onFailure {
-                setErrorMessage("Error fetching items: ${it.message}")
+                _state.value = _state.value.copy(
+                    errorMessage = it.message,
+                    isLoading = false,
+                )
             }
-            setLoading(false)
         }
     }
 
     fun fetchDetailById(id: String) {
         viewModelScope.launch(ioDispatcher) {
-            setLoading(true)
+            _state.value = _state.value.copy(isLoading = true)
             val result = repository.fetchById(id)
             result.onSuccess { detailItem ->
-                _detail.value = detailItem
+                _state.value = _state.value.copy(
+                    detail = detailItem,
+                    isLoading = false,
+                )
             }.onFailure {
-                setErrorMessage("Error fetching item details: ${it.message}")
+                _state.value = _state.value.copy(
+                    errorMessage = it.message,
+                    isLoading = false,
+                )
             }
-            setLoading(false)
         }
     }
 
     fun filterItems(query: String, nameSelector: (SimpleDTO) -> String) {
         viewModelScope.launch(defaultDispatcher) {
-            _filteredItems.value = if (query.isBlank()) {
-                _items.value
+            val filtered = if (query.isBlank()) {
+                _state.value.items
             } else {
-                _items.value.filter {
-                    nameSelector(it).contains(query, ignoreCase = true)
-                }
+                _state.value.items.filter { nameSelector(it).contains(query, ignoreCase = true) }
             }
+            _state.value = _state.value.copy(filteredItems = filtered)
         }
     }
 }
