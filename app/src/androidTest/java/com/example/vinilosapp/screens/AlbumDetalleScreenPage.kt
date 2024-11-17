@@ -1,9 +1,12 @@
 package com.example.vinilosapp.screens
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasScrollToIndexAction
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
@@ -13,6 +16,7 @@ class AlbumDetalleScreenPage @Inject constructor(
 ) {
 
     private val composeRule = composeRuleHolder.composeRule
+    private val parentScrollableTag = "LazyColumn" // Assuming no tag, change if available
     private val albumCoverTag = "Detail_Cover_Image"
     private val albumDescriptionTag = "Description"
     private val albumReleaseDateTag = "albumReleaseDate"
@@ -22,9 +26,16 @@ class AlbumDetalleScreenPage @Inject constructor(
     private val performersSectionTag = "performersSection"
     private val commentsSectionTag = "commentsSection"
 
-    fun assertAlbumCoverIsDisplayed(): Boolean {
+    private fun printDebugLogs() {
+        composeRule.onRoot().printToLog("TAG")
+    }
+
+    private fun scrollToAndAssert(tag: String): Boolean {
+        printDebugLogs()
         return try {
-            composeRule.onNodeWithTag(albumCoverTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
+            composeRule.onNodeWithTag(tag, useUnmergedTree = true)
+                .performScrollTo()
+                .assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()
@@ -32,74 +43,28 @@ class AlbumDetalleScreenPage @Inject constructor(
         }
     }
 
-    fun assertAlbumDescriptionIsDisplayed(): Boolean {
-        return try {
-            composeRule.onNodeWithTag(albumDescriptionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
-            true
-        } catch (e: AssertionError) {
-            e.printStackTrace()
-            false
-        }
-    }
+    fun assertAlbumCoverIsDisplayed(): Boolean = scrollToAndAssert(albumCoverTag)
 
-    fun assertAlbumReleaseDateIsDisplayed(): Boolean {
-        return try {
-            composeRule.onNodeWithTag(albumReleaseDateTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
-            true
-        } catch (e: AssertionError) {
-            e.printStackTrace()
-            false
-        }
-    }
+    fun assertAlbumDescriptionIsDisplayed(): Boolean = scrollToAndAssert(albumDescriptionTag)
 
-    fun assertAlbumLabelIsDisplayed(): Boolean {
-        return try {
-            composeRule.onRoot().printToLog("TAG")
-            composeRule.onNodeWithTag(albumLabelTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
-            true
-        } catch (e: AssertionError) {
-            e.printStackTrace()
-            false
-        }
-    }
+    fun assertAlbumReleaseDateIsDisplayed(): Boolean = scrollToAndAssert(albumReleaseDateTag)
 
-    fun assertAlbumGenreIsDisplayed(): Boolean {
-        return try {
-            composeRule.onRoot().printToLog("TAG")
-            composeRule.onNodeWithTag(albumGenreTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
-            true
-        } catch (e: AssertionError) {
-            e.printStackTrace()
-            false
-        }
-    }
+    fun assertAlbumLabelIsDisplayed(): Boolean = scrollToAndAssert(albumLabelTag)
 
-    fun assertTracksSectionIsDisplayed(): Boolean {
-        return try {
-            composeRule.onRoot().printToLog("TAG")
-            composeRule.onNodeWithTag(tracksSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
-            true
-        } catch (e: AssertionError) {
-            e.printStackTrace()
-            false
-        }
-    }
+    fun assertAlbumGenreIsDisplayed(): Boolean = scrollToAndAssert(albumGenreTag)
 
-    fun assertPerformersSectionIsDisplayed(): Boolean {
-        return try {
-            composeRule.onRoot().printToLog("TAG")
-            composeRule.onNodeWithTag(performersSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
-            true
-        } catch (e: AssertionError) {
-            e.printStackTrace()
-            false
-        }
-    }
+    fun assertTracksSectionIsDisplayed(): Boolean = scrollToAndAssert(tracksSectionTag)
+
+    fun assertPerformersSectionIsDisplayed(): Boolean = scrollToAndAssert(performersSectionTag)
 
     fun assertCommentsSectionIsDisplayed(): Boolean {
+        printDebugLogs()
         return try {
-            composeRule.onRoot().printToLog("TAG")
-            composeRule.onNodeWithTag(commentsSectionTag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
+            // Use performScrollToNode in case comments are at the end of a large list
+            composeRule.onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag(commentsSectionTag))
+            composeRule.onNodeWithTag(commentsSectionTag, useUnmergedTree = true)
+                .assertIsDisplayed()
             true
         } catch (e: AssertionError) {
             e.printStackTrace()

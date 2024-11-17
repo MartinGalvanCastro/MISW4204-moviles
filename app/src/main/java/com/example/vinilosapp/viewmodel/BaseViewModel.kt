@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<SimpleDTO : Any, DetailDTO : Any>(
     protected val repository: BaseRepository<SimpleDTO, DetailDTO>,
-    val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    protected var ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    protected var defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
     protected val _state = MutableStateFlow(ViewModelState<SimpleDTO, DetailDTO>(isLoading = true))
