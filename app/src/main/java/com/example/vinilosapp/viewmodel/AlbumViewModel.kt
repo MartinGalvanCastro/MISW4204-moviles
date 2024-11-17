@@ -37,7 +37,6 @@ class AlbumViewModel @Inject constructor(
             val result = albumRepository.createAlbum(newAlbum)
             result.onSuccess { createdAlbum ->
                 _successMessage.value = "Album '${createdAlbum.name}' created successfully!"
-                refreshAlbums() // Optionally refresh albums after creation
             }.onFailure {
                 _state.value = _state.value.copy(
                     errorMessage = "Error creating album: ${it.message}",
@@ -51,21 +50,5 @@ class AlbumViewModel @Inject constructor(
 
     fun filterAlbums(query: String) {
         filterItems(query) { it.name }
-    }
-
-    private suspend fun refreshAlbums() {
-        val result = albumRepository.fetchAll()
-        result.onSuccess { itemList ->
-            _state.value = _state.value.copy(
-                items = itemList,
-                filteredItems = itemList,
-                isLoading = false,
-            )
-        }.onFailure {
-            _state.value = _state.value.copy(
-                errorMessage = "Error refreshing albums: ${it.message}",
-                isLoading = false,
-            )
-        }
     }
 }

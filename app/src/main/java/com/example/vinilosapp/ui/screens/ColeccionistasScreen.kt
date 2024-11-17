@@ -80,7 +80,7 @@ fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltVie
                             footer = collector.telephone,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .testTag("collectorItem-${collector.id}"),
+                                .testTag("collectorItem"),
                         )
                     }
                 }
