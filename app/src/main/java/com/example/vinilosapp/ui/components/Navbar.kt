@@ -68,22 +68,22 @@ fun Navbar() {
     NavigationBar(
         modifier = Modifier.testTag("navbar-container"),
     ) {
-        for (index in items.indices) {
-            val isSelected = currentRoute == items[index].route
+        items.forEach { item ->
+            val isSelected = currentRoute == item.route
 
             NavigationBarItem(
-                modifier = Modifier.testTag("navbar-item-${items[index].testTag}"),
+                modifier = Modifier.testTag("navbar-item-${item.testTag}"),
                 icon = {
                     Icon(
-                        imageVector = if (isSelected) items[index].filledIcon else items[index].outlinedIcon,
-                        contentDescription = items[index].label,
+                        imageVector = if (isSelected) item.filledIcon else item.outlinedIcon,
+                        contentDescription = item.label,
                     )
                 },
-                label = { Text(items[index].label, modifier = Modifier.testTag(items[index].testTag)) },
+                label = { Text(item.label, modifier = Modifier.testTag(item.testTag)) },
                 selected = isSelected,
                 onClick = {
                     if (!isSelected) {
-                        navController.navigate(items[index].route) {
+                        navController.navigate(item.route) {
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
                             }
