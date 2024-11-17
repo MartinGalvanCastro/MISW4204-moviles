@@ -10,20 +10,22 @@ import androidx.compose.ui.platform.testTag
 import com.example.vinilosapp.models.GridItemProps
 
 @Composable
-fun GridLayout(
-    items: List<GridItemProps>,
+fun <T> GridLayout(
+    items: List<T>,
     itemTestTag: String,
     modifier: Modifier = Modifier,
+    transform: (T) -> GridItemProps,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = modifier.fillMaxSize(),
     ) {
         items(items) { item ->
+            val gridItem = transform(item)
             ImageAndText(
-                imageUrl = item.imageUrl,
-                imageText = item.name,
-                onSelect = item.onSelect,
+                imageUrl = gridItem.imageUrl,
+                imageText = gridItem.name,
+                onSelect = gridItem.onSelect,
                 modifier = Modifier.testTag(itemTestTag),
             )
         }

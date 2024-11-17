@@ -29,15 +29,9 @@ import com.example.vinilosapp.viewmodel.ColeccionistaViewModel
 
 @Composable
 fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltViewModel()) {
-    val collectors by coleccionistaViewModel.items.collectAsState()
-    val loading by coleccionistaViewModel.loading.collectAsState()
-    val error by coleccionistaViewModel.errorMessage.collectAsState()
+    val state by coleccionistaViewModel.state.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
-
-    val filteredCollectors = collectors.filter {
-        it.name.contains(filterText, ignoreCase = true)
-    }
 
     LaunchedEffect(Unit) {
         coleccionistaViewModel.fetchAllItems()
@@ -66,25 +60,27 @@ fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltVie
         Spacer(Modifier.height(10.dp))
 
         when {
-            loading -> {
+            state.isLoading -> {
                 ScreenSkeleton("Cargando...", modifier = Modifier.testTag("loadingMessage"))
             }
-            error != null -> {
-                ScreenSkeleton(error!!, modifier = Modifier.testTag("errorMessage"))
+            state.errorMessage != null -> {
+                ScreenSkeleton(state.errorMessage!!, modifier = Modifier.testTag("errorMessage"))
             }
             else -> {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().testTag("collectorList"),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("collectorList"),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    items(filteredCollectors) { collector ->
+                    items(state.filteredItems, key = { it.id }) { collector ->
                         ItemCard(
                             title = collector.name,
                             description = collector.email,
                             footer = collector.telephone,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .testTag("collectorItem"),
+                                .testTag("collectorItem-${collector.id}"),
                         )
                     }
                 }
