@@ -5,7 +5,6 @@ import com.example.models.CollectorSimpleDTO
 import com.example.vinilosapp.repository.ColeccionistaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -39,10 +38,13 @@ class ColeccionistaViewModelTest {
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-
         Dispatchers.setMain(testDispatcher)
 
-        coleccionistaViewModel = ColeccionistaViewModel(coleccionistaRepository, testDispatcher, testDispatcher)
+        coleccionistaViewModel = ColeccionistaViewModel(
+            colecionistaRepository = coleccionistaRepository,
+            ioDispatcher = testDispatcher,
+            defaultDispatcher = testDispatcher,
+        )
     }
 
     @After
@@ -58,8 +60,8 @@ class ColeccionistaViewModelTest {
         coleccionistaViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockCollectorList, coleccionistaViewModel.filteredItems.first())
-        assertThat(coleccionistaViewModel.loading.first(), `is`(false))
+        assertEquals(mockCollectorList, coleccionistaViewModel.state.value.filteredItems)
+        assertThat(coleccionistaViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -69,8 +71,8 @@ class ColeccionistaViewModelTest {
         coleccionistaViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching items: API error", coleccionistaViewModel.errorMessage.first())
-        assertThat(coleccionistaViewModel.loading.first(), `is`(false))
+        assertEquals("API error", coleccionistaViewModel.state.value.errorMessage)
+        assertThat(coleccionistaViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -90,8 +92,8 @@ class ColeccionistaViewModelTest {
         coleccionistaViewModel.fetchDetailById(collectorId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockCollectorDetail, coleccionistaViewModel.detail.first())
-        assertThat(coleccionistaViewModel.loading.first(), `is`(false))
+        assertEquals(mockCollectorDetail, coleccionistaViewModel.state.value.detail)
+        assertThat(coleccionistaViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -102,8 +104,8 @@ class ColeccionistaViewModelTest {
         coleccionistaViewModel.fetchDetailById(collectorId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching item details: API error", coleccionistaViewModel.errorMessage.first())
-        assertThat(coleccionistaViewModel.loading.first(), `is`(false))
+        assertEquals("API error", coleccionistaViewModel.state.value.errorMessage)
+        assertThat(coleccionistaViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
@@ -119,7 +121,7 @@ class ColeccionistaViewModelTest {
         coleccionistaViewModel.filterCollectors("One")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(collector1), coleccionistaViewModel.filteredItems.first())
+        assertEquals(listOf(collector1), coleccionistaViewModel.state.value.filteredItems)
     }
 
     @Test
@@ -135,7 +137,7 @@ class ColeccionistaViewModelTest {
         coleccionistaViewModel.filterCollectors("Non-existing collector")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(coleccionistaViewModel.filteredItems.first().isEmpty())
+        assertTrue(coleccionistaViewModel.state.value.filteredItems.isEmpty())
     }
 
     @Test
@@ -150,6 +152,6 @@ class ColeccionistaViewModelTest {
         coleccionistaViewModel.filterCollectors("")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(collector1, collector2), coleccionistaViewModel.filteredItems.first())
+        assertEquals(listOf(collector1, collector2), coleccionistaViewModel.state.value.filteredItems)
     }
 }

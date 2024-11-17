@@ -8,6 +8,7 @@ import com.example.vinilosapp.models.ViewModelState
 import com.example.vinilosapp.repository.MusicianRepository
 import com.example.vinilosapp.repository.PrizeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,6 +19,16 @@ class MusicianViewModel @Inject constructor(
     musicianRepository: MusicianRepository,
     private val prizeRepository: PrizeRepository,
 ) : BaseViewModel<MusicianSimpleDTO, MusicianDetailDTO>(musicianRepository) {
+
+    constructor(
+        musicianRepository: MusicianRepository,
+        prizeRepository: PrizeRepository,
+        ioDispatcher: CoroutineDispatcher,
+        defaultDispatcher: CoroutineDispatcher,
+    ) : this(musicianRepository, prizeRepository) {
+        this.ioDispatcher = ioDispatcher
+        this.defaultDispatcher = defaultDispatcher
+    }
 
     private val _prizesState = MutableStateFlow(ViewModelState<PrizeDetailDTO, PrizeDetailDTO>(isLoading = true))
     val prizesState: StateFlow<ViewModelState<PrizeDetailDTO, PrizeDetailDTO>> = _prizesState
