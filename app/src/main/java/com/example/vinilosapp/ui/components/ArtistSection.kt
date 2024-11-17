@@ -35,11 +35,11 @@ fun ArtistSection(
                 .horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            for (index in artistas.indices) {
+            artistas.forEachIndexed { index, artista ->
                 ImageAndText(
                     imageShape = ImageShape.CIRCULO,
-                    imageUrl = artistas[index].image,
-                    imageText = artistas[index].name,
+                    imageUrl = artista.image,
+                    imageText = artista.name,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.testTag("artistItem-$index"),
                 )
