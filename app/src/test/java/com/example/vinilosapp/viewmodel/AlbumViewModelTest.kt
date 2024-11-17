@@ -5,7 +5,6 @@ import com.example.models.AlbumSimpleDTO
 import com.example.vinilosapp.repository.AlbumRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -23,7 +22,6 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
-import java.math.BigDecimal
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -39,9 +37,7 @@ class AlbumViewModelTest {
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-
         Dispatchers.setMain(testDispatcher)
-
         albumViewModel = AlbumViewModel(
             albumRepository = albumRepository,
             ioDispatcher = testDispatcher,
@@ -61,82 +57,75 @@ class AlbumViewModelTest {
     }
 
     @Test
-    fun `Given successful repository response When fetchAllItems is called Then items are updated`() = runBlocking {
+    fun `fetchAllItems should update items when repository succeeds`() = runBlocking {
         val mockAlbumList = listOf(mock(AlbumSimpleDTO::class.java), mock(AlbumSimpleDTO::class.java))
         initializeViewModelWithMockAlbums(mockAlbumList)
-        assertEquals(mockAlbumList, albumViewModel.filteredItems.first())
-        assertThat(albumViewModel.loading.first(), `is`(false))
+
+        assertEquals(mockAlbumList, albumViewModel.state.value.filteredItems)
+        assertThat(albumViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
-    fun `Given repository failure When fetchAllItems is called Then errorMessage is set`() = runBlocking {
+    fun `fetchAllItems should set errorMessage when repository fails`() = runBlocking {
         `when`(albumRepository.fetchAll()).thenReturn(Result.failure(RuntimeException("API error")))
         albumViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
-        assertEquals("Error fetching items: API error", albumViewModel.errorMessage.first())
-        assertThat(albumViewModel.loading.first(), `is`(false))
+
+        assertEquals("API error", albumViewModel.state.value.errorMessage)
+        assertThat(albumViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
-    fun `Given successful repository response When fetchDetailById is called Then detail is updated`() = runBlocking {
+    fun `fetchDetailById should update detail when repository succeeds`() = runBlocking {
         val albumId = "1"
-        val mockAlbumDetail = AlbumDetailDTO(
-            id = BigDecimal(1),
-            name = "Test Album",
-            cover = "Cover URL",
-            releaseDate = "2022-01-01",
-            description = "Description",
-            performers = emptyList(),
-            tracks = emptyList(),
-            comments = emptyList(),
-        )
+        val mockAlbumDetail = mock(AlbumDetailDTO::class.java)
         `when`(albumRepository.fetchById(albumId)).thenReturn(Result.success(mockAlbumDetail))
 
         albumViewModel.fetchDetailById(albumId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockAlbumDetail, albumViewModel.detail.first())
-        assertThat(albumViewModel.loading.first(), `is`(false))
+        assertEquals(mockAlbumDetail, albumViewModel.state.value.detail)
+        assertThat(albumViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
-    fun `Given repository failure When fetchDetailById is called Then errorMessage is set`() = runBlocking {
+    fun `fetchDetailById should set errorMessage when repository fails`() = runBlocking {
         val albumId = "1"
         `when`(albumRepository.fetchById(albumId)).thenReturn(Result.failure(RuntimeException("API error")))
 
         albumViewModel.fetchDetailById(albumId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error fetching item details: API error", albumViewModel.errorMessage.first())
-        assertThat(albumViewModel.loading.first(), `is`(false))
+        assertEquals("API error", albumViewModel.state.value.errorMessage)
+        assertThat(albumViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
-    fun `Given successful repository response When createAlbum is called Then successMessage is set`() = runBlocking {
+    fun `createAlbum should set successMessage when repository succeeds`() = runBlocking {
         val newAlbum = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Test Album") }
         `when`(albumRepository.createAlbum(newAlbum)).thenReturn(Result.success(newAlbum))
 
         albumViewModel.createAlbum(newAlbum)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Album 'Test Album' created successfully!", albumViewModel.successMessage.first())
-        assertThat(albumViewModel.loading.first(), `is`(false))
+        assertEquals("Album 'Test Album' created successfully!", albumViewModel.successMessage.value)
+        assertThat(albumViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
-    fun `Given repository failure When createAlbum is called Then errorMessage is set`() = runBlocking {
+    fun `createAlbum should set errorMessage when repository fails`() = runBlocking {
         val newAlbum = mock(AlbumSimpleDTO::class.java)
         `when`(albumRepository.createAlbum(newAlbum)).thenReturn(Result.failure(RuntimeException("API error")))
 
         albumViewModel.createAlbum(newAlbum)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Error creating album", albumViewModel.errorMessage.first())
-        assertThat(albumViewModel.loading.first(), `is`(false))
+        assertEquals("Error creating album: API error", albumViewModel.state.value.errorMessage)
+        assertThat(albumViewModel.state.value.isLoading, `is`(false))
     }
 
     @Test
-    fun `Given albums exist When filterAlbums is called with matching query Then filteredItems is updated`() = runBlocking {
+    fun `filterAlbums should update filteredItems with matching results`() = runBlocking {
         val album1 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album One") }
         val album2 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album Two") }
         initializeViewModelWithMockAlbums(listOf(album1, album2))
@@ -144,11 +133,11 @@ class AlbumViewModelTest {
         albumViewModel.filterAlbums("One")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(album1), albumViewModel.filteredItems.first())
+        assertEquals(listOf(album1), albumViewModel.state.value.filteredItems)
     }
 
     @Test
-    fun `Given albums exist When filterAlbums is called with non-matching query Then filteredItems is empty`() = runBlocking {
+    fun `filterAlbums should update filteredItems with empty list when no match is found`() = runBlocking {
         val album1 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album One") }
         val album2 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album Two") }
         initializeViewModelWithMockAlbums(listOf(album1, album2))
@@ -156,11 +145,11 @@ class AlbumViewModelTest {
         albumViewModel.filterAlbums("Non-existing album")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(albumViewModel.filteredItems.first().isEmpty())
+        assertTrue(albumViewModel.state.value.filteredItems.isEmpty())
     }
 
     @Test
-    fun `Given albums exist When filterAlbums is called with blank query Then all items are shown`() = runBlocking {
+    fun `filterAlbums should update filteredItems with all items for blank query`() = runBlocking {
         val album1 = mock(AlbumSimpleDTO::class.java)
         val album2 = mock(AlbumSimpleDTO::class.java)
         initializeViewModelWithMockAlbums(listOf(album1, album2))
@@ -168,6 +157,6 @@ class AlbumViewModelTest {
         albumViewModel.filterAlbums("")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(listOf(album1, album2), albumViewModel.filteredItems.first())
+        assertEquals(listOf(album1, album2), albumViewModel.state.value.filteredItems)
     }
 }
