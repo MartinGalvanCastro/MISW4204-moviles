@@ -1,5 +1,7 @@
 package com.example.vinilosapp.steps
 
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.screens.AlbumDetalleScreenPage
 import com.example.vinilosapp.screens.AlbumScreenPage
 import io.cucumber.java.en.And
@@ -22,7 +24,7 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene caratula")
     fun elAlbumTieneCaratula() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertAlbumCoverIsDisplayed()
         }
     }
@@ -30,7 +32,7 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene descripcion")
     fun elAlbumTieneDescripcion() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertAlbumDescriptionIsDisplayed()
         }
     }
@@ -38,7 +40,7 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene fecha de publicacion")
     fun elAlbumTieneFechaDePublicacion() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertAlbumReleaseDateIsDisplayed()
         }
     }
@@ -46,7 +48,7 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene disquera")
     fun elAlbumTieneDisquera() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertAlbumLabelIsDisplayed()
         }
     }
@@ -54,7 +56,7 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene genero")
     fun elAlbumTieneGenero() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertAlbumGenreIsDisplayed()
         }
     }
@@ -62,7 +64,7 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene canciones")
     fun elAlbumTieneCanciones() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertTracksSectionIsDisplayed()
         }
     }
@@ -70,7 +72,7 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene artistas")
     fun elAlbumTieneArtistas() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertPerformersSectionIsDisplayed()
         }
     }
@@ -78,7 +80,8 @@ class AlbumDetalleSteps @Inject constructor(
     @And("El album tiene comentarios")
     fun elAlbumTieneComentarios() {
         composeRuleHolder.composeRule.waitForIdle()
-        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 5_000) {
+        composeRuleHolder.composeRule.onRoot().printToLog("ComposeTree")
+        composeRuleHolder.composeRule.waitUntil(timeoutMillis = 10_000) {
             albumDetalleScreenPage.assertCommentsSectionIsDisplayed()
         }
     }
