@@ -7,7 +7,6 @@ object DetailRoutePrefix {
 }
 
 object Routes {
-    const val LOGIN_SCREEN = "loginScreen"
     const val ALBUMS_SCREEN = "albumsScreen"
     const val ARTISTAS_SCREEN = "artistasScreen"
     const val BANDAS_SCREEN = "bandasScreen"
