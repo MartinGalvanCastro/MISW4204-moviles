@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class AlbumServiceRetrofit @Inject constructor(
-    retrofit: Retrofit,
+    private val retrofit: Retrofit,
 ) : AlbumServiceAdapter {
 
     private val albumAPI by lazy { retrofit.create(AlbumAPI::class.java) }
