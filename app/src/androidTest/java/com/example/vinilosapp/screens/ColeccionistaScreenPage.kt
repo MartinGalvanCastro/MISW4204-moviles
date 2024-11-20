@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
@@ -35,6 +36,16 @@ class ColeccionistaScreenPage @Inject constructor(
         } catch (e: AssertionError) {
             e.printStackTrace()
             false
+        }
+    }
+
+    fun clickOnCollector() {
+        val collectors = composeTestRule.onAllNodesWithTag(collectorItemTag)
+
+        if (collectors.fetchSemanticsNodes().isNotEmpty()) {
+            collectors[0].performClick()
+        } else {
+            throw AssertionError("No collectors found to click on")
         }
     }
 
