@@ -47,12 +47,21 @@ class AlbumRepository @Inject constructor(
     suspend fun fetchCollectorAlbums(collectoAlbums: List<CollectorAlbumSimpleDTO>): List<AlbumSimpleDTO> = coroutineScope {
         val results = collectoAlbums.map { album ->
             async {
-                album.id to fetchById("$album.id")
+                album.id to fetchById("${album.id}")
             }
         }.awaitAll()
 
         val succesfulAlbums = results.mapNotNull { (_, result) ->
-            result.getOrNull() as AlbumSimpleDTO
+            val detail = result.getOrNull()
+            detail?.let {
+                AlbumSimpleDTO(
+                    id = detail.id,
+                    name = detail.name,
+                    cover = it.cover,
+                    description = detail.description,
+                    releaseDate = detail.releaseDate,
+                )
+            }
         }
 
         succesfulAlbums

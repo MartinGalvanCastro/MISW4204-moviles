@@ -104,7 +104,8 @@ fun ColeccionistasDetalleScreen(
                                 musicians?.let {
                                     ArtistSection(
                                         it,
-                                        fromBandas = true,
+                                        fromBandas = false,
+                                        fromColeccionista = true,
                                         Modifier.testTag("artistasSection"),
                                     )
                                 }
