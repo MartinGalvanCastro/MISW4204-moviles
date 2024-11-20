@@ -98,6 +98,7 @@ fun AlbumDetalleScreen(
                             ArtistSection(
                                 state.detail!!.performers,
                                 fromBandas = false,
+                                fromColeccionista = false,
                                 Modifier.testTag("performersSection"),
                             )
                         }

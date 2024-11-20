@@ -24,11 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.vinilosapp.LocalAppState
+import com.example.vinilosapp.navigation.DetailRoutePrefix
 import com.example.vinilosapp.ui.components.ScreenSkeleton
 import com.example.vinilosapp.viewmodel.ColeccionistaViewModel
 
 @Composable
 fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltViewModel()) {
+    val navController = LocalAppState.current.navController
     val state by coleccionistaViewModel.state.collectAsState()
 
     var filterText by remember { mutableStateOf("") }
@@ -78,6 +81,9 @@ fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltVie
                             title = collector.name,
                             description = collector.email,
                             footer = collector.telephone,
+                            onSelect = {
+                                navController.navigate("${DetailRoutePrefix.COLECCIONISTA_DETALLE_SCREEN}/${collector.id}")
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .testTag("collectorItem"),

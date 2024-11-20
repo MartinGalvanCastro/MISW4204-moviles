@@ -14,6 +14,7 @@ import com.example.vinilosapp.ui.screens.ArtistasScreen
 import com.example.vinilosapp.ui.screens.BandasDetalleScreen
 import com.example.vinilosapp.ui.screens.BandasScreen
 import com.example.vinilosapp.ui.screens.ColeccionistaScreen
+import com.example.vinilosapp.ui.screens.ColeccionistasDetalleScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
@@ -61,6 +62,13 @@ fun AppNavigation(navController: NavHostController) {
         ) { backStackEntry ->
             val bandaId = backStackEntry.arguments?.getString("bandaId")
             BandasDetalleScreen(bandaId)
+        }
+        composable(
+            route = Routes.COLECCIONISTA_DETALLE_SCREEN,
+            arguments = listOf(navArgument("coleccionistaId") { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val coleccionistaId = backStackEntry.arguments?.getString("coleccionistaId")
+            ColeccionistasDetalleScreen(coleccionistaId)
         }
     }
 }
