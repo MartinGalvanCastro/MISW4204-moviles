@@ -1,9 +1,10 @@
 package com.example.vinilosapp.repository
 
-import com.example.models.AlbumDetailDTO
 import com.example.models.AlbumSimpleDTO
 import com.example.models.CollectorAlbumSimpleDTO
 import com.example.vinilosapp.di.Cache
+import com.example.vinilosapp.models.AlbumDetail
+import com.example.vinilosapp.models.AlbumSimple
 import com.example.vinilosapp.services.adapters.AlbumServiceAdapter
 import com.example.vinilosapp.utils.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
@@ -18,22 +19,22 @@ class AlbumRepository @Inject constructor(
     private val albumServiceAdapter: AlbumServiceAdapter,
     networkChecker: NetworkChecker,
     cache: Cache,
-) : BaseRepository<AlbumSimpleDTO, AlbumDetailDTO>(
+) : BaseRepository<AlbumSimple, AlbumDetail>(
     cache,
     networkChecker,
-    AlbumSimpleDTO::class.java,
-    AlbumDetailDTO::class.java,
+    AlbumSimple::class.java,
+    AlbumDetail::class.java,
 ) {
 
-    override suspend fun fetchAllItems(): Result<List<AlbumSimpleDTO>> {
+    override suspend fun fetchAllItems(): Result<List<AlbumSimple>> {
         return albumServiceAdapter.getAllAlbums()
     }
 
-    override suspend fun fetchItemById(id: String): Result<AlbumDetailDTO> {
+    override suspend fun fetchItemById(id: String): Result<AlbumDetail> {
         return albumServiceAdapter.getAlbumById(id)
     }
 
-    suspend fun createAlbum(newAlbum: AlbumSimpleDTO): Result<AlbumSimpleDTO> {
+    suspend fun createAlbum(newAlbum: AlbumSimple): Result<AlbumSimple> {
         return if (networkChecker.isConnected()) {
             CoroutineScope(Dispatchers.IO).launch {
                 clearCache()

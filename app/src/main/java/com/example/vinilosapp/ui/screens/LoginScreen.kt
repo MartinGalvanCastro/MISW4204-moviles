@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -40,6 +41,15 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth().testTag("LoginPrompt"),
         )
+
+        Button(
+            onClick = {
+                appState.tipoUsuario.value = TipoUsuario.COLECCIONISTA
+            },
+            modifier = Modifier.testTag("coleccionistaButton"),
+        ) {
+            Text("Coleccionista")
+        }
 
         OutlinedButton(
             onClick = {

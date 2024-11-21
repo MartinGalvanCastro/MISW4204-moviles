@@ -201,6 +201,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+
     testImplementation(libs.junit)
     testImplementation(libs.coil.test)
     testImplementation(libs.mvrx.testing)
@@ -211,7 +212,6 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.hamcrest.library)
     testImplementation(libs.mavericks.mocking)
-
 
 
     androidTestImplementation(libs.androidx.junit)

@@ -76,7 +76,7 @@ fun ColeccionistaScreen(coleccionistaViewModel: ColeccionistaViewModel = hiltVie
                         .testTag("collectorList"),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    items(state.filteredItems, key = { it.id }) { collector ->
+                    items(state.filteredItems, key = { it.id!! }) { collector ->
                         ItemCard(
                             title = collector.name,
                             description = collector.email,

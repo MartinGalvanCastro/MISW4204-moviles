@@ -16,4 +16,5 @@ object Routes {
     const val ARTISTA_DETALLE_SCREEN = "${DetailRoutePrefix.ARTISTA_DETALLE_SCREEN}/{artistaId}"
     const val BAND_DETALLE_SCREEN = "${DetailRoutePrefix.BAND_DETALLE_SCREEN}/{bandaId}"
     const val COLECCIONISTA_DETALLE_SCREEN = "${DetailRoutePrefix.COLECCIONISTA_DETALLE_SCREEN}/{coleccionistaId}"
+    const val ADD_ALBUM_SCREEN = "addAlbum"
 }

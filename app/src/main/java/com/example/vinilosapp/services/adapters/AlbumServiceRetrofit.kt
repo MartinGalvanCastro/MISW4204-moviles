@@ -1,7 +1,7 @@
 package com.example.vinilosapp.services.adapters
 
-import com.example.models.AlbumDetailDTO
-import com.example.models.AlbumSimpleDTO
+import com.example.vinilosapp.models.AlbumDetail
+import com.example.vinilosapp.models.AlbumSimple
 import com.example.vinilosapp.services.api.AlbumAPI
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -12,7 +12,7 @@ class AlbumServiceRetrofit @Inject constructor(
 
     private val albumAPI by lazy { retrofit.create(AlbumAPI::class.java) }
 
-    override suspend fun getAllAlbums(): Result<List<AlbumSimpleDTO>> {
+    override suspend fun getAllAlbums(): Result<List<AlbumSimple>> {
         return try {
             val response = albumAPI.getAllAlbums()
             Result.success(response)
@@ -21,7 +21,7 @@ class AlbumServiceRetrofit @Inject constructor(
         }
     }
 
-    override suspend fun getAlbumById(id: String): Result<AlbumDetailDTO> {
+    override suspend fun getAlbumById(id: String): Result<AlbumDetail> {
         return try {
             val response = albumAPI.getAlbumById(id)
             Result.success(response)
@@ -30,7 +30,7 @@ class AlbumServiceRetrofit @Inject constructor(
         }
     }
 
-    override suspend fun createAlbum(newAlbum: AlbumSimpleDTO): Result<AlbumSimpleDTO> {
+    override suspend fun createAlbum(newAlbum: AlbumSimple): Result<AlbumSimple> {
         return try {
             val response = albumAPI.createAlbum(newAlbum)
             Result.success(response)

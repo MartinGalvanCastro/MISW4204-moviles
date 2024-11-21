@@ -21,17 +21,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.rememberAsyncImagePainter
-import com.example.models.AlbumDetailDTO
 import com.example.models.BandDetailDTO
 import com.example.models.CollectorDetailDTO
 import com.example.models.MusicianDetailDTO
 import com.example.vinilosapp.R
+import com.example.vinilosapp.models.AlbumDetail
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 sealed class DetailDTO {
-    data class AlbumDetail(val album: AlbumDetailDTO) : DetailDTO()
+    data class AlbumDetail(val album: com.example.vinilosapp.models.AlbumDetail) : DetailDTO()
     data class BandDetail(val bandDetail: BandDetailDTO) : DetailDTO()
     data class MusicianDetail(val musicianDetail: MusicianDetailDTO) : DetailDTO()
     data class ColeccionistaDetail(val coleccionistaDetail: CollectorDetailDTO) : DetailDTO()
@@ -63,12 +63,12 @@ fun InfoSection(
                 ),
                 ListItemValueItem(
                     "Disquera: ",
-                    "SONY",
+                    item.album.recordLabel,
                     "albumLabel",
                 ),
                 ListItemValueItem(
                     "Género: ",
-                    "Rock",
+                    item.album.genre,
                     "albumGenre",
                 ),
             )
