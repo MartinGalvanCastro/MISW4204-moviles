@@ -5,6 +5,7 @@ import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import com.airbnb.mvrx.Mavericks
+import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -20,5 +21,6 @@ class VinilosApplication : Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         Mavericks.initialize(this)
+        AndroidThreeTen.init(this)
     }
 }

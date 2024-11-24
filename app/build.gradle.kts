@@ -200,6 +200,7 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.jakewharton.threetenabp)
 
 
     testImplementation(libs.junit)

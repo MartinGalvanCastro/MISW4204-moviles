@@ -15,6 +15,7 @@ class LoginScreenPage@Inject constructor(
     private val appLogoTag = "AppLogo"
 
     private val invitadoButtonTag = "InvitadoButton"
+    private val coleccionistaButtonTag = "coleccionistaButton"
 
     /**
      * Asserts that the app logo is displayed.
@@ -28,5 +29,9 @@ class LoginScreenPage@Inject constructor(
      */
     fun clickInvitadoButton() {
         composeRule.onNodeWithTag(invitadoButtonTag).performClick()
+    }
+
+    fun clickColeccionistaButton() {
+        composeRule.onNodeWithTag(coleccionistaButtonTag).performClick()
     }
 }

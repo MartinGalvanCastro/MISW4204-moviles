@@ -38,4 +38,18 @@ class AlbumServiceRetrofit @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun linkAlbumTo(albumId: String, performerId: String, isBand: Boolean): Result<String> {
+        return try {
+            if (isBand) {
+                albumAPI.linkAlbumToBand(albumId, performerId)
+            } else {
+                albumAPI.linkAlbumToMusician(albumId, performerId)
+            }
+
+            return Result.success("Se creo el album exitosamente")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

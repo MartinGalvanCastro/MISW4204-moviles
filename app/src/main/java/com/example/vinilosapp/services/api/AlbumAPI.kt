@@ -17,4 +17,10 @@ interface AlbumAPI {
 
     @POST("albums")
     suspend fun createAlbum(@Body newAlbum: AlbumSimple): AlbumSimple
+
+    @POST("albums/{albumId}/bands/{bandId}")
+    suspend fun linkAlbumToBand(@Path("albumId") albumId: String, @Path("bandId") bandId: String)
+
+    @POST("albums/{albumId}/musicians/{bandId}")
+    suspend fun linkAlbumToMusician(@Path("albumId") albumId: String, @Path("musicianId") musicianId: String)
 }

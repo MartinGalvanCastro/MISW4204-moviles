@@ -2,12 +2,10 @@ package com.example.vinilosapp.steps
 
 import com.example.vinilosapp.screens.HelperPage
 import com.example.vinilosapp.screens.LoginScreenPage
-import dagger.hilt.android.testing.HiltAndroidTest
 import io.cucumber.java.Before
 import io.cucumber.java.en.When
 import javax.inject.Inject
 
-@HiltAndroidTest
 class CommonSteps @Inject constructor(
     private val composeRuleHolder: ComposeRuleHolder,
     private val loginScreenPage: LoginScreenPage,
@@ -19,10 +17,30 @@ class CommonSteps @Inject constructor(
         composeRuleHolder.composeRule.waitForIdle()
     }
 
-    @When("Un usuario invitado ingresa a Vinilos App")
-    fun invitadoIngresaAVinilosApp() {
+    @When("Un usuario {string} ingresa a Vinilos App")
+    fun usuarioIngresaAVinilosApp(tipo: String) {
         loginScreenPage.assertAppLogoIsDisplayed()
-        loginScreenPage.clickInvitadoButton()
+
+        when (tipo) {
+            "Invitado" -> loginScreenPage.clickInvitadoButton()
+            "Coleccionista" -> loginScreenPage.clickColeccionistaButton()
+            else -> throw IllegalArgumentException("Unsupported user type: $tipo")
+        }
+    }
+
+    @When("Navega al menu de {string}")
+    fun navegaAlMenu(menu: String) {
+        composeRuleHolder.composeRule.waitForIdle()
+
+        when (menu) {
+            "artistas" -> helperPage.navigateToArtistas()
+            "bandas" -> helperPage.navigateToBandas()
+            "coleccionistas" -> helperPage.navigateToColeccionistas()
+            "albumes" -> {}
+            else -> throw IllegalArgumentException("Unsupported menu: $menu")
+        }
+
+        composeRuleHolder.composeRule.waitForIdle()
     }
 
     @When("Ingresa la palabra {string}")
@@ -30,5 +48,16 @@ class CommonSteps @Inject constructor(
         composeRuleHolder.composeRule.waitForIdle()
         helperPage.enterFilterText(palabra)
         composeRuleHolder.composeRule.waitForIdle()
+    }
+
+    @When("Un usuario <type> ingresa a Vinilos App")
+    fun unUsuarioTypeIngresaAVinilosApp(tipo: String) {
+        loginScreenPage.assertAppLogoIsDisplayed()
+
+        when (tipo) {
+            "Invitado" -> loginScreenPage.clickInvitadoButton()
+            "Coleccionista" -> loginScreenPage.clickColeccionistaButton()
+            else -> throw IllegalArgumentException("Unsupported user type: $tipo")
+        }
     }
 }

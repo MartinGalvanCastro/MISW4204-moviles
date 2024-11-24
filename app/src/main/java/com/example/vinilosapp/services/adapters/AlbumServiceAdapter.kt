@@ -7,4 +7,5 @@ interface AlbumServiceAdapter {
     suspend fun getAllAlbums(): Result<List<AlbumSimple>>
     suspend fun getAlbumById(id: String): Result<AlbumDetail>
     suspend fun createAlbum(newAlbum: AlbumSimple): Result<AlbumSimple>
+    suspend fun linkAlbumTo(albumId: String, performerId: String, isBand: Boolean): Result<String>
 }

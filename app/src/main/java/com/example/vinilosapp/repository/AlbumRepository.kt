@@ -45,6 +45,17 @@ class AlbumRepository @Inject constructor(
         }
     }
 
+    suspend fun linkAlbumTo(albumId: String, performerId: String, isBand: Boolean): Result<String> {
+        return if (networkChecker.isConnected()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                clearCache()
+            }
+            albumServiceAdapter.linkAlbumTo(albumId, performerId, isBand)
+        } else {
+            Result.failure(Exception("No internet connection"))
+        }
+    }
+
     suspend fun fetchCollectorAlbums(collectoAlbums: List<CollectorAlbumSimpleDTO>): List<AlbumSimpleDTO> = coroutineScope {
         val results = collectoAlbums.map { album ->
             async {

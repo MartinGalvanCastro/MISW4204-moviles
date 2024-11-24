@@ -8,185 +8,191 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.vinilosapp.models.AlbumSimple
+import com.example.vinilosapp.models.AddAlbumFormAttribute
 import com.example.vinilosapp.models.Genre
 import com.example.vinilosapp.models.RecordLabel
+import com.example.vinilosapp.ui.components.DatePicker
 import com.example.vinilosapp.ui.components.DetailedTopBar
 import com.example.vinilosapp.ui.components.Dropdown
 import com.example.vinilosapp.ui.components.TextField
-import com.example.vinilosapp.viewmodel.AlbumViewModel
-import java.util.logging.Level
-import java.util.logging.Logger
+import com.example.vinilosapp.viewmodel.AddAlbumViewModel
+import kotlinx.coroutines.launch
+
+object ScreenTestTags {
+    const val ALBUM_NAME_TEXT_FIELD = "AlbumNameTextField"
+    const val DESCRIPTION_TEXT_FIELD = "DescriptionTextField"
+    const val RELEASE_DATE_PICKER = "ReleaseDatePicker"
+    const val GENRE_DROPDOWN = "GenreDropdown"
+    const val RECORD_LABEL_DROPDOWN = "RecordLabelDropdown"
+    const val PERFORMER_DROPDOWN = "PerformerDropdown"
+    const val CANCEL_BUTTON = "CancelButton"
+    const val SUBMIT_BUTTON = "SubmitButton"
+}
 
 @Composable
-fun AddAlbumScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
-    // Form fields
-    var albumName by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var releaseDate by remember { mutableStateOf("") }
-    var genre by remember { mutableStateOf("") }
-    var recordLabel by remember { mutableStateOf("") }
+fun AddAlbumScreen(addAlbumViewModel: AddAlbumViewModel = hiltViewModel()) {
+    val formState by addAlbumViewModel.formState.collectAsState()
+    val album = formState.item
 
-    // Hardcoded image URL
-    val hardcodedCoverUrl = "https://via.placeholder.com/150"
-
-    // Error states
-    var albumNameError by remember { mutableStateOf<String?>(null) }
-    var descriptionError by remember { mutableStateOf<String?>(null) }
-    var releaseDateError by remember { mutableStateOf<String?>(null) }
-    var genreError by remember { mutableStateOf<String?>(null) }
-    var recordLabelError by remember { mutableStateOf<String?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = { DetailedTopBar("Agregar Álbum") },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.testTag("SnackbarHost"),
+            )
+        },
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start,
         ) {
             // Album Name
             TextField(
-                value = albumName,
-                onValueChange = {
-                    albumName = it
-                    albumNameError = if (it.isBlank()) "El nombre del álbum es obligatorio" else null
-                },
+                value = album.name,
+                onValueChange = { addAlbumViewModel.handleChange(AddAlbumFormAttribute.Name(it)) },
                 label = "Nombre del álbum",
-                isError = albumNameError != null,
-                errorMessage = albumNameError.orEmpty(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ScreenTestTags.ALBUM_NAME_TEXT_FIELD),
             )
-
             Spacer(modifier = Modifier.height(8.dp))
 
             // Description
             TextField(
-                value = description,
-                onValueChange = {
-                    description = it
-                    descriptionError = if (it.isBlank()) "La descripción es obligatoria" else null
-                },
+                value = album.description,
+                onValueChange = { addAlbumViewModel.handleChange(AddAlbumFormAttribute.Description(it)) },
                 label = "Descripción",
-                isError = descriptionError != null,
-                errorMessage = descriptionError.orEmpty(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ScreenTestTags.DESCRIPTION_TEXT_FIELD),
             )
-
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Release Date
-            TextField(
-                value = releaseDate,
-                onValueChange = {
-                    releaseDate = it
-                    releaseDateError = if (it.isBlank()) {
-                        "La fecha es obligatoria"
-                    } else if (!it.matches(Regex("^\\d{4}-\\d{2}-\\d{2}\$"))) {
-                        "La fecha debe estar en formato YYYY-MM-DD"
-                    } else {
-                        null
-                    }
-                },
+            DatePicker(
                 label = "Fecha de Lanzamiento",
-                placeholder = "YYYY-MM-DD",
-                isError = releaseDateError != null,
-                errorMessage = releaseDateError.orEmpty(),
+                initialDate = album.releaseDate,
+                onDateSelected = { selectedDate ->
+                    addAlbumViewModel.handleChange(AddAlbumFormAttribute.ReleaseDate(selectedDate))
+                },
+                modifier = Modifier.testTag(ScreenTestTags.RELEASE_DATE_PICKER),
             )
-
             Spacer(modifier = Modifier.height(8.dp))
 
             // Genre Dropdown
             Dropdown(
-                selectedOption = genre,
-                onOptionSelected = {
-                    genre = it
-                    genreError = if (it.isBlank()) "El género es obligatorio" else null
-                },
+                selectedOption = album.genre,
+                onOptionSelected = { addAlbumViewModel.handleChange(AddAlbumFormAttribute.Genre(it)) },
                 options = Genre.entries.map { it.genre },
                 label = "Género",
-                isError = genreError != null,
-                errorMessage = genreError.orEmpty(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ScreenTestTags.GENRE_DROPDOWN),
             )
-
             Spacer(modifier = Modifier.height(8.dp))
 
             // Record Label Dropdown
             Dropdown(
-                selectedOption = recordLabel,
-                onOptionSelected = {
-                    recordLabel = it
-                    recordLabelError = if (it.isBlank()) "La disquera es obligatoria" else null
-                },
+                selectedOption = album.recordLabel,
+                onOptionSelected = { addAlbumViewModel.handleChange(AddAlbumFormAttribute.RecordLabel(it)) },
                 options = RecordLabel.entries.map { it.label },
                 label = "Disquera",
-                isError = recordLabelError != null,
-                errorMessage = recordLabelError.orEmpty(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ScreenTestTags.RECORD_LABEL_DROPDOWN),
             )
+            Spacer(modifier = Modifier.height(8.dp))
 
+            // Performer Dropdown
+            Dropdown(
+                selectedOption = formState.selectedArtist?.second.orEmpty(),
+                onOptionSelected = { selected ->
+                    val artist = formState.performerList.find { it.second == selected }
+                    artist?.let { addAlbumViewModel.handleChange(AddAlbumFormAttribute.SelectedArtist(it)) }
+                },
+                options = formState.performerList.map { it.second },
+                label = "Artista o Banda",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ScreenTestTags.PERFORMER_DROPDOWN),
+            )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Buttons
+            // Buttons: Submit and Cancel
             Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 // Cancel Button
                 OutlinedButton(
-                    onClick = {
-                        albumName = ""
-                        description = ""
-                        releaseDate = ""
-                        genre = ""
-                        recordLabel = ""
-                        albumNameError = null
-                        descriptionError = null
-                        releaseDateError = null
-                        genreError = null
-                        recordLabelError = null
-                    },
-                    modifier = Modifier.weight(1f),
+                    onClick = { addAlbumViewModel.cleanForm() },
+                    modifier = Modifier.weight(1f).testTag(ScreenTestTags.CANCEL_BUTTON),
                 ) {
                     Text("Cancelar")
                 }
 
-                // Save Button
+                // Submit Button
                 Button(
-                    onClick = {
-                        Logger.getLogger("Add Album Screen").log(Level.INFO, "Click on on save")
-                        val newAlbum = AlbumSimple(
-                            name = albumName,
-                            cover = hardcodedCoverUrl,
-                            releaseDate = releaseDate,
-                            description = description,
-                            genre = genre,
-                            recordLabel = recordLabel,
-                        )
-                        albumViewModel.createAlbum(newAlbum)
-                    },
-                    enabled = albumName.isNotBlank() &&
-                        description.isNotBlank() &&
-                        releaseDate.isNotBlank() &&
-                        genre.isNotBlank() &&
-                        recordLabel.isNotBlank() &&
-                        releaseDate.matches(Regex("^\\d{4}-\\d{2}-\\d{2}\$")),
-                    modifier = Modifier.weight(1f),
+                    onClick = { addAlbumViewModel.createAlbum() },
+                    enabled = !formState.isLoadingSubmit &&
+                        album.name.isNotBlank() &&
+                        album.description.isNotBlank() &&
+                        album.releaseDate.isNotBlank() &&
+                        album.genre.isNotBlank() &&
+                        album.recordLabel.isNotBlank() &&
+                        formState.selectedArtist != null,
+                    modifier = Modifier.weight(1f).testTag(ScreenTestTags.SUBMIT_BUTTON),
                 ) {
-                    Text("Guardar")
+                    if (formState.isLoadingSubmit) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        Text("Guardar")
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // Show Snackbar for success or error messages
+        LaunchedEffect(formState.successMessage, formState.errorMessage) {
+            formState.successMessage?.let {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(it)
+                    addAlbumViewModel.handleChange(AddAlbumFormAttribute.SuccessMessage(null)) // Clear success message after showing
+                }
+            }
+
+            formState.errorMessage?.let {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(it)
+                    addAlbumViewModel.handleChange(AddAlbumFormAttribute.ErrorMessage(null)) // Clear error message after showing
                 }
             }
         }
