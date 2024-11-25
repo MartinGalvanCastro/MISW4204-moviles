@@ -1,5 +1,6 @@
 package com.example.vinilosapp.ui.components
 
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -70,6 +71,7 @@ fun DatePicker(
         },
         modifier = modifier
             .fillMaxWidth()
+            .focusable()
             .testTag(TestTags.DATE_PICKER_TEXT_FIELD),
     )
 
@@ -94,12 +96,16 @@ fun DatePicker(
             dismissButton = {
                 TextButton(
                     onClick = { showDatePicker = false },
-                    modifier = Modifier.testTag(TestTags.DATE_PICKER_DISMISS_BUTTON),
+                    modifier = Modifier
+                        .focusable()
+                        .testTag(TestTags.DATE_PICKER_DISMISS_BUTTON),
                 ) {
                     Text("Cancel")
                 }
             },
-            modifier = Modifier.testTag(TestTags.DATE_PICKER_DIALOG),
+            modifier = Modifier
+                .focusable()
+                .testTag(TestTags.DATE_PICKER_DIALOG),
         ) {
             DatePicker(state = datePickerState)
         }

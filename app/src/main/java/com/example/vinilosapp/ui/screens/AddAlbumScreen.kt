@@ -16,13 +16,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,7 +36,6 @@ import com.example.vinilosapp.models.RecordLabel
 import com.example.vinilosapp.ui.components.DatePicker
 import com.example.vinilosapp.ui.components.DetailedTopBar
 import com.example.vinilosapp.ui.components.Dropdown
-import com.example.vinilosapp.ui.components.TextField
 import com.example.vinilosapp.viewmodel.AddAlbumViewModel
 import kotlinx.coroutines.launch
 
@@ -55,6 +58,11 @@ fun AddAlbumScreen(addAlbumViewModel: AddAlbumViewModel = hiltViewModel()) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
+    var isNameTouched by remember { mutableStateOf(false) }
+    var isNameError by remember { mutableStateOf(false) }
+    var isDescriptionTouched by remember { mutableStateOf(false) }
+    var isDescriptionError by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = { DetailedTopBar("Agregar Álbum") },
         snackbarHost = {
@@ -73,10 +81,28 @@ fun AddAlbumScreen(addAlbumViewModel: AddAlbumViewModel = hiltViewModel()) {
             // Album Name
             TextField(
                 value = album.name,
-                onValueChange = { addAlbumViewModel.handleChange(AddAlbumFormAttribute.Name(it)) },
-                label = "Nombre del álbum",
+                onValueChange = {
+                    addAlbumViewModel.handleChange(AddAlbumFormAttribute.Name(it))
+                    if (isNameTouched) {
+                        isNameError = it.isBlank()
+                    }
+                },
+                label = { Text("Nombre del álbum") },
+                isError = isNameError,
+                supportingText = {
+                    if (isNameError) {
+                        Text("El campo no puede estar vacío")
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            isNameTouched = true
+                        } else if (isNameTouched) {
+                            isNameError = album.name.isBlank()
+                        }
+                    }
                     .testTag(ScreenTestTags.ALBUM_NAME_TEXT_FIELD),
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -84,21 +110,42 @@ fun AddAlbumScreen(addAlbumViewModel: AddAlbumViewModel = hiltViewModel()) {
             // Description
             TextField(
                 value = album.description,
-                onValueChange = { addAlbumViewModel.handleChange(AddAlbumFormAttribute.Description(it)) },
-                label = "Descripción",
+                onValueChange = {
+                    addAlbumViewModel.handleChange(AddAlbumFormAttribute.Description(it))
+                    if (isDescriptionTouched) {
+                        isDescriptionError = it.isBlank()
+                    }
+                },
+                label = { Text("Descripción") },
+                isError = isDescriptionError,
+                supportingText = {
+                    if (isDescriptionError) {
+                        Text("El campo no puede estar vacío")
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            isDescriptionTouched = true
+                        } else if (isDescriptionTouched) {
+                            isDescriptionError = album.description.isBlank()
+                        }
+                    }
                     .testTag(ScreenTestTags.DESCRIPTION_TEXT_FIELD),
             )
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Date Picker
             DatePicker(
                 label = "Fecha de Lanzamiento",
                 initialDate = album.releaseDate,
                 onDateSelected = { selectedDate ->
                     addAlbumViewModel.handleChange(AddAlbumFormAttribute.ReleaseDate(selectedDate))
                 },
-                modifier = Modifier.testTag(ScreenTestTags.RELEASE_DATE_PICKER),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ScreenTestTags.RELEASE_DATE_PICKER),
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -149,7 +196,9 @@ fun AddAlbumScreen(addAlbumViewModel: AddAlbumViewModel = hiltViewModel()) {
                 // Cancel Button
                 OutlinedButton(
                     onClick = { addAlbumViewModel.cleanForm() },
-                    modifier = Modifier.weight(1f).testTag(ScreenTestTags.CANCEL_BUTTON),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag(ScreenTestTags.CANCEL_BUTTON),
                 ) {
                     Text("Cancelar")
                 }
@@ -157,14 +206,10 @@ fun AddAlbumScreen(addAlbumViewModel: AddAlbumViewModel = hiltViewModel()) {
                 // Submit Button
                 Button(
                     onClick = { addAlbumViewModel.createAlbum() },
-                    enabled = !formState.isLoadingSubmit &&
-                        album.name.isNotBlank() &&
-                        album.description.isNotBlank() &&
-                        album.releaseDate.isNotBlank() &&
-                        album.genre.isNotBlank() &&
-                        album.recordLabel.isNotBlank() &&
-                        formState.selectedArtist != null,
-                    modifier = Modifier.weight(1f).testTag(ScreenTestTags.SUBMIT_BUTTON),
+                    enabled = !formState.isLoadingSubmit && formState.isValid,
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag(ScreenTestTags.SUBMIT_BUTTON),
                 ) {
                     if (formState.isLoadingSubmit) {
                         CircularProgressIndicator(

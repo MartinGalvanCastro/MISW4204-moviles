@@ -231,6 +231,7 @@ dependencies {
     androidTestImplementation(libs.androidx.rules)
     androidTestImplementation(libs.androidx.uiautomator)
     androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.jakewharton.threetenabp)
 
 
     debugImplementation(libs.androidx.ui.tooling)

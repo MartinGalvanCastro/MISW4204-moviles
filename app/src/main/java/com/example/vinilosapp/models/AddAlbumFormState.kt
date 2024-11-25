@@ -8,4 +8,5 @@ data class AddAlbumFormState(
     val isLoadingSubmit: Boolean = false,
     val errorMessage: String? = null,
     val successMessage: String? = null,
+    val isValid: Boolean = false,
 )

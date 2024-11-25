@@ -4,8 +4,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.example.vinilosapp.steps.ComposeRuleHolder
+import java.util.logging.Level
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class HelperPage @Inject constructor(
     private val composeRuleHolder: ComposeRuleHolder,
 ) {
@@ -32,5 +35,16 @@ class HelperPage @Inject constructor(
 
     fun navigateToColeccionistas() {
         clickNavbarItem("navbar-item-Coleccionistas")
+    }
+
+    private val generatedNames = mutableMapOf<String, String>()
+
+    fun saveGeneratedName(entity: String, name: String) {
+        generatedNames[entity] = name
+    }
+
+    fun getGeneratedName(entity: String): String {
+        java.util.logging.Logger.getAnonymousLogger().log(Level.INFO, "${generatedNames.keys}")
+        return generatedNames[entity] ?: throw IllegalStateException("$entity name was not set")
     }
 }

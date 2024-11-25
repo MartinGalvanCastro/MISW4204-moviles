@@ -10,7 +10,9 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AlbumDetalleScreenPage @Inject constructor(
     private val composeRuleHolder: ComposeRuleHolder,
 ) {

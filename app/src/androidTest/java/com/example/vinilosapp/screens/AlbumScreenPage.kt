@@ -12,7 +12,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AlbumScreenPage @Inject constructor(
     composeRuleHolder: ComposeRuleHolder,
 ) {
@@ -21,6 +23,10 @@ class AlbumScreenPage @Inject constructor(
 
     private val albumGrid = composeRule.onNodeWithTag("albumGrid")
     private val albumItemTag = "albumItem"
+
+    fun clickAddAlbumButton() {
+        composeRule.onNodeWithTag("addAlbumTag").performClick()
+    }
 
     fun clickOnAlbum() {
         val albums = composeRule.onAllNodesWithTag(albumItemTag)

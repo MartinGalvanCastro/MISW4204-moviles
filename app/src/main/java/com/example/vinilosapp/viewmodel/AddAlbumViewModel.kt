@@ -60,17 +60,40 @@ class AddAlbumViewModel @Inject constructor(
 
     fun handleChange(attribute: AddAlbumFormAttribute) {
         _formState.update { currentState ->
-            when (attribute) {
-                is AddAlbumFormAttribute.Name -> currentState.copy(item = currentState.item.copy(name = attribute.value))
-                is AddAlbumFormAttribute.Cover -> currentState.copy(item = currentState.item.copy(cover = attribute.value))
-                is AddAlbumFormAttribute.ReleaseDate -> currentState.copy(item = currentState.item.copy(releaseDate = attribute.value))
-                is AddAlbumFormAttribute.Description -> currentState.copy(item = currentState.item.copy(description = attribute.value))
-                is AddAlbumFormAttribute.Genre -> currentState.copy(item = currentState.item.copy(genre = attribute.value))
-                is AddAlbumFormAttribute.RecordLabel -> currentState.copy(item = currentState.item.copy(recordLabel = attribute.value))
-                is AddAlbumFormAttribute.SelectedArtist -> currentState.copy(selectedArtist = attribute.value)
-                is AddAlbumFormAttribute.SuccessMessage -> currentState.copy(successMessage = attribute.value)
-                is AddAlbumFormAttribute.ErrorMessage -> currentState.copy(errorMessage = attribute.value)
+            val updatedState = when (attribute) {
+                is AddAlbumFormAttribute.Name ->
+                    currentState.copy(item = currentState.item.copy(name = attribute.value))
+                is AddAlbumFormAttribute.Cover ->
+                    currentState.copy(item = currentState.item.copy(cover = attribute.value))
+                is AddAlbumFormAttribute.ReleaseDate ->
+                    currentState.copy(item = currentState.item.copy(releaseDate = attribute.value))
+                is AddAlbumFormAttribute.Description ->
+                    currentState.copy(item = currentState.item.copy(description = attribute.value))
+                is AddAlbumFormAttribute.Genre ->
+                    currentState.copy(item = currentState.item.copy(genre = attribute.value))
+                is AddAlbumFormAttribute.RecordLabel ->
+                    currentState.copy(item = currentState.item.copy(recordLabel = attribute.value))
+                is AddAlbumFormAttribute.SelectedArtist ->
+                    currentState.copy(selectedArtist = attribute.value)
+                is AddAlbumFormAttribute.SuccessMessage ->
+                    currentState.copy(successMessage = attribute.value)
+                is AddAlbumFormAttribute.ErrorMessage ->
+                    currentState.copy(errorMessage = attribute.value)
             }
+
+            // Determine if the form is valid
+            val isFormValid = with(updatedState) {
+                item.name.isNotBlank() &&
+                    item.cover.isNotBlank() &&
+                    item.releaseDate.isNotBlank() &&
+                    item.description.isNotBlank() &&
+                    item.genre.isNotBlank() &&
+                    item.recordLabel.isNotBlank() &&
+                    selectedArtist != null
+            }
+
+            // Update the state with the new validity status
+            updatedState.copy(isValid = isFormValid)
         }
     }
 
@@ -140,8 +163,11 @@ class AddAlbumViewModel @Inject constructor(
                     return@launch
                 }
 
-                albumRepository.createAlbum(album)
-                albumRepository.linkAlbumTo("${album.id}", selectedArtist.first, selectedArtist.third)
+                albumRepository.createAlbum(album).onSuccess { newAlbum ->
+                    albumRepository.linkAlbumTo("${newAlbum.id}", selectedArtist.first, selectedArtist.third)
+                }.onFailure { err ->
+                    throw Exception(err.message)
+                }
 
                 withContext(mainDispatcher) {
                     _formState.update {
