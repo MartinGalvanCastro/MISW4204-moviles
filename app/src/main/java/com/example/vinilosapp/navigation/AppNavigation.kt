@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vinilosapp.ui.components.ScreenWrapper
+import com.example.vinilosapp.ui.screens.AddAlbumScreen
 import com.example.vinilosapp.ui.screens.AlbumDetalleScreen
 import com.example.vinilosapp.ui.screens.AlbumesScreen
 import com.example.vinilosapp.ui.screens.ArtistasDetalleScreen
@@ -69,6 +70,11 @@ fun AppNavigation(navController: NavHostController) {
         ) { backStackEntry ->
             val coleccionistaId = backStackEntry.arguments?.getString("coleccionistaId")
             ColeccionistasDetalleScreen(coleccionistaId)
+        }
+        composable(
+            route = Routes.ADD_ALBUM_SCREEN,
+        ) {
+            AddAlbumScreen()
         }
     }
 }

@@ -14,7 +14,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ColeccionistaScreenPage @Inject constructor(
     composeRuleHolder: ComposeRuleHolder,
 ) {

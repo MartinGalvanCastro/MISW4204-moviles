@@ -12,7 +12,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ArtistaScreenPage @Inject constructor(
     composeRuleHolder: ComposeRuleHolder,
 ) {

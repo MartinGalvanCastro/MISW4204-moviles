@@ -200,6 +200,8 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.jakewharton.threetenabp)
+
 
     testImplementation(libs.junit)
     testImplementation(libs.coil.test)
@@ -211,7 +213,6 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.hamcrest.library)
     testImplementation(libs.mavericks.mocking)
-
 
 
     androidTestImplementation(libs.androidx.junit)
@@ -230,6 +231,7 @@ dependencies {
     androidTestImplementation(libs.androidx.rules)
     androidTestImplementation(libs.androidx.uiautomator)
     androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.jakewharton.threetenabp)
 
 
     debugImplementation(libs.androidx.ui.tooling)

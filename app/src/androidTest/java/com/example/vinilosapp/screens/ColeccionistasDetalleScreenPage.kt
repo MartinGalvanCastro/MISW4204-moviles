@@ -7,7 +7,9 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ColeccionistasDetalleScreenPage @Inject constructor(
     private val composeRuleHolder: ComposeRuleHolder,
 ) {
