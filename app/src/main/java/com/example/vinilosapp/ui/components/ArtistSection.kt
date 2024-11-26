@@ -17,6 +17,7 @@ import com.example.models.PerformerSimpleDTO
 fun ArtistSection(
     artistas: List<PerformerSimpleDTO>,
     fromBandas: Boolean = false,
+    fromColeccionista: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -25,7 +26,7 @@ fun ArtistSection(
             .testTag(if (fromBandas) "bandMembersSection" else "artistsSection"),
     ) {
         SectionTitle(
-            title = if (fromBandas) "Integrantes" else "Artistas",
+            title = if (fromBandas) "Integrantes" else "Artistas ${if (fromColeccionista) "Favoritos" else ""}",
             modifier = Modifier.testTag("sectionTitle"),
         )
 

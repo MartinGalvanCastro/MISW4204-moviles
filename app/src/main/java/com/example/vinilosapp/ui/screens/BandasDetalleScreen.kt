@@ -104,6 +104,7 @@ fun BandasDetalleScreen(
                                     ArtistSection(
                                         it,
                                         fromBandas = true,
+                                        fromColeccionista = false,
                                         Modifier.testTag("miembrosSection"),
                                     )
                                 }

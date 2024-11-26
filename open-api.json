@@ -1,288 +1,269 @@
 {
-  "openapi":"3.0.0",
-  "info":{
-    "title":"Your API Title",
-    "description":"Your API description",
-    "version":"1.0",
-    "contact":{
-
-    }
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Your API Title",
+    "description": "Your API description",
+    "version": "1.0",
+    "contact": {}
   },
-  "tags":[
+  "tags": [
     {
-      "name":"Your API Tag",
-      "description":""
+      "name": "Your API Tag",
+      "description": ""
     }
   ],
-  "servers":[
+  "servers": [
     {
-      "url":"http://localhost:3000/",
-      "description":"Local environment"
+      "url": "http://localhost:3000/",
+      "description": "Local environment"
     },
     {
-      "url":"https://staging.yourapi.com/",
-      "description":"Staging"
+      "url": "https://staging.yourapi.com/",
+      "description": "Staging"
     },
     {
-      "url":"https://production.yourapi.com/",
-      "description":"Production"
+      "url": "https://production.yourapi.com/",
+      "description": "Production"
     }
   ],
-  "components":{
-    "schemas":{
-      "PrizeDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+  "components": {
+    "schemas": {
+      "PrizeDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "TrackDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "TrackDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "CollectorDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "CollectorDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "BandDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "BandDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "MusicianDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "MusicianDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "PerformerPrizeSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "PerformerPrizeSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "premiationDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The date the prize was awarded",
-            "example":"2024-10-21T00:00:00Z"
+          "premiationDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The date the prize was awarded",
+            "example": "2024-10-21T00:00:00Z"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "premiationDate"
         ]
       },
-      "PrizeDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "PrizeDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the prize",
-            "example":"Best Musician Award"
+          "name": {
+            "type": "string",
+            "description": "The name of the prize",
+            "example": "Best Musician Award"
           },
-          "description":{
-            "type":"string",
-            "description":"A description of the prize",
-            "example":"Awarded for outstanding performance."
+          "description": {
+            "type": "string",
+            "description": "A description of the prize",
+            "example": "Awarded for outstanding performance."
           },
-          "organization":{
-            "type":"string",
-            "description":"The organization awarding the prize",
-            "example":"Music Academy"
+          "organization": {
+            "type": "string",
+            "description": "The organization awarding the prize",
+            "example": "Music Academy"
           },
-          "performerPrizes":{
-            "description":"Performer prizes associated with the prize",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PerformerPrizeSimpleDTO"
+          "performerPrizes": {
+            "description": "Performer prizes associated with the prize",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformerPrizeSimpleDTO"
             }
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "description",
           "organization"
         ]
       },
-      "PrizeSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "PrizeSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the prize",
-            "example":"Best Musician Award"
+          "name": {
+            "type": "string",
+            "description": "The name of the prize",
+            "example": "Best Musician Award"
           },
-          "description":{
-            "type":"string",
-            "description":"A description of the prize",
-            "example":"Awarded for outstanding performance."
+          "description": {
+            "type": "string",
+            "description": "A description of the prize",
+            "example": "Awarded for outstanding performance."
           },
-          "organization":{
-            "type":"string",
-            "description":"The organization awarding the prize",
-            "example":"Music Academy"
+          "organization": {
+            "type": "string",
+            "description": "The organization awarding the prize",
+            "example": "Music Academy"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "description",
           "organization"
         ]
       },
-      "PerformerSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "PerformerSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the performer",
-            "example":"John Smith"
+          "name": {
+            "type": "string",
+            "description": "The name of the performer",
+            "example": "John Smith"
           },
-          "image":{
-            "type":"string",
-            "description":"The image URL of the performer",
-            "example":"https://example.com/image.jpg"
+          "image": {
+            "type": "string",
+            "description": "The image URL of the performer",
+            "example": "https://example.com/image.jpg"
           },
-          "description":{
-            "type":"string",
-            "description":"A brief description of the performer",
-            "example":"A talented musician."
+          "description": {
+            "type": "string",
+            "description": "A brief description of the performer",
+            "example": "A talented musician."
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "image",
           "description"
         ]
       },
-      "TrackSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "TrackSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the track",
-            "example":"Symphony No. 5"
+          "name": {
+            "type": "string",
+            "description": "The name of the track",
+            "example": "Symphony No. 5"
           },
-          "duration":{
-            "type":"string",
-            "description":"The duration of the track in minutes and seconds",
-            "example":"03:45"
+          "duration": {
+            "type": "string",
+            "description": "The duration of the track in minutes and seconds",
+            "example": "03:45"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "duration"
         ]
       },
-      "CommentSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "CommentSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "description":{
-            "type":"string",
-            "description":"The description of the comment",
-            "example":"This album is fantastic!"
+          "description": {
+            "type": "string",
+            "description": "The description of the comment",
+            "example": "This album is fantastic!"
           },
-          "rating":{
-            "type":"number",
-            "description":"The rating given by the collector",
-            "example":4.5
+          "rating": {
+            "type": "number",
+            "description": "The rating given by the collector",
+            "example": 4.5
           }
         },
-        "required":[
-          "id",
+        "required": [
           "description",
           "rating"
         ]
       },
-      "AlbumDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "AlbumDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the album",
-            "example":"Album Name"
+          "name": {
+            "type": "string",
+            "description": "The name of the album",
+            "example": "Album Name"
           },
-          "cover":{
-            "type":"string",
-            "description":"The cover image URL of the album",
-            "example":"https://example.com/cover.jpg"
+          "cover": {
+            "type": "string",
+            "description": "The cover image URL of the album",
+            "example": "https://example.com/cover.jpg"
           },
-          "releaseDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The release date of the album",
-            "example":"2024-10-21T00:00:00Z"
+          "releaseDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The release date of the album",
+            "example": "2024-10-21T00:00:00Z"
           },
-          "description":{
-            "type":"string",
-            "description":"The description of the album",
-            "example":"A great album description."
+          "description": {
+            "type": "string",
+            "description": "The description of the album",
+            "example": "A great album description."
           },
-          "performers":{
-            "description":"Performers in the album",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PerformerSimpleDTO"
+          "performers": {
+            "description": "Performers in the album",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformerSimpleDTO"
             }
           },
-          "tracks":{
-            "description":"Tracks in the album",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/TrackSimpleDTO"
+          "tracks": {
+            "description": "Tracks in the album",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrackSimpleDTO"
             }
           },
-          "comments":{
-            "description":"Comments on the album",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/CommentSimpleDTO"
+          "comments": {
+            "description": "Comments on the album",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentSimpleDTO"
             }
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "cover",
           "releaseDate",
@@ -292,2417 +273,2375 @@
           "comments"
         ]
       },
-      "AlbumSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "AlbumSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the album",
-            "example":"Album Name"
+          "name": {
+            "type": "string",
+            "description": "The name of the album",
+            "example": "Album Name"
           },
-          "cover":{
-            "type":"string",
-            "description":"The cover image URL of the album",
-            "example":"https://example.com/cover.jpg"
+          "cover": {
+            "type": "string",
+            "description": "The cover image URL of the album",
+            "example": "https://example.com/cover.jpg"
           },
-          "releaseDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The release date of the album",
-            "example":"2024-10-21T00:00:00Z"
+          "releaseDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The release date of the album",
+            "example": "2024-10-21T00:00:00Z"
           },
-          "description":{
-            "type":"string",
-            "description":"The description of the album",
-            "example":"A great album description."
+          "description": {
+            "type": "string",
+            "description": "The description of the album",
+            "example": "A great album description."
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "cover",
           "releaseDate",
           "description"
         ]
       },
-      "CollectorAlbumSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "CollectorAlbumSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "price":{
-            "type":"number",
-            "description":"The price paid for the album",
-            "example":29.99
+          "price": {
+            "type": "number",
+            "description": "The price paid for the album",
+            "example": 29.99
           },
-          "status":{
-            "type":"string",
-            "description":"The status of the album in the collector’s collection",
-            "example":"OWNED"
+          "status": {
+            "type": "string",
+            "description": "The status of the album in the collector\u2019s collection",
+            "example": "OWNED"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "price",
           "status"
         ]
       },
-      "CollectorDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "CollectorDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the collector",
-            "example":"John Doe"
+          "name": {
+            "type": "string",
+            "description": "The name of the collector",
+            "example": "John Doe"
           },
-          "telephone":{
-            "type":"string",
-            "description":"The telephone number of the collector",
-            "example":"+123456789"
+          "telephone": {
+            "type": "string",
+            "description": "The telephone number of the collector",
+            "example": "+123456789"
           },
-          "email":{
-            "type":"string",
-            "description":"The email of the collector",
-            "example":"john.doe@example.com"
+          "email": {
+            "type": "string",
+            "description": "The email of the collector",
+            "example": "john.doe@example.com"
           },
-          "favoritePerformers":{
-            "description":"Favorite performers",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PerformerSimpleDTO"
+          "favoritePerformers": {
+            "description": "Favorite performers",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformerSimpleDTO"
             }
           },
-          "comments":{
-            "description":"Comments made by the collector",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/CommentSimpleDTO"
+          "comments": {
+            "description": "Comments made by the collector",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentSimpleDTO"
             }
           },
-          "collectorAlbums":{
-            "description":"Collector albums",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/CollectorAlbumSimpleDTO"
+          "collectorAlbums": {
+            "description": "Collector albums",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectorAlbumSimpleDTO"
             }
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "telephone",
           "email"
         ]
       },
-      "CollectorSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "CollectorSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the collector",
-            "example":"John Doe"
+          "name": {
+            "type": "string",
+            "description": "The name of the collector",
+            "example": "John Doe"
           },
-          "telephone":{
-            "type":"string",
-            "description":"The telephone number of the collector",
-            "example":"+123456789"
+          "telephone": {
+            "type": "string",
+            "description": "The telephone number of the collector",
+            "example": "+123456789"
           },
-          "email":{
-            "type":"string",
-            "description":"The email of the collector",
-            "example":"john.doe@example.com"
+          "email": {
+            "type": "string",
+            "description": "The email of the collector",
+            "example": "john.doe@example.com"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "telephone",
           "email"
         ]
       },
-      "MusicianDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "MusicianDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the performer",
-            "example":"John Smith"
+          "name": {
+            "type": "string",
+            "description": "The name of the performer",
+            "example": "John Smith"
           },
-          "image":{
-            "type":"string",
-            "description":"The image URL of the performer",
-            "example":"https://example.com/image.jpg"
+          "image": {
+            "type": "string",
+            "description": "The image URL of the performer",
+            "example": "https://example.com/image.jpg"
           },
-          "description":{
-            "type":"string",
-            "description":"A brief description of the performer",
-            "example":"A talented musician."
+          "description": {
+            "type": "string",
+            "description": "A brief description of the performer",
+            "example": "A talented musician."
           },
-          "albums":{
-            "description":"Albums associated with the musician",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/AlbumSimpleDTO"
+          "albums": {
+            "description": "Albums associated with the musician",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlbumSimpleDTO"
             }
           },
-          "collectors":{
-            "description":"Collectors who have marked this performer as a favorite",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/CollectorSimpleDTO"
+          "collectors": {
+            "description": "Collectors who have marked this performer as a favorite",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectorSimpleDTO"
             }
           },
-          "performerPrizes":{
-            "description":"Prizes associated with the musician",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PerformerPrizeSimpleDTO"
+          "performerPrizes": {
+            "description": "Prizes associated with the musician",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformerPrizeSimpleDTO"
             }
           },
-          "birthDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The birth date of the musician",
-            "example":"1980-04-12T00:00:00Z"
+          "birthDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The birth date of the musician",
+            "example": "1980-04-12T00:00:00Z"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "image",
           "description",
           "birthDate"
         ]
       },
-      "PerformerPrizeDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "PerformerPrizeDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "MusicianSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "MusicianSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the performer",
-            "example":"John Smith"
+          "name": {
+            "type": "string",
+            "description": "The name of the performer",
+            "example": "John Smith"
           },
-          "image":{
-            "type":"string",
-            "description":"The image URL of the performer",
-            "example":"https://example.com/image.jpg"
+          "image": {
+            "type": "string",
+            "description": "The image URL of the performer",
+            "example": "https://example.com/image.jpg"
           },
-          "description":{
-            "type":"string",
-            "description":"A brief description of the performer",
-            "example":"A talented musician."
+          "description": {
+            "type": "string",
+            "description": "A brief description of the performer",
+            "example": "A talented musician."
           },
-          "albums":{
-            "description":"Albums where the performer has participated",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/AlbumSimpleDTO"
+          "albums": {
+            "description": "Albums where the performer has participated",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlbumSimpleDTO"
             }
           },
-          "collectors":{
-            "description":"Collectors who have marked this performer as a favorite",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/CollectorSimpleDTO"
+          "collectors": {
+            "description": "Collectors who have marked this performer as a favorite",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectorSimpleDTO"
             }
           },
-          "performerPrizes":{
-            "description":"Prizes awarded to the performer",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PerformerPrizeDTO"
+          "performerPrizes": {
+            "description": "Prizes awarded to the performer",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformerPrizeDTO"
             }
           },
-          "birthDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The birth date of the musician",
-            "example":"1980-04-12T00:00:00Z"
+          "birthDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The birth date of the musician",
+            "example": "1980-04-12T00:00:00Z"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "image",
           "description",
           "birthDate"
         ]
       },
-      "BandDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "BandDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the band",
-            "example":"The Rolling Stones"
+          "name": {
+            "type": "string",
+            "description": "The name of the band",
+            "example": "The Rolling Stones"
           },
-          "image":{
-            "type":"string",
-            "description":"The image URL of the performer",
-            "example":"https://example.com/image.jpg"
+          "image": {
+            "type": "string",
+            "description": "The image URL of the performer",
+            "example": "https://example.com/image.jpg"
           },
-          "description":{
-            "type":"string",
-            "description":"A brief description of the performer",
-            "example":"A talented musician."
+          "description": {
+            "type": "string",
+            "description": "A brief description of the performer",
+            "example": "A talented musician."
           },
-          "albums":{
-            "description":"Albums where the performer has participated",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/AlbumSimpleDTO"
+          "albums": {
+            "description": "Albums where the performer has participated",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlbumSimpleDTO"
             }
           },
-          "collectors":{
-            "description":"Collectors who have marked this performer as a favorite",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/CollectorSimpleDTO"
+          "collectors": {
+            "description": "Collectors who have marked this performer as a favorite",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectorSimpleDTO"
             }
           },
-          "performerPrizes":{
-            "description":"Prizes awarded to the performer",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PerformerPrizeSimpleDTO"
+          "performerPrizes": {
+            "description": "Prizes awarded to the performer",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformerPrizeSimpleDTO"
             }
           },
-          "creationDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The creation date of the band",
-            "example":"1962-04-12T00:00:00Z"
+          "creationDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The creation date of the band",
+            "example": "1962-04-12T00:00:00Z"
           },
-          "musicians":{
-            "description":"Musicians in the band",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/MusicianSimpleDTO"
+          "musicians": {
+            "description": "Musicians in the band",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MusicianSimpleDTO"
             }
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "image",
           "description",
           "creationDate"
         ]
       },
-      "BandSimpleDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "BandSimpleDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the band",
-            "example":"The Rolling Stones"
+          "name": {
+            "type": "string",
+            "description": "The name of the band",
+            "example": "The Rolling Stones"
           },
-          "image":{
-            "type":"string",
-            "description":"The image URL of the performer",
-            "example":"https://example.com/image.jpg"
+          "image": {
+            "type": "string",
+            "description": "The image URL of the performer",
+            "example": "https://example.com/image.jpg"
           },
-          "description":{
-            "type":"string",
-            "description":"A brief description of the performer",
-            "example":"A talented musician."
+          "description": {
+            "type": "string",
+            "description": "A brief description of the performer",
+            "example": "A talented musician."
           },
-          "albums":{
-            "description":"Albums where the performer has participated",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/AlbumSimpleDTO"
+          "albums": {
+            "description": "Albums where the performer has participated",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlbumSimpleDTO"
             }
           },
-          "collectors":{
-            "description":"Collectors who have marked this performer as a favorite",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/CollectorSimpleDTO"
+          "collectors": {
+            "description": "Collectors who have marked this performer as a favorite",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectorSimpleDTO"
             }
           },
-          "performerPrizes":{
-            "description":"Prizes awarded to the performer",
-            "type":"array",
-            "items":{
-              "$ref":"#/components/schemas/PerformerPrizeSimpleDTO"
+          "performerPrizes": {
+            "description": "Prizes awarded to the performer",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerformerPrizeDTO"
             }
           },
-          "creationDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The creation date of the band",
-            "example":"1962-04-12T00:00:00Z"
+          "creationDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The creation date of the band",
+            "example": "1962-04-12T00:00:00Z"
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "image",
           "description",
           "creationDate"
         ]
       },
-      "PerformerPrizeDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "PerformerPrizeDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "premiationDate":{
-            "format":"date",
-            "type":"string",
-            "description":"The date the prize was awarded",
-            "example":"2024-10-21T00:00:00Z"
+          "premiationDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The date the prize was awarded",
+            "example": "2024-10-21T00:00:00Z"
           },
-          "performer":{
-            "description":"The performer who won the prize",
-            "allOf":[
+          "performer": {
+            "description": "The performer who won the prize",
+            "allOf": [
               {
-                "$ref":"#/components/schemas/PerformerSimpleDTO"
+                "$ref": "#/components/schemas/PerformerSimpleDTO"
               }
             ]
           },
-          "prize":{
-            "description":"The prize awarded to the performer",
-            "allOf":[
+          "prize": {
+            "description": "The prize awarded to the performer",
+            "allOf": [
               {
-                "$ref":"#/components/schemas/PrizeSimpleDTO"
+                "$ref": "#/components/schemas/PrizeSimpleDTO"
               }
             ]
           }
         },
-        "required":[
-          "id",
+        "required": [
           "premiationDate",
           "performer",
           "prize"
         ]
       },
-      "TrackDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "TrackDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "name":{
-            "type":"string",
-            "description":"The name of the track",
-            "example":"Symphony No. 5"
+          "name": {
+            "type": "string",
+            "description": "The name of the track",
+            "example": "Symphony No. 5"
           },
-          "duration":{
-            "type":"string",
-            "description":"The duration of the track in minutes and seconds",
-            "example":"03:45"
+          "duration": {
+            "type": "string",
+            "description": "The duration of the track in minutes and seconds",
+            "example": "03:45"
           },
-          "album":{
-            "description":"The album to which the track belongs",
-            "allOf":[
+          "album": {
+            "description": "The album to which the track belongs",
+            "allOf": [
               {
-                "$ref":"#/components/schemas/AlbumSimpleDTO"
+                "$ref": "#/components/schemas/AlbumSimpleDTO"
               }
             ]
           }
         },
-        "required":[
-          "id",
+        "required": [
           "name",
           "duration",
           "album"
         ]
       },
-      "CollectorAlbumDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "CollectorAlbumDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "price":{
-            "type":"number",
-            "description":"The price paid for the album",
-            "example":29.99
+          "price": {
+            "type": "number",
+            "description": "The price paid for the album",
+            "example": 29.99
           },
-          "status":{
-            "type":"string",
-            "description":"The status of the album in the collector’s collection",
-            "example":"OWNED"
+          "status": {
+            "type": "string",
+            "description": "The status of the album in the collector\u2019s collection",
+            "example": "OWNED"
           },
-          "album":{
-            "description":"The album in the collector’s collection",
-            "allOf":[
+          "album": {
+            "description": "The album in the collector\u2019s collection",
+            "allOf": [
               {
-                "$ref":"#/components/schemas/AlbumSimpleDTO"
+                "$ref": "#/components/schemas/AlbumSimpleDTO"
               }
             ]
           },
-          "collector":{
-            "description":"The collector who owns the album",
-            "allOf":[
+          "collector": {
+            "description": "The collector who owns the album",
+            "allOf": [
               {
-                "$ref":"#/components/schemas/CollectorSimpleDTO"
+                "$ref": "#/components/schemas/CollectorSimpleDTO"
               }
             ]
           }
         },
-        "required":[
-          "id",
+        "required": [
           "price",
           "status",
           "album",
           "collector"
         ]
       },
-      "CommentDetailDTO":{
-        "type":"object",
-        "properties":{
-          "id":{
-            "type":"number",
-            "description":"Unique identifier",
-            "example":1
+      "CommentDetailDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "Unique identifier",
+            "example": 1
           },
-          "description":{
-            "type":"string",
-            "description":"The description of the comment",
-            "example":"This album is fantastic!"
+          "description": {
+            "type": "string",
+            "description": "The description of the comment",
+            "example": "This album is fantastic!"
           },
-          "rating":{
-            "type":"number",
-            "description":"The rating given by the collector",
-            "example":4.5
+          "rating": {
+            "type": "number",
+            "description": "The rating given by the collector",
+            "example": 4.5
           },
-          "collector":{
-            "description":"The collector who made the comment",
-            "allOf":[
+          "collector": {
+            "description": "The collector who made the comment",
+            "allOf": [
               {
-                "$ref":"#/components/schemas/CollectorSimpleDTO"
+                "$ref": "#/components/schemas/CollectorSimpleDTO"
               }
             ]
           },
-          "album":{
-            "description":"The album the comment belongs to",
-            "allOf":[
+          "album": {
+            "description": "The album the comment belongs to",
+            "allOf": [
               {
-                "$ref":"#/components/schemas/AlbumSimpleDTO"
+                "$ref": "#/components/schemas/AlbumSimpleDTO"
               }
             ]
           }
         },
-        "required":[
-          "id",
+        "required": [
           "description",
           "rating",
           "collector",
           "album"
         ]
       },
-      "AlbumDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "AlbumDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "CommentDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "CommentDTO": {
+        "type": "object",
+        "properties": {}
       },
-      "CollectorAlbumDTO":{
-        "type":"object",
-        "properties":{
-
-        }
+      "CollectorAlbumDTO": {
+        "type": "object",
+        "properties": {}
       }
     }
   },
-  "paths":{
-    "/prizes":{
-      "get":{
-        "operationId":"PrizeController_findAll",
-        "parameters":[
-
-        ],
-        "responses":{
-          "200":{
-            "description":""
+  "paths": {
+    "/prizes": {
+      "get": {
+        "operationId": "PrizeController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"PrizeController_create",
-        "parameters":[
-
-        ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/PrizeDTO"
+      "post": {
+        "operationId": "PrizeController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrizeDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/prizes/{prizeId}":{
-      "get":{
-        "operationId":"PrizeController_findOne",
-        "parameters":[
+    "/prizes/{prizeId}": {
+      "get": {
+        "operationId": "PrizeController_findOne",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"PrizeController_update",
-        "parameters":[
+      "put": {
+        "operationId": "PrizeController_update",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/PrizeDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PrizeDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"PrizeController_delete",
-        "parameters":[
+      "delete": {
+        "operationId": "PrizeController_delete",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/tracks":{
-      "get":{
-        "operationId":"TrackController_findTracks",
-        "parameters":[
+    "/albums/{albumId}/tracks": {
+      "get": {
+        "operationId": "TrackController_findTracks",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"TrackController_addTrackVinyl",
-        "parameters":[
+      "post": {
+        "operationId": "TrackController_addTrackVinyl",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/TrackDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrackDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/tracks/{trackId}":{
-      "get":{
-        "operationId":"TrackController_findOneTrack",
-        "parameters":[
+    "/albums/{albumId}/tracks/{trackId}": {
+      "get": {
+        "operationId": "TrackController_findOneTrack",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"trackId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "trackId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"TrackController_update",
-        "parameters":[
+      "put": {
+        "operationId": "TrackController_update",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"trackId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "trackId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/TrackDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrackDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"TrackController_delete",
-        "parameters":[
+      "delete": {
+        "operationId": "TrackController_delete",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"trackId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "trackId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/collectors":{
-      "get":{
-        "operationId":"CollectorController_findAll",
-        "parameters":[
-
-        ],
-        "responses":{
-          "200":{
-            "description":""
+    "/collectors": {
+      "get": {
+        "operationId": "CollectorController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"CollectorController_create",
-        "parameters":[
-
-        ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/CollectorDTO"
+      "post": {
+        "operationId": "CollectorController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectorDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/collectors/{collectorId}":{
-      "get":{
-        "operationId":"CollectorController_findOne",
-        "parameters":[
+    "/collectors/{collectorId}": {
+      "get": {
+        "operationId": "CollectorController_findOne",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"CollectorController_update",
-        "parameters":[
+      "put": {
+        "operationId": "CollectorController_update",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/CollectorDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectorDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"CollectorController_delete",
-        "parameters":[
+      "delete": {
+        "operationId": "CollectorController_delete",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/bands":{
-      "get":{
-        "operationId":"BandController_findAll",
-        "parameters":[
-
-        ],
-        "responses":{
-          "200":{
-            "description":""
+    "/bands": {
+      "get": {
+        "operationId": "BandController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"BandController_create",
-        "parameters":[
-
-        ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/BandDTO"
+      "post": {
+        "operationId": "BandController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BandDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/bands/{bandId}":{
-      "get":{
-        "operationId":"BandController_findOne",
-        "parameters":[
+    "/bands/{bandId}": {
+      "get": {
+        "operationId": "BandController_findOne",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"BandController_update",
-        "parameters":[
+      "put": {
+        "operationId": "BandController_update",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/BandDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BandDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"BandController_delete",
-        "parameters":[
+      "delete": {
+        "operationId": "BandController_delete",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/musicians":{
-      "get":{
-        "operationId":"MusicianController_findAll",
-        "parameters":[
-
-        ],
-        "responses":{
-          "200":{
-            "description":""
+    "/musicians": {
+      "get": {
+        "operationId": "MusicianController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"MusicianController_create",
-        "parameters":[
-
-        ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/MusicianDTO"
+      "post": {
+        "operationId": "MusicianController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MusicianDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/musicians/{musicianId}":{
-      "get":{
-        "operationId":"MusicianController_findOne",
-        "parameters":[
+    "/musicians/{musicianId}": {
+      "get": {
+        "operationId": "MusicianController_findOne",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"MusicianController_update",
-        "parameters":[
+      "put": {
+        "operationId": "MusicianController_update",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/MusicianDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MusicianDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"MusicianController_delete",
-        "parameters":[
+      "delete": {
+        "operationId": "MusicianController_delete",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/albums":{
-      "get":{
-        "operationId":"AlbumController_findAll",
-        "parameters":[
-
-        ],
-        "responses":{
-          "200":{
-            "description":""
+    "/albums": {
+      "get": {
+        "operationId": "AlbumController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"AlbumController_create",
-        "parameters":[
-
-        ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/AlbumDTO"
+      "post": {
+        "operationId": "AlbumController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}":{
-      "get":{
-        "operationId":"AlbumController_findOne",
-        "parameters":[
+    "/albums/{albumId}": {
+      "get": {
+        "operationId": "AlbumController_findOne",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"AlbumController_update",
-        "parameters":[
+      "put": {
+        "operationId": "AlbumController_update",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/AlbumDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlbumDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"AlbumController_delete",
-        "parameters":[
+      "delete": {
+        "operationId": "AlbumController_delete",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/comments/":{
-      "get":{
-        "operationId":"CommentController_findCommentsByAlbumId",
-        "parameters":[
+    "/albums/{albumId}/comments/": {
+      "get": {
+        "operationId": "CommentController_findCommentsByAlbumId",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/comments/{commentId}":{
-      "get":{
-        "operationId":"CommentController_findCommentsByAlbumIdCommentId",
-        "parameters":[
+    "/albums/{albumId}/comments/{commentId}": {
+      "get": {
+        "operationId": "CommentController_findCommentsByAlbumIdCommentId",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"commentId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"CommentController_updateComment",
-        "parameters":[
+      "put": {
+        "operationId": "CommentController_updateComment",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"commentId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/CommentDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"CommentController_deleteVinylToArtist",
-        "parameters":[
+      "delete": {
+        "operationId": "CommentController_deleteVinylToArtist",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"commentId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "commentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/comments":{
-      "post":{
-        "operationId":"CommentController_addCommentAlbum",
-        "parameters":[
+    "/albums/{albumId}/comments": {
+      "post": {
+        "operationId": "CommentController_addCommentAlbum",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/CommentDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/collectors/{collectorId}/albums":{
-      "get":{
-        "operationId":"CollectorAlbumController_findAlbumsByCollectorId",
-        "parameters":[
+    "/collectors/{collectorId}/albums": {
+      "get": {
+        "operationId": "CollectorAlbumController_findAlbumsByCollectorId",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/collectors/{collectorId}/albums/{albumId}":{
-      "get":{
-        "operationId":"CollectorAlbumController_findAlbumsByCollectorIdAlbumId",
-        "parameters":[
+    "/collectors/{collectorId}/albums/{albumId}": {
+      "get": {
+        "operationId": "CollectorAlbumController_findAlbumsByCollectorIdAlbumId",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"CollectorAlbumController_addAlbumToCollector",
-        "parameters":[
+      "post": {
+        "operationId": "CollectorAlbumController_addAlbumToCollector",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/CollectorAlbumDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectorAlbumDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"CollectorAlbumController_updateAlbumCollector",
-        "parameters":[
+      "put": {
+        "operationId": "CollectorAlbumController_updateAlbumCollector",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/CollectorAlbumDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectorAlbumDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"CollectorAlbumController_deleteAlbumCollector",
-        "parameters":[
+      "delete": {
+        "operationId": "CollectorAlbumController_deleteAlbumCollector",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/prizes/{prizeId}/performers":{
-      "get":{
-        "operationId":"PerformerPrizeController_findArtistPrize",
-        "parameters":[
+    "/prizes/{prizeId}/performers": {
+      "get": {
+        "operationId": "PerformerPrizeController_findArtistPrize",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/prizes/{prizeId}/musicians/{musicianId}":{
-      "post":{
-        "operationId":"PerformerPrizeController_associateMusicianPrize",
-        "parameters":[
+    "/prizes/{prizeId}/musicians/{musicianId}": {
+      "post": {
+        "operationId": "PerformerPrizeController_associateMusicianPrize",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/PerformerPrizeDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerformerPrizeDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"PerformerPrizeController_deletePrizeMusician",
-        "parameters":[
+      "delete": {
+        "operationId": "PerformerPrizeController_deletePrizeMusician",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/prizes/{prizeId}/bands/{bandId}":{
-      "post":{
-        "operationId":"PerformerPrizeController_associateBandPrize",
-        "parameters":[
+    "/prizes/{prizeId}/bands/{bandId}": {
+      "post": {
+        "operationId": "PerformerPrizeController_associateBandPrize",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "$ref":"#/components/schemas/PerformerPrizeDTO"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerformerPrizeDTO"
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"PerformerPrizeController_deletePrizeBand",
-        "parameters":[
+      "delete": {
+        "operationId": "PerformerPrizeController_deletePrizeBand",
+        "parameters": [
           {
-            "name":"prizeId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "prizeId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/performerprizes":{
-      "get":{
-        "operationId":"PerformerPrizesController_findAll",
-        "parameters":[
-
-        ],
-        "responses":{
-          "200":{
-            "description":""
+    "/performerprizes": {
+      "get": {
+        "operationId": "PerformerPrizesController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/bands/{bandId}/musicians/{musicianId}":{
-      "post":{
-        "operationId":"BandMusicianController_addMusicianToBand",
-        "parameters":[
+    "/bands/{bandId}/musicians/{musicianId}": {
+      "post": {
+        "operationId": "BandMusicianController_addMusicianToBand",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "get":{
-        "operationId":"BandMusicianController_findBandByBandIdMusicianId",
-        "parameters":[
+      "get": {
+        "operationId": "BandMusicianController_findBandByBandIdMusicianId",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"BandMusicianController_deleteMusicianToBand",
-        "parameters":[
+      "delete": {
+        "operationId": "BandMusicianController_deleteMusicianToBand",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/bands/{bandId}/musicians/":{
-      "get":{
-        "operationId":"BandMusicianController_findMusiciansByBandId",
-        "parameters":[
+    "/bands/{bandId}/musicians/": {
+      "get": {
+        "operationId": "BandMusicianController_findMusiciansByBandId",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/musicians/{musicianId}/albums/{albumId}":{
-      "get":{
-        "operationId":"MusicianAlbumController_findAlbumsByMusicianIdAlbumId",
-        "parameters":[
+    "/musicians/{musicianId}/albums/{albumId}": {
+      "get": {
+        "operationId": "MusicianAlbumController_findAlbumsByMusicianIdAlbumId",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"MusicianAlbumController_addMusicianAlbum",
-        "parameters":[
+      "post": {
+        "operationId": "MusicianAlbumController_addMusicianAlbum",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"MusicianAlbumController_deleteAlbumToMusician",
-        "parameters":[
+      "delete": {
+        "operationId": "MusicianAlbumController_deleteAlbumToMusician",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/musicians/{musicianId}/albums/":{
-      "get":{
-        "operationId":"MusicianAlbumController_findAlbumsByMusicianId",
-        "parameters":[
+    "/musicians/{musicianId}/albums/": {
+      "get": {
+        "operationId": "MusicianAlbumController_findAlbumsByMusicianId",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"MusicianAlbumController_associateMusicianAlbum",
-        "parameters":[
+      "put": {
+        "operationId": "MusicianAlbumController_associateMusicianAlbum",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "type":"array",
-                "items":{
-                  "type":"string"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/bands/{bandId}/albums/{albumId}":{
-      "get":{
-        "operationId":"BandAlbumController_findAlbumsByBandIdAlbumId",
-        "parameters":[
+    "/bands/{bandId}/albums/{albumId}": {
+      "get": {
+        "operationId": "BandAlbumController_findAlbumsByBandIdAlbumId",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "post":{
-        "operationId":"BandAlbumController_addBandAlbum",
-        "parameters":[
+      "post": {
+        "operationId": "BandAlbumController_addBandAlbum",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"BandAlbumController_deleteAlbumToBand",
-        "parameters":[
+      "delete": {
+        "operationId": "BandAlbumController_deleteAlbumToBand",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/bands/{bandId}/albums/":{
-      "get":{
-        "operationId":"BandAlbumController_findAlbumsByBandId",
-        "parameters":[
+    "/bands/{bandId}/albums/": {
+      "get": {
+        "operationId": "BandAlbumController_findAlbumsByBandId",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"BandAlbumController_associateBandAlbum",
-        "parameters":[
+      "put": {
+        "operationId": "BandAlbumController_associateBandAlbum",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "type":"array",
-                "items":{
-                  "type":"string"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/collectors/{collectorId}/performers":{
-      "get":{
-        "operationId":"CollectorPerformerController_getPerformersByCollectorId",
-        "parameters":[
+    "/collectors/{collectorId}/performers": {
+      "get": {
+        "operationId": "CollectorPerformerController_getPerformersByCollectorId",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/collectors/{collectorId}/bands/{bandId}":{
-      "post":{
-        "operationId":"CollectorPerformerController_associateCollectorBand",
-        "parameters":[
+    "/collectors/{collectorId}/bands/{bandId}": {
+      "post": {
+        "operationId": "CollectorPerformerController_associateCollectorBand",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"CollectorPerformerController_deleteCollectorBand",
-        "parameters":[
+      "delete": {
+        "operationId": "CollectorPerformerController_deleteCollectorBand",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/collectors/{collectorId}/musicians/{musicianId}":{
-      "post":{
-        "operationId":"CollectorPerformerController_associateCollectorMusician",
-        "parameters":[
+    "/collectors/{collectorId}/musicians/{musicianId}": {
+      "post": {
+        "operationId": "CollectorPerformerController_associateCollectorMusician",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"CollectorPerformerController_deleteCollectorMusician",
-        "parameters":[
+      "delete": {
+        "operationId": "CollectorPerformerController_deleteCollectorMusician",
+        "parameters": [
           {
-            "name":"collectorId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "collectorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/bands/{bandId}":{
-      "get":{
-        "operationId":"AlbumBandController_findBandsByAlbumIdBandId",
-        "parameters":[
+    "/albums/{albumId}/bands/{bandId}": {
+      "get": {
+        "operationId": "AlbumBandController_findBandsByAlbumIdBandId",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"AlbumBandController_deleteBandToAlbum",
-        "parameters":[
+      "delete": {
+        "operationId": "AlbumBandController_deleteBandToAlbum",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/bands":{
-      "get":{
-        "operationId":"AlbumBandController_findBandsByAlbumId",
-        "parameters":[
+    "/albums/{albumId}/bands": {
+      "get": {
+        "operationId": "AlbumBandController_findBandsByAlbumId",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"AlbumBandController_associateAlbumBand",
-        "parameters":[
+      "put": {
+        "operationId": "AlbumBandController_associateAlbumBand",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "type":"array",
-                "items":{
-                  "type":"string"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/bands/{bandId}/":{
-      "post":{
-        "operationId":"AlbumBandController_addAlbumBand",
-        "parameters":[
+    "/albums/{albumId}/bands/{bandId}/": {
+      "post": {
+        "operationId": "AlbumBandController_addAlbumBand",
+        "parameters": [
           {
-            "name":"bandId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "bandId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/musicians/{musicianId}":{
-      "get":{
-        "operationId":"AlbumMusicianController_findMusiciansByAlbumIdMusicianId",
-        "parameters":[
+    "/albums/{albumId}/musicians/{musicianId}": {
+      "get": {
+        "operationId": "AlbumMusicianController_findMusiciansByAlbumIdMusicianId",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "delete":{
-        "operationId":"AlbumMusicianController_deleteMusicianToAlbum",
-        "parameters":[
+      "delete": {
+        "operationId": "AlbumMusicianController_deleteMusicianToAlbum",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "204":{
-            "description":""
+        "responses": {
+          "204": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/musicians":{
-      "get":{
-        "operationId":"AlbumMusicianController_findMusiciansByAlbumId",
-        "parameters":[
+    "/albums/{albumId}/musicians": {
+      "get": {
+        "operationId": "AlbumMusicianController_findMusiciansByAlbumId",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       },
-      "put":{
-        "operationId":"AlbumMusicianController_associateAlbumMusician",
-        "parameters":[
+      "put": {
+        "operationId": "AlbumMusicianController_associateAlbumMusician",
+        "parameters": [
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "requestBody":{
-          "required":true,
-          "content":{
-            "application/json":{
-              "schema":{
-                "type":"array",
-                "items":{
-                  "type":"string"
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
                 }
               }
             }
           }
         },
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
     },
-    "/albums/{albumId}/musicians/{musicianId}/":{
-      "post":{
-        "operationId":"AlbumMusicianController_addAlbumMusician",
-        "parameters":[
+    "/albums/{albumId}/musicians/{musicianId}/": {
+      "post": {
+        "operationId": "AlbumMusicianController_addAlbumMusician",
+        "parameters": [
           {
-            "name":"musicianId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "musicianId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           },
           {
-            "name":"albumId",
-            "required":true,
-            "in":"path",
-            "schema":{
-              "type":"number"
+            "name": "albumId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
             }
           }
         ],
-        "responses":{
-          "200":{
-            "description":""
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
