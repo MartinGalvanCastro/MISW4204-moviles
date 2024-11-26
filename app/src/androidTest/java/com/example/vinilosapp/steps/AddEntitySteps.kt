@@ -3,14 +3,18 @@ package com.example.vinilosapp.steps
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.example.vinilosapp.screens.AddAlbumScreenPage
+import com.example.vinilosapp.screens.AddSongScreenPage
+import com.example.vinilosapp.screens.AlbumDetalleScreenPage
 import com.example.vinilosapp.screens.AlbumScreenPage
 import com.example.vinilosapp.screens.HelperPage
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Then
 import javax.inject.Inject
 
-class AddAlbumSteps @Inject constructor(
+class AddEntitySteps @Inject constructor(
     private val albumScreenPage: AlbumScreenPage,
+    private val albumDetalleScreenPage: AlbumDetalleScreenPage,
+    private val addSongScreenPage: AddSongScreenPage,
     private val composeRuleHolder: ComposeRuleHolder,
     private val helperPage: HelperPage,
     private val addAlbumScreenPage: AddAlbumScreenPage,
@@ -24,6 +28,12 @@ class AddAlbumSteps @Inject constructor(
     fun quiereAgregarEntidad(entidad: String) {
         when (entidad) {
             "un album" -> albumScreenPage.clickAddAlbumButton()
+            "una cancion" -> {
+                composeRuleHolder.composeRule.waitUntil(10_000) {
+                    albumDetalleScreenPage.assertTracksSectionIsDisplayed()
+                    albumDetalleScreenPage.clickAddSong()
+                }
+            }
             else -> throw IllegalArgumentException("Unsupported entity type: $entidad")
         }
     }
@@ -39,8 +49,11 @@ class AddAlbumSteps @Inject constructor(
         helperPage.saveGeneratedName(tipoStandard, nombre)
 
         composeRuleHolder.composeRule.waitUntil(10_000) {
-            helperPage.saveGeneratedName(tipoStandard, nombre)
-            addAlbumScreenPage.enterAlbumName(generatedName)
+            when (tipoStandard) {
+                ALBUM_STANDARD_NAME -> addAlbumScreenPage.enterAlbumName(generatedName)
+                CANCION_STANDARD_NAME -> addSongScreenPage.enterSongName(generatedName)
+                else -> throw IllegalArgumentException("Unsupported entity type: $tipoStandard")
+            }
         }
         composeRuleHolder.composeRule.waitForIdle()
     }
@@ -56,8 +69,17 @@ class AddAlbumSteps @Inject constructor(
                 addAlbumScreenPage.selectFirstRecordLabel() // First item in Record Label dropdown
                 addAlbumScreenPage.selectFirstPerformer() // First item in Performer dropdown
             }
+            "la cancion" -> {
+                addSongScreenPage.enterDuration("12:12")
+            }
             else -> throw IllegalArgumentException("Unsupported entity type: $tipo")
         }
         composeRuleHolder.composeRule.onNodeWithTag("SubmitButton").performClick()
+    }
+
+    @Then("Puede ver una cancion llamada test-e2e-cancion")
+    fun verificarCancion() {
+        val name = helperPage.getGeneratedName(CANCION_STANDARD_NAME)
+        albumDetalleScreenPage.assertSongIsInList(name)
     }
 }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.vinilosapp.ui.components.ScreenWrapper
 import com.example.vinilosapp.ui.screens.AddAlbumScreen
+import com.example.vinilosapp.ui.screens.AddSongScreen
 import com.example.vinilosapp.ui.screens.AlbumDetalleScreen
 import com.example.vinilosapp.ui.screens.AlbumesScreen
 import com.example.vinilosapp.ui.screens.ArtistasDetalleScreen
@@ -75,6 +76,13 @@ fun AppNavigation(navController: NavHostController) {
             route = Routes.ADD_ALBUM_SCREEN,
         ) {
             AddAlbumScreen()
+        }
+        composable(
+            route = Routes.ADD_SONG_SCREEN,
+            arguments = listOf(navArgument("albumId") { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val albumId = backStackEntry.arguments?.getString("albumId")
+            AddSongScreen(albumId!!)
         }
     }
 }

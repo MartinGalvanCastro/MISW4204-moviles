@@ -1,5 +1,6 @@
 package com.example.vinilosapp.services.adapters
 
+import com.example.models.TrackSimpleDTO
 import com.example.vinilosapp.models.AlbumDetail
 import com.example.vinilosapp.models.AlbumSimple
 import com.example.vinilosapp.services.api.AlbumAPI
@@ -48,6 +49,18 @@ class AlbumServiceRetrofit @Inject constructor(
             }
 
             return Result.success("Se creo el album exitosamente")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun linkTrackToAlbum(
+        albumId: String,
+        trackSimpleDTO: TrackSimpleDTO,
+    ): Result<String> {
+        return try {
+            albumAPI.linkTrackToAlbum(albumId, trackSimpleDTO)
+            Result.success("Se creo la cancion exitosamente")
         } catch (e: Exception) {
             Result.failure(e)
         }

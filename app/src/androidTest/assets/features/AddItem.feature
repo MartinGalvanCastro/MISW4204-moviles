@@ -1,4 +1,4 @@
-Feature: Add Iten
+Feature: Add Album
 
   Scenario: Agregar un album llamado test-e2e
     When Un usuario "Coleccionista" ingresa a Vinilos App

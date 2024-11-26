@@ -1,5 +1,6 @@
 package com.example.vinilosapp.services.api
 
+import com.example.models.TrackSimpleDTO
 import com.example.vinilosapp.models.AlbumDetail
 import com.example.vinilosapp.models.AlbumSimple
 import retrofit2.http.Body
@@ -23,4 +24,7 @@ interface AlbumAPI {
 
     @POST("albums/{albumId}/musicians/{bandId}")
     suspend fun linkAlbumToMusician(@Path("albumId") albumId: String, @Path("musicianId") musicianId: String)
+
+    @POST("albums/{albumId}/tracks")
+    suspend fun linkTrackToAlbum(@Path("albumId") albumId: String, @Body trackSimpleDTO: TrackSimpleDTO)
 }

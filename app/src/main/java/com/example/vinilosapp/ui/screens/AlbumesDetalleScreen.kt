@@ -22,7 +22,6 @@ import com.example.vinilosapp.ui.components.DetailDTO
 import com.example.vinilosapp.ui.components.DetailedTopBar
 import com.example.vinilosapp.ui.components.InfoSection
 import com.example.vinilosapp.ui.components.ScreenSkeleton
-import com.example.vinilosapp.utils.TipoUsuario
 import com.example.vinilosapp.viewmodel.AlbumViewModel
 
 @Composable
@@ -81,16 +80,14 @@ fun AlbumDetalleScreen(
                         )
                     }
 
-                    if (state.detail!!.tracks.isNotEmpty()) {
-                        item(key = "tracksSection") {
-                            CancionesSection(
-                                state.detail!!.tracks,
-                                TipoUsuario.INVITADO,
-                                Modifier
-                                    .fillMaxWidth()
-                                    .testTag("tracksSection"),
-                            )
-                        }
+                    item(key = "tracksSection") {
+                        CancionesSection(
+                            albumId!!,
+                            state.detail!!.tracks,
+                            Modifier
+                                .fillMaxWidth()
+                                .testTag("tracksSection"),
+                        )
                     }
 
                     if (state.detail!!.performers.isNotEmpty()) {
