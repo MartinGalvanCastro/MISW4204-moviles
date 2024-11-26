@@ -7,10 +7,8 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import com.example.vinilosapp.ui.components.TestTags
 import com.example.vinilosapp.ui.screens.ScreenTestTags
@@ -34,7 +32,6 @@ class AddAlbumScreenPage @Inject constructor(
                 .assertIsDisplayed()
                 .performClick()
             composeRule.waitUntil(timeoutMillis = 5000) {
-                composeRule.onRoot().printToLog("TAG")
                 composeRule.onNodeWithTag(ScreenTestTags.ALBUM_NAME_TEXT_FIELD)
                     .fetchSemanticsNode()
                     .config.getOrNull(SemanticsProperties.IsEditable) == true
@@ -53,7 +50,6 @@ class AddAlbumScreenPage @Inject constructor(
     }
 
     fun selectReleaseDate() {
-        // Open the date picker dialog
         composeRule.onNodeWithTag(TestTags.DATE_PICKER_TRAILING_ICON)
             .performClick()
 
@@ -65,7 +61,6 @@ class AddAlbumScreenPage @Inject constructor(
         composeRule.onNodeWithText("Today, $currentDateString", useUnmergedTree = true)
             .performClick()
 
-        // Confirm the current date selection
         composeRule.onNodeWithTag(TestTags.DATE_PICKER_CONFIRM_BUTTON)
             .performClick()
     }

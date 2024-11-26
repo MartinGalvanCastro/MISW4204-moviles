@@ -2,6 +2,7 @@ package com.example.vinilosapp.repository
 
 import com.example.models.AlbumSimpleDTO
 import com.example.models.CollectorAlbumSimpleDTO
+import com.example.models.TrackSimpleDTO
 import com.example.vinilosapp.di.Cache
 import com.example.vinilosapp.models.AlbumDetail
 import com.example.vinilosapp.models.AlbumSimple
@@ -77,5 +78,16 @@ class AlbumRepository @Inject constructor(
         }
 
         succesfulAlbums
+    }
+
+    suspend fun createSong(albumId: String, simpleDTO: TrackSimpleDTO): Result<String> {
+        return if (networkChecker.isConnected()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                clearCache()
+            }
+            albumServiceAdapter.linkTrackToAlbum(albumId, simpleDTO)
+        } else {
+            Result.failure(Exception("No internet connection"))
+        }
     }
 }
