@@ -1,7 +1,9 @@
 package com.example.vinilosapp.services.adapters
 
-import com.example.models.AlbumDetailDTO
-import com.example.models.AlbumSimpleDTO
+import com.example.vinilosapp.models.AlbumDetail
+import com.example.vinilosapp.models.AlbumSimple
+import com.example.vinilosapp.models.Genre
+import com.example.vinilosapp.models.RecordLabel
 import com.example.vinilosapp.services.api.AlbumAPI
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -36,7 +38,7 @@ class AlbumServiceRetrofitTest {
 
     @Test
     fun `Given successful response When getAllAlbums is called Then it should return a list of albums`() = runBlocking {
-        val mockAlbums = listOf(mock(AlbumSimpleDTO::class.java), mock(AlbumSimpleDTO::class.java))
+        val mockAlbums = listOf(mock(AlbumSimple::class.java), mock(AlbumSimple::class.java))
         `when`(albumAPI.getAllAlbums()).thenReturn(mockAlbums)
 
         val result = albumServiceRetrofit.getAllAlbums()
@@ -59,7 +61,7 @@ class AlbumServiceRetrofitTest {
     @Test
     fun `Given successful response When getAlbumById is called Then it should return album details`() = runBlocking {
         val albumId = "1"
-        val mockAlbumDetail = AlbumDetailDTO(
+        val mockAlbumDetail = AlbumDetail(
             id = BigDecimal(1),
             name = "Test Album",
             cover = "Test Cover",
@@ -68,6 +70,8 @@ class AlbumServiceRetrofitTest {
             performers = emptyList(),
             tracks = emptyList(),
             comments = emptyList(),
+            genre = Genre.FOLK.toString(),
+            recordLabel = RecordLabel.EMI.toString(),
         )
         `when`(albumAPI.getAlbumById(albumId)).thenReturn(mockAlbumDetail)
 
@@ -91,7 +95,7 @@ class AlbumServiceRetrofitTest {
 
     @Test
     fun `Given successful response When createAlbum is called Then it should return created album`() = runBlocking {
-        val newAlbum = mock(AlbumSimpleDTO::class.java)
+        val newAlbum = mock(AlbumSimple::class.java)
         `when`(albumAPI.createAlbum(newAlbum)).thenReturn(newAlbum)
 
         val result = albumServiceRetrofit.createAlbum(newAlbum)
@@ -102,7 +106,7 @@ class AlbumServiceRetrofitTest {
 
     @Test
     fun `Given an error response When createAlbum is called Then it should return a failure`() = runBlocking {
-        val newAlbum = mock(AlbumSimpleDTO::class.java)
+        val newAlbum = mock(AlbumSimple::class.java)
         val exception = RuntimeException("Network error")
         `when`(albumAPI.createAlbum(newAlbum)).thenThrow(exception)
 

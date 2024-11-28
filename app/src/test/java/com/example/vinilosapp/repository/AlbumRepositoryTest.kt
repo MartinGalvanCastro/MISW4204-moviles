@@ -1,8 +1,9 @@
 package com.example.vinilosapp.repository
 
 import com.example.models.AlbumDetailDTO
-import com.example.models.AlbumSimpleDTO
 import com.example.vinilosapp.di.Cache
+import com.example.vinilosapp.models.AlbumDetail
+import com.example.vinilosapp.models.AlbumSimple
 import com.example.vinilosapp.services.adapters.AlbumServiceAdapter
 import com.example.vinilosapp.utils.NetworkChecker
 import kotlinx.coroutines.runBlocking
@@ -36,8 +37,8 @@ class AlbumRepositoryTest {
     @Test
     fun `Given cached data When fetchAll is called Then it should return cached data`() {
         runBlocking {
-            val mockAlbums = listOf(mock(AlbumSimpleDTO::class.java), mock(AlbumSimpleDTO::class.java))
-            `when`(cache.getList<AlbumSimpleDTO>("list-AlbumSimpleDTO")).thenReturn(mockAlbums)
+            val mockAlbums = listOf(mock(AlbumSimple::class.java), mock(AlbumSimple::class.java))
+            `when`(cache.getList<AlbumSimple>("list-AlbumSimple")).thenReturn(mockAlbums)
 
             val result = albumRepository.fetchAll()
 
@@ -50,8 +51,8 @@ class AlbumRepositoryTest {
     @Test
     fun `Given no cached data and network success When fetchAll is called Then it should fetch from service and cache the result`() {
         runBlocking {
-            val mockAlbums = listOf(mock(AlbumSimpleDTO::class.java), mock(AlbumSimpleDTO::class.java))
-            `when`(cache.getList<AlbumSimpleDTO>("list-AlbumSimpleDTO")).thenReturn(null)
+            val mockAlbums = listOf(mock(AlbumSimple::class.java), mock(AlbumSimple::class.java))
+            `when`(cache.getList<AlbumSimple>("list-AlbumSimple")).thenReturn(null)
             `when`(networkChecker.isConnected()).thenReturn(true)
             `when`(albumServiceAdapter.getAllAlbums()).thenReturn(Result.success(mockAlbums))
 
@@ -60,14 +61,14 @@ class AlbumRepositoryTest {
             assertTrue(result.isSuccess)
             assertEquals(mockAlbums, result.getOrNull())
             verify(albumServiceAdapter).getAllAlbums()
-            verify(cache).putList("list-AlbumSimpleDTO", mockAlbums)
+            verify(cache).putList("list-AlbumSimple", mockAlbums)
         }
     }
 
     @Test
     fun `Given no network connection When fetchAll is called Then it should return network failure`() {
         runBlocking {
-            `when`(cache.getList<AlbumSimpleDTO>("list-AlbumSimpleDTO")).thenReturn(null)
+            `when`(cache.getList<AlbumSimple>("list-AlbumSimple")).thenReturn(null)
             `when`(networkChecker.isConnected()).thenReturn(false)
 
             val result = albumRepository.fetchAll()
@@ -98,8 +99,8 @@ class AlbumRepositoryTest {
         runBlocking {
             val albumId = "1"
             val detailKey = "detail-AlbumDetailDTO-1"
-            val mockAlbumDetail = mock(AlbumDetailDTO::class.java)
-            `when`(cache.getDetail<AlbumDetailDTO>(detailKey)).thenReturn(null)
+            val mockAlbumDetail = mock(AlbumDetail::class.java)
+            `when`(cache.getDetail<AlbumDetail>(detailKey)).thenReturn(null)
             `when`(networkChecker.isConnected()).thenReturn(true)
             `when`(albumServiceAdapter.getAlbumById(albumId)).thenReturn(Result.success(mockAlbumDetail))
 
@@ -129,7 +130,7 @@ class AlbumRepositoryTest {
 
     @Test
     fun `Given cached data When createAlbum is called Then cache should be cleared`() = runBlocking {
-        val newAlbum = mock(AlbumSimpleDTO::class.java)
+        val newAlbum = mock(AlbumSimple::class.java)
         `when`(networkChecker.isConnected()).thenReturn(true)
         `when`(albumServiceAdapter.createAlbum(newAlbum)).thenReturn(Result.success(newAlbum))
 
@@ -143,7 +144,7 @@ class AlbumRepositoryTest {
     @Test
     fun `Given network is connected and service success When createAlbum is called Then it should return created album`() {
         runBlocking {
-            val newAlbum = mock(AlbumSimpleDTO::class.java)
+            val newAlbum = mock(AlbumSimple::class.java)
             `when`(networkChecker.isConnected()).thenReturn(true)
             `when`(albumServiceAdapter.createAlbum(newAlbum)).thenReturn(Result.success(newAlbum))
 
@@ -157,7 +158,7 @@ class AlbumRepositoryTest {
     @Test
     fun `Given no network connection When createAlbum is called Then it should return network failure`() {
         runBlocking {
-            val newAlbum = mock(AlbumSimpleDTO::class.java)
+            val newAlbum = mock(AlbumSimple::class.java)
             `when`(networkChecker.isConnected()).thenReturn(false)
 
             val result = albumRepository.createAlbum(newAlbum)

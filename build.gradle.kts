@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.openapi.generator) apply false
     alias(libs.plugins.hilt) apply false
     id("jacoco")
+    id("com.google.gms.google-services") version "4.4.2" apply false
 }
 
 

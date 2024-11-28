@@ -5,11 +5,9 @@ import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
-import androidx.compose.ui.test.printToLog
 import com.example.vinilosapp.steps.ComposeRuleHolder
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -43,7 +41,6 @@ class AlbumDetalleScreenPage @Inject constructor(
 
     fun clickAddSong(): Boolean {
         return try {
-            composeRule.onRoot().printToLog("TAG")
             composeRule.onNodeWithTag("addSongButton").performClick()
             true
         } catch (e: AssertionError) {

@@ -2,6 +2,7 @@ package com.example.vinilosapp.viewmodel
 
 import com.example.models.CollectorDetailDTO
 import com.example.models.CollectorSimpleDTO
+import com.example.vinilosapp.repository.AlbumRepository
 import com.example.vinilosapp.repository.ColeccionistaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,6 +32,9 @@ class ColeccionistaViewModelTest {
     @Mock
     private lateinit var coleccionistaRepository: ColeccionistaRepository
 
+    @Mock
+    private lateinit var albumRepository: AlbumRepository
+
     private lateinit var coleccionistaViewModel: ColeccionistaViewModel
 
     private val testDispatcher = StandardTestDispatcher()
@@ -42,6 +46,7 @@ class ColeccionistaViewModelTest {
 
         coleccionistaViewModel = ColeccionistaViewModel(
             colecionistaRepository = coleccionistaRepository,
+            albumRepository = albumRepository,
             ioDispatcher = testDispatcher,
             defaultDispatcher = testDispatcher,
         )

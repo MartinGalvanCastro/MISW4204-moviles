@@ -1,4 +1,15 @@
-@startuml
+a@startuml
+class com.example.vinilosapp.ui.screens.ScreenTestTags {
++  ALBUM_NAME_TEXT_FIELD
++  DESCRIPTION_TEXT_FIELD
++  RELEASE_DATE_PICKER
++  GENRE_DROPDOWN
++  RECORD_LABEL_DROPDOWN
++  PERFORMER_DROPDOWN
++  CANCEL_BUTTON
++  SUBMIT_BUTTON
+}
+
 interface com.example.vinilosapp.services.api.MusicianAPI {
 + List<MusicianSimpleDTO> getMusicians()
 + MusicianDetailDTO getMusicianById(String)
@@ -10,10 +21,19 @@ class com.example.vinilosapp.config.TrustFactory {
 + Pair<SSLSocketFactory, X509TrustManager> getTrustFactoryManager(Context)
 }
 
+class com.example.vinilosapp.ui.components.TestTags {
++  DATE_PICKER_TEXT_FIELD
++  DATE_PICKER_DIALOG
++  DATE_PICKER_CONFIRM_BUTTON
++  DATE_PICKER_DISMISS_BUTTON
++  DATE_PICKER_TRAILING_ICON
+}
+
 class com.example.vinilosapp.navigation.DetailRoutePrefix {
 +  ALBUM_DETALLE_SCREEN
 +  ARTISTA_DETALLE_SCREEN
 +  BAND_DETALLE_SCREEN
++  COLECCIONISTA_DETALLE_SCREEN
 }
 
 class com.example.vinilosapp.navigation.Routes {
@@ -24,6 +44,9 @@ class com.example.vinilosapp.navigation.Routes {
 +  ALBUM_DETALLE_SCREEN
 +  ARTISTA_DETALLE_SCREEN
 +  BAND_DETALLE_SCREEN
++  COLECCIONISTA_DETALLE_SCREEN
++  ADD_ALBUM_SCREEN
++  ADD_SONG_SCREEN
 }
 
 class com.example.vinilosapp.repository.AlbumRepository {
@@ -32,15 +55,24 @@ class com.example.vinilosapp.repository.null {
 }
 class com.example.vinilosapp.repository.null {
 }
+class com.example.vinilosapp.models.AddAlbumFormState {
+}
 interface com.example.vinilosapp.services.api.AlbumAPI {
-+ List<AlbumSimpleDTO> getAllAlbums()
-+ AlbumDetailDTO getAlbumById(String)
-+ AlbumSimpleDTO createAlbum(AlbumSimpleDTO)
++ List<AlbumSimple> getAllAlbums()
++ AlbumDetail getAlbumById(String)
++ AlbumSimple createAlbum(AlbumSimple)
++ void linkAlbumToBand(String,String)
++ void linkAlbumToMusician(String,String)
++ void linkTrackToAlbum(String,TrackSimpleDTO)
 }
 
 class com.example.vinilosapp.viewmodel.ColeccionistaViewModel {
+-  _albumsState
++ StateFlow<ViewModelState<AlbumSimpleDTO, AlbumSimpleDTO>> albumsState
 + void filterCollectors(String)
++ void fetchAlbumsOfCollector(List<CollectorAlbumSimpleDTO>)
 }
+
 
 abstract class com.example.vinilosapp.repository.BaseRepository {
 - String listKey
@@ -83,6 +115,8 @@ interface com.example.vinilosapp.services.adapters.MusicianServiceAdapter {
 + Result<MusicianDetailDTO> getMusicianById(String)
 }
 
+class com.example.vinilosapp.models.AddSongFormState {
+}
 class com.example.vinilosapp.services.adapters.MusicianServiceRetrofit {
 -  musicianAPI
 + Result<List<MusicianSimpleDTO>> getMusicians()
@@ -91,10 +125,25 @@ class com.example.vinilosapp.services.adapters.MusicianServiceRetrofit {
 
 
 interface com.example.vinilosapp.services.adapters.AlbumServiceAdapter {
-+ Result<List<AlbumSimpleDTO>> getAllAlbums()
-+ Result<AlbumDetailDTO> getAlbumById(String)
-+ Result<AlbumSimpleDTO> createAlbum(AlbumSimpleDTO)
++ Result<List<AlbumSimple>> getAllAlbums()
++ Result<AlbumDetail> getAlbumById(String)
++ Result<AlbumSimple> createAlbum(AlbumSimple)
++ Result<String> linkAlbumTo(String,String,Boolean)
++ Result<String> linkTrackToAlbum(String,TrackSimpleDTO)
 }
+
+class com.example.vinilosapp.viewmodel.AddSongViewModel {
+- CoroutineDispatcher ioDispatcher
+- CoroutineDispatcher mainDispatcher
+-  defaultSong
+-  _formState
++ StateFlow<AddSongFormState> formState
++ void handleChange(AddSongFormAttribute)
+- Boolean validateDurationFormat(String)
++ void cleanForm()
++ void createSong(String)
+}
+
 
 class com.example.vinilosapp.viewmodel.MusicianViewModel {
 -  _prizesState
@@ -127,6 +176,26 @@ class com.example.vinilosapp.repository.null {
 }
 class com.example.vinilosapp.repository.null {
 }
+class com.example.vinilosapp.models.AddAlbumFormAttribute$Name {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$Cover {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$ReleaseDate {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$Description {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$Genre {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$RecordLabel {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$SelectedArtist {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$SuccessMessage {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute$ErrorMessage {
+}
+class com.example.vinilosapp.models.AddAlbumFormAttribute {
+}
 class com.example.vinilosapp.utils.NetworkChecker {
 + Boolean isConnected()
 }
@@ -146,15 +215,31 @@ class com.example.vinilosapp.services.adapters.ColecionistaServiceRetrofit {
 }
 
 
+class com.example.vinilosapp.viewmodel.AddAlbumViewModel {
+- CoroutineDispatcher ioDispatcher
+- CoroutineDispatcher mainDispatcher
+-  defaultAlbum
+-  _formState
++ StateFlow<AddAlbumFormState> formState
++ void handleChange(AddAlbumFormAttribute)
++ void cleanForm()
+- void handleErrorFetchingData()
+- void fetchArtistAndBandLists()
++ void createAlbum()
+}
+
+
 interface com.example.vinilosapp.services.adapters.PremioServiceAdapter {
 + Result<PrizeDetailDTO> getPremioById(String)
 }
 
 class com.example.vinilosapp.services.adapters.AlbumServiceRetrofit {
 -  albumAPI
-+ Result<List<AlbumSimpleDTO>> getAllAlbums()
-+ Result<AlbumDetailDTO> getAlbumById(String)
-+ Result<AlbumSimpleDTO> createAlbum(AlbumSimpleDTO)
++ Result<List<AlbumSimple>> getAllAlbums()
++ Result<AlbumDetail> getAlbumById(String)
++ Result<AlbumSimple> createAlbum(AlbumSimple)
++ Result<String> linkAlbumTo(String,String,Boolean)
++ Result<String> linkTrackToAlbum(void,String,void,TrackSimpleDTO,void)
 }
 
 
@@ -203,6 +288,13 @@ interface com.example.vinilosapp.services.api.ColeccionistaAPI {
 
 class com.example.vinilosapp.models.GridItemProps {
 }
+class com.example.vinilosapp.ui.screens.SongScreenTestTags {
++  SONG_NAME_TEXT_FIELD
++  DURATION_TEXT_FIELD
++  CANCEL_BUTTON
++  SUBMIT_BUTTON
+}
+
 class com.example.vinilosapp.VinilosApplication {
 + ImageLoader imageLoader
 + ImageLoader newImageLoader(PlatformContext)
@@ -216,6 +308,16 @@ class com.example.vinilosapp.di.ImageModule {
 }
 
 enum com.example.vinilosapp.utils.TipoUsuario {
+}
+class com.example.vinilosapp.models.AddSongFormAttribute$Name {
+}
+class com.example.vinilosapp.models.AddSongFormAttribute$Duration {
+}
+class com.example.vinilosapp.models.AddSongFormAttribute$SuccessMessage {
+}
+class com.example.vinilosapp.models.AddSongFormAttribute$ErrorMessage {
+}
+class com.example.vinilosapp.models.AddSongFormAttribute {
 }
 class com.example.vinilosapp.RoutingActivity {
 + void onCreate(Bundle?)
@@ -263,11 +365,19 @@ class com.example.vinilosapp.di.Cache {
 }
 
 
+class com.example.vinilosapp.models.AlbumDetail$Companion {
++ AlbumDetail fromDto(AlbumDetailDTO,String,String)
+}
+
+class com.example.vinilosapp.models.AlbumDetail {
+}
 class com.example.vinilosapp.ui.components.NavbarItem {
 }
 class com.example.vinilosapp.viewmodel.AlbumViewModel {
 }
 enum com.example.vinilosapp.ui.components.ImageShape {
+}
+class com.example.vinilosapp.models.AlbumSimple {
 }
 
 
@@ -276,6 +386,7 @@ com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewm
 com.example.vinilosapp.services.adapters.PremioServiceAdapter <|.. com.example.vinilosapp.services.adapters.PremioServiceRetrofit
 com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewmodel.BandViewModel
 com.example.vinilosapp.services.adapters.MusicianServiceAdapter <|.. com.example.vinilosapp.services.adapters.MusicianServiceRetrofit
+androidx.lifecycle.ViewModel <|-- com.example.vinilosapp.viewmodel.AddSongViewModel
 com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewmodel.MusicianViewModel
 com.example.vinilosapp.ui.components.DetailDTO +.. com.example.vinilosapp.ui.components.DetailDTO$AlbumDetail
 com.example.vinilosapp.ui.components.DetailDTO <|-- com.example.vinilosapp.ui.components.DetailDTO$AlbumDetail
@@ -286,7 +397,26 @@ com.example.vinilosapp.ui.components.DetailDTO <|-- com.example.vinilosapp.ui.co
 com.example.vinilosapp.ui.components.DetailDTO +.. com.example.vinilosapp.ui.components.DetailDTO$ColeccionistaDetail
 com.example.vinilosapp.ui.components.DetailDTO <|-- com.example.vinilosapp.ui.components.DetailDTO$ColeccionistaDetail
 com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.MusicianRepository
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$Name
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$Name
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$Cover
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$Cover
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$ReleaseDate
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$ReleaseDate
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$Description
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$Description
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$Genre
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$Genre
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$RecordLabel
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$RecordLabel
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$SelectedArtist
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$SelectedArtist
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$SuccessMessage
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$SuccessMessage
+com.example.vinilosapp.models.AddAlbumFormAttribute +.. com.example.vinilosapp.models.AddAlbumFormAttribute$ErrorMessage
+com.example.vinilosapp.models.AddAlbumFormAttribute <|-- com.example.vinilosapp.models.AddAlbumFormAttribute$ErrorMessage
 com.example.vinilosapp.services.adapters.ColecionistaServiceAdapter <|.. com.example.vinilosapp.services.adapters.ColecionistaServiceRetrofit
+androidx.lifecycle.ViewModel <|-- com.example.vinilosapp.viewmodel.AddAlbumViewModel
 com.example.vinilosapp.services.adapters.AlbumServiceAdapter <|.. com.example.vinilosapp.services.adapters.AlbumServiceRetrofit
 com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.ColeccionistaRepository
 com.example.vinilosapp.services.adapters.BandServiceAdapter <|.. com.example.vinilosapp.services.adapters.BandServiceRetrofit
@@ -295,8 +425,17 @@ androidx.activity.ComponentActivity <|-- com.example.vinilosapp.MainActivity
 okhttp3.Interceptor <|.. com.example.vinilosapp.di.RequestHeaderInterceptor
 android.app.Application <|-- com.example.vinilosapp.VinilosApplication
 com.example.vinilosapp.Factory <|.. com.example.vinilosapp.VinilosApplication
+com.example.vinilosapp.models.AddSongFormAttribute +.. com.example.vinilosapp.models.AddSongFormAttribute$Name
+com.example.vinilosapp.models.AddSongFormAttribute <|-- com.example.vinilosapp.models.AddSongFormAttribute$Name
+com.example.vinilosapp.models.AddSongFormAttribute +.. com.example.vinilosapp.models.AddSongFormAttribute$Duration
+com.example.vinilosapp.models.AddSongFormAttribute <|-- com.example.vinilosapp.models.AddSongFormAttribute$Duration
+com.example.vinilosapp.models.AddSongFormAttribute +.. com.example.vinilosapp.models.AddSongFormAttribute$SuccessMessage
+com.example.vinilosapp.models.AddSongFormAttribute <|-- com.example.vinilosapp.models.AddSongFormAttribute$SuccessMessage
+com.example.vinilosapp.models.AddSongFormAttribute +.. com.example.vinilosapp.models.AddSongFormAttribute$ErrorMessage
+com.example.vinilosapp.models.AddSongFormAttribute <|-- com.example.vinilosapp.models.AddSongFormAttribute$ErrorMessage
 android.app.Activity <|-- com.example.vinilosapp.RoutingActivity
 com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.BandRepository
 com.example.vinilosapp.repository.BaseRepository <|-- com.example.vinilosapp.repository.PrizeRepository
+com.example.vinilosapp.models.AlbumDetail +.. com.example.vinilosapp.models.AlbumDetail$Companion
 com.example.vinilosapp.viewmodel.BaseViewModel <|-- com.example.vinilosapp.viewmodel.AlbumViewModel
 @enduml
