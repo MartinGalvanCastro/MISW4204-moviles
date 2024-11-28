@@ -2,9 +2,9 @@ package com.example.vinilosapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.models.TrackSimpleDTO
 import com.example.vinilosapp.models.AddSongFormAttribute
 import com.example.vinilosapp.models.AddSongFormState
+import com.example.vinilosapp.models.FormsDefaults
 import com.example.vinilosapp.repository.AlbumRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -33,9 +33,7 @@ class AddSongViewModel @Inject constructor(
         this.mainDispatcher = mainDispatcher
     }
 
-    private val defaultSong = TrackSimpleDTO(name = "", duration = "")
-
-    private val _formState = MutableStateFlow(AddSongFormState(defaultSong))
+    private val _formState = MutableStateFlow(AddSongFormState(FormsDefaults.DEFAULT_SONG))
     val formState: StateFlow<AddSongFormState> = _formState
 
     // Handles changes to form attributes
@@ -69,8 +67,8 @@ class AddSongViewModel @Inject constructor(
 
     // Resets the form to its default state
     fun cleanForm() {
-        _formState.update { currentState ->
-            currentState.copy(item = defaultSong)
+        _formState.update {
+            it.copy(item = FormsDefaults.DEFAULT_SONG, successMessage = null, errorMessage = null, isValid = false)
         }
     }
 
@@ -82,19 +80,30 @@ class AddSongViewModel @Inject constructor(
             try {
                 val song = _formState.value.item
 
-                albumRepository.createSong(albumId, song).onSuccess {
+                val result = albumRepository.createSong(albumId, song)
+                result.onSuccess {
+                    // Update form state on success
                     withContext(mainDispatcher) {
                         _formState.update {
                             it.copy(
                                 successMessage = "Canción creada exitosamente",
-                                item = defaultSong,
+                                item = FormsDefaults.DEFAULT_SONG,
+                                isValid = false,
                             )
                         }
                     }
                 }.onFailure { err ->
-                    throw Exception(err.message)
+                    // Update form state on failure
+                    withContext(mainDispatcher) {
+                        _formState.update {
+                            it.copy(
+                                errorMessage = "Error al crear la canción: ${err.message}",
+                            )
+                        }
+                    }
                 }
             } catch (e: Exception) {
+                // Handle unexpected errors
                 withContext(mainDispatcher) {
                     _formState.update {
                         it.copy(

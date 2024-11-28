@@ -5,7 +5,6 @@ import com.example.vinilosapp.di.Cache
 import com.example.vinilosapp.services.adapters.PremioServiceAdapter
 import com.example.vinilosapp.utils.NetworkChecker
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
@@ -29,14 +28,15 @@ class PrizeRepository @Inject constructor(
     }
 
     suspend fun fetchPrizes(prizeIds: List<String>): List<PrizeDetailDTO> = coroutineScope {
-        val results = prizeIds.map { id ->
-            async {
-                id to fetchById(id)
-            }
-        }.awaitAll()
+        val successfulPrizes = mutableListOf<PrizeDetailDTO>()
 
-        val successfulPrizes = results.mapNotNull { (_, result) ->
-            result.getOrNull()
+        for (i in prizeIds.indices) {
+            val id = prizeIds[i]
+            val deferredResult = async {
+                fetchById(id).getOrNull()
+            }
+            // Add to the list only if the result is successful
+            deferredResult.await()?.let { successfulPrizes.add(it) }
         }
 
         successfulPrizes
