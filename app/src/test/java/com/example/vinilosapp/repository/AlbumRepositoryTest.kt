@@ -1,6 +1,5 @@
 package com.example.vinilosapp.repository
 
-import com.example.models.AlbumDetailDTO
 import com.example.vinilosapp.di.Cache
 import com.example.vinilosapp.models.AlbumDetail
 import com.example.vinilosapp.models.AlbumSimple
@@ -82,9 +81,9 @@ class AlbumRepositoryTest {
     fun `Given cached data When fetchById is called Then it should return cached data`() {
         runBlocking {
             val albumId = "1"
-            val detailKey = "detail-AlbumDetailDTO-1"
-            val mockAlbumDetail = mock(AlbumDetailDTO::class.java)
-            `when`(cache.getDetail<AlbumDetailDTO>(detailKey)).thenReturn(mockAlbumDetail)
+            val detailKey = "detail-AlbumDetail-1"
+            val mockAlbumDetail = mock(AlbumDetail::class.java)
+            `when`(cache.getDetail<AlbumDetail>(detailKey)).thenReturn(mockAlbumDetail)
 
             val result = albumRepository.fetchById(albumId)
 
@@ -98,7 +97,7 @@ class AlbumRepositoryTest {
     fun `Given no cached data and network success When fetchById is called Then it should fetch from service and cache the result`() {
         runBlocking {
             val albumId = "1"
-            val detailKey = "detail-AlbumDetailDTO-1"
+            val detailKey = "detail-AlbumDetail-1"
             val mockAlbumDetail = mock(AlbumDetail::class.java)
             `when`(cache.getDetail<AlbumDetail>(detailKey)).thenReturn(null)
             `when`(networkChecker.isConnected()).thenReturn(true)
@@ -117,8 +116,8 @@ class AlbumRepositoryTest {
     fun `Given no network connection When fetchById is called Then it should return network failure`() {
         runBlocking {
             val albumId = "1"
-            val detailKey = "detail-AlbumDetailDTO-1"
-            `when`(cache.getDetail<AlbumDetailDTO>(detailKey)).thenReturn(null)
+            val detailKey = "detail-AlbumDetail-1"
+            `when`(cache.getDetail<AlbumDetail>(detailKey)).thenReturn(null)
             `when`(networkChecker.isConnected()).thenReturn(false)
 
             val result = albumRepository.fetchById(albumId)

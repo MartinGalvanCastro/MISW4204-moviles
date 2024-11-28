@@ -1,5 +1,7 @@
 package com.example.vinilosapp.ui.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +28,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.vinilosapp.LocalAppState
@@ -39,7 +43,7 @@ import com.example.vinilosapp.viewmodel.AlbumViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 
-@OptIn(FlowPreview::class)
+@OptIn(FlowPreview::class, ExperimentalFoundationApi::class)
 @Composable
 fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
     val navController = LocalAppState.current.navController
@@ -63,9 +67,14 @@ fun AlbumesScreen(albumViewModel: AlbumViewModel = hiltViewModel()) {
             if (userType === TipoUsuario.COLECCIONISTA) {
                 ExtendedFloatingActionButton(
                     onClick = { navController.navigate(ADD_ALBUM_SCREEN) },
-                    icon = { Icon(Icons.Default.Add, "addAlbum") },
+                    icon = { Icon(Icons.Default.Add, contentDescription = null) },
                     text = { Text(text = "Agregar Album") },
-                    modifier = Modifier.testTag("addAlbumTag"),
+                    modifier = Modifier
+                        .testTag("addAlbumTag")
+                        .semantics { contentDescription = "Agregar álbum" }
+                        .combinedClickable(
+                            onClick = { navController.navigate(ADD_ALBUM_SCREEN) },
+                        ),
                 )
             }
         },
