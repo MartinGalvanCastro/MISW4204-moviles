@@ -35,11 +35,11 @@ fun CommentSection(comentarios: List<CommentSimpleDTO>, modifier: Modifier = Mod
                 Row(
                     modifier = Modifier.padding(start = 8.dp, top = 0.dp),
                 ) {
-                    repeat(comentarios[index].rating.toInt()) {
-                        Icon(Icons.Default.Star, contentDescription = "Star", tint = Color.Black)
+                    repeat(comentarios[index].rating.toInt()) { rep ->
+                        Icon(Icons.Default.Star, contentDescription = "Star-$rep", tint = Color.Black)
                     }
-                    repeat(5 - comentarios[index].rating.toInt()) {
-                        Icon(Icons.Outlined.StarBorder, contentDescription = "Empty Star", tint = Color.Black)
+                    repeat(5 - comentarios[index].rating.toInt()) { rep ->
+                        Icon(Icons.Outlined.StarBorder, contentDescription = "Empty Star - $rep", tint = Color.Black)
                     }
                 }
             }

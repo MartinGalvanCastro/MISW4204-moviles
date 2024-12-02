@@ -24,8 +24,7 @@ class AddSongScreenPage @Inject constructor(
                 .assertIsDisplayed()
                 .performTextInput(name)
             true
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             false
         }

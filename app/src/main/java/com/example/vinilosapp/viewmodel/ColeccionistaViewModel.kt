@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,22 +32,41 @@ class ColeccionistaViewModel @Inject constructor(
         this.defaultDispatcher = defaultDispatcher
     }
 
-    private val _albumsState = MutableStateFlow(ViewModelState<AlbumSimpleDTO, AlbumSimpleDTO>(isLoading = true))
+    private val _albumsState: MutableStateFlow<ViewModelState<AlbumSimpleDTO, AlbumSimpleDTO>> by lazy {
+        MutableStateFlow(ViewModelState(isLoading = true))
+    }
     val albumsState: StateFlow<ViewModelState<AlbumSimpleDTO, AlbumSimpleDTO>> = _albumsState
 
+    private fun updateAlbumsState(
+        isLoading: Boolean? = null,
+        items: List<AlbumSimpleDTO>? = null,
+        errorMessage: String? = null,
+    ) {
+        _albumsState.update { currentState ->
+            currentState.copy(
+                isLoading = isLoading ?: currentState.isLoading,
+                items = items ?: currentState.items,
+                errorMessage = errorMessage ?: currentState.errorMessage,
+            )
+        }
+    }
+
     fun filterCollectors(query: String) {
-        filterItems(query) { it.name }
+        viewModelScope.launch(defaultDispatcher) {
+            filterItems(query) { it.name }
+        }
     }
 
     fun fetchAlbumsOfCollector(albums: List<CollectorAlbumSimpleDTO>) {
         viewModelScope.launch(ioDispatcher) {
-            try {
-                _albumsState.value = _albumsState.value.copy(isLoading = true)
-                val albums = albumRepository.fetchCollectorAlbums(albums)
-                _albumsState.value = _albumsState.value.copy(items = albums, isLoading = false)
+            updateAlbumsState(isLoading = true)
+            val fetchedAlbums = try {
+                albumRepository.fetchCollectorAlbums(albums)
             } catch (e: Exception) {
-                _albumsState.value = _albumsState.value.copy(errorMessage = e.message, isLoading = false)
+                updateAlbumsState(errorMessage = e.message, isLoading = false)
+                return@launch
             }
+            updateAlbumsState(items = fetchedAlbums, isLoading = false)
         }
     }
 }

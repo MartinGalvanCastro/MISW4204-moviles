@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vinilosapp.models.AddAlbumFormAttribute
 import com.example.vinilosapp.models.AddAlbumFormState
-import com.example.vinilosapp.models.AlbumSimple
+import com.example.vinilosapp.models.FormsDefaults
 import com.example.vinilosapp.repository.AlbumRepository
 import com.example.vinilosapp.repository.BandRepository
 import com.example.vinilosapp.repository.MusicianRepository
@@ -41,17 +41,7 @@ class AddAlbumViewModel @Inject constructor(
         this.mainDispatcher = mainDispatcher
     }
 
-    private val defaultAlbum = AlbumSimple(
-        id = null,
-        name = "",
-        cover = "https://via.placeholder.com/150",
-        releaseDate = "",
-        description = "",
-        genre = "",
-        recordLabel = "",
-    )
-
-    private val _formState = MutableStateFlow(AddAlbumFormState(defaultAlbum))
+    private val _formState = MutableStateFlow(AddAlbumFormState(FormsDefaults.DEFAULT_ALBUM))
     val formState: StateFlow<AddAlbumFormState> = _formState
 
     init {
@@ -81,7 +71,6 @@ class AddAlbumViewModel @Inject constructor(
                     currentState.copy(errorMessage = attribute.value)
             }
 
-            // Determine if the form is valid
             val isFormValid = with(updatedState) {
                 item.name.isNotBlank() &&
                     item.cover.isNotBlank() &&
@@ -92,14 +81,19 @@ class AddAlbumViewModel @Inject constructor(
                     selectedArtist != null
             }
 
-            // Update the state with the new validity status
             updatedState.copy(isValid = isFormValid)
         }
     }
 
     fun cleanForm() {
-        _formState.update { currentState ->
-            currentState.copy(item = defaultAlbum)
+        _formState.update {
+            it.copy(
+                item = FormsDefaults.DEFAULT_ALBUM,
+                successMessage = null,
+                errorMessage = null,
+                selectedArtist = null,
+                isValid = false,
+            )
         }
     }
 
@@ -173,8 +167,9 @@ class AddAlbumViewModel @Inject constructor(
                     _formState.update {
                         it.copy(
                             successMessage = "Álbum creado exitosamente",
-                            item = defaultAlbum,
+                            item = FormsDefaults.DEFAULT_ALBUM,
                             selectedArtist = null,
+                            isValid = false,
                         )
                     }
                 }

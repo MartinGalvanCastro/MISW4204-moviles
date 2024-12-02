@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.hilt)
     id("kotlin-kapt")
     id("jacoco")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -236,6 +237,10 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
 
 

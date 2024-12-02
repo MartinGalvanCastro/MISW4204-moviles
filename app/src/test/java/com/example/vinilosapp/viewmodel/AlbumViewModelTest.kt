@@ -1,7 +1,7 @@
 package com.example.vinilosapp.viewmodel
 
-import com.example.models.AlbumDetailDTO
-import com.example.models.AlbumSimpleDTO
+import com.example.vinilosapp.models.AlbumDetail
+import com.example.vinilosapp.models.AlbumSimple
 import com.example.vinilosapp.repository.AlbumRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,7 +50,7 @@ class AlbumViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private suspend fun initializeViewModelWithMockAlbums(mockAlbums: List<AlbumSimpleDTO>) {
+    private suspend fun initializeViewModelWithMockAlbums(mockAlbums: List<AlbumSimple>) {
         `when`(albumRepository.fetchAll()).thenReturn(Result.success(mockAlbums))
         albumViewModel.fetchAllItems()
         testDispatcher.scheduler.advanceUntilIdle()
@@ -58,7 +58,7 @@ class AlbumViewModelTest {
 
     @Test
     fun `fetchAllItems should update items when repository succeeds`() = runBlocking {
-        val mockAlbumList = listOf(mock(AlbumSimpleDTO::class.java), mock(AlbumSimpleDTO::class.java))
+        val mockAlbumList = listOf(mock(AlbumSimple::class.java), mock(AlbumSimple::class.java))
         initializeViewModelWithMockAlbums(mockAlbumList)
 
         assertEquals(mockAlbumList, albumViewModel.state.value.filteredItems)
@@ -78,7 +78,7 @@ class AlbumViewModelTest {
     @Test
     fun `fetchDetailById should update detail when repository succeeds`() = runBlocking {
         val albumId = "1"
-        val mockAlbumDetail = mock(AlbumDetailDTO::class.java)
+        val mockAlbumDetail = mock(AlbumDetail::class.java)
         `when`(albumRepository.fetchById(albumId)).thenReturn(Result.success(mockAlbumDetail))
 
         albumViewModel.fetchDetailById(albumId)
@@ -102,7 +102,7 @@ class AlbumViewModelTest {
 
     @Test
     fun `createAlbum should set successMessage when repository succeeds`() = runBlocking {
-        val newAlbum = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Test Album") }
+        val newAlbum = mock(AlbumSimple::class.java).apply { `when`(name).thenReturn("Test Album") }
         `when`(albumRepository.createAlbum(newAlbum)).thenReturn(Result.success(newAlbum))
 
         albumViewModel.createAlbum(newAlbum)
@@ -114,7 +114,7 @@ class AlbumViewModelTest {
 
     @Test
     fun `createAlbum should set errorMessage when repository fails`() = runBlocking {
-        val newAlbum = mock(AlbumSimpleDTO::class.java)
+        val newAlbum = mock(AlbumSimple::class.java)
         `when`(albumRepository.createAlbum(newAlbum)).thenReturn(Result.failure(RuntimeException("API error")))
 
         albumViewModel.createAlbum(newAlbum)
@@ -126,8 +126,8 @@ class AlbumViewModelTest {
 
     @Test
     fun `filterAlbums should update filteredItems with matching results`() = runBlocking {
-        val album1 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album One") }
-        val album2 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album Two") }
+        val album1 = mock(AlbumSimple::class.java).apply { `when`(name).thenReturn("Album One") }
+        val album2 = mock(AlbumSimple::class.java).apply { `when`(name).thenReturn("Album Two") }
         initializeViewModelWithMockAlbums(listOf(album1, album2))
 
         albumViewModel.filterAlbums("One")
@@ -138,8 +138,8 @@ class AlbumViewModelTest {
 
     @Test
     fun `filterAlbums should update filteredItems with empty list when no match is found`() = runBlocking {
-        val album1 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album One") }
-        val album2 = mock(AlbumSimpleDTO::class.java).apply { `when`(name).thenReturn("Album Two") }
+        val album1 = mock(AlbumSimple::class.java).apply { `when`(name).thenReturn("Album One") }
+        val album2 = mock(AlbumSimple::class.java).apply { `when`(name).thenReturn("Album Two") }
         initializeViewModelWithMockAlbums(listOf(album1, album2))
 
         albumViewModel.filterAlbums("Non-existing album")
@@ -150,8 +150,8 @@ class AlbumViewModelTest {
 
     @Test
     fun `filterAlbums should update filteredItems with all items for blank query`() = runBlocking {
-        val album1 = mock(AlbumSimpleDTO::class.java)
-        val album2 = mock(AlbumSimpleDTO::class.java)
+        val album1 = mock(AlbumSimple::class.java)
+        val album2 = mock(AlbumSimple::class.java)
         initializeViewModelWithMockAlbums(listOf(album1, album2))
 
         albumViewModel.filterAlbums("")
