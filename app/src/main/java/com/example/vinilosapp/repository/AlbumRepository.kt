@@ -11,7 +11,6 @@ import com.example.vinilosapp.utils.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -57,27 +56,28 @@ class AlbumRepository @Inject constructor(
         }
     }
 
-    suspend fun fetchCollectorAlbums(collectoAlbums: List<CollectorAlbumSimpleDTO>): List<AlbumSimpleDTO> = coroutineScope {
-        val results = collectoAlbums.map { album ->
-            async {
-                album.id to fetchById("${album.id}")
-            }
-        }.awaitAll()
+    suspend fun fetchCollectorAlbums(collectorAlbums: List<CollectorAlbumSimpleDTO>): List<AlbumSimpleDTO> = coroutineScope {
+        val results = mutableListOf<AlbumSimpleDTO>()
 
-        val succesfulAlbums = results.mapNotNull { (_, result) ->
-            val detail = result.getOrNull()
-            detail?.let {
-                AlbumSimpleDTO(
-                    id = detail.id,
-                    name = detail.name,
-                    cover = it.cover,
-                    description = detail.description,
-                    releaseDate = detail.releaseDate,
-                )
+        for (i in collectorAlbums.indices) {
+            val album = collectorAlbums[i]
+            val deferredResult = async {
+                val result = fetchById("${album.id}")
+                result.getOrNull()?.let { detail ->
+                    AlbumSimpleDTO(
+                        id = detail.id,
+                        name = detail.name,
+                        cover = detail.cover,
+                        description = detail.description,
+                        releaseDate = detail.releaseDate,
+                    )
+                }
             }
+            // Only add successful results
+            deferredResult.await()?.let { results.add(it) }
         }
 
-        succesfulAlbums
+        results
     }
 
     suspend fun createSong(albumId: String, simpleDTO: TrackSimpleDTO): Result<String> {

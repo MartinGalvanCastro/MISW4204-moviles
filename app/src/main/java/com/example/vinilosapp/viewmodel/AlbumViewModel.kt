@@ -9,8 +9,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.logging.Level
-import java.util.logging.Logger
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,29 +30,30 @@ class AlbumViewModel @Inject constructor(
     private val _successMessage = MutableStateFlow<String?>(null)
     val successMessage: StateFlow<String?> = _successMessage
 
+    private fun updateSuccessMessage(message: String?) {
+        _successMessage.value = message
+    }
+
     fun createAlbum(newAlbum: AlbumSimple) {
         viewModelScope.launch(ioDispatcher) {
-            _state.value = _state.value.copy(isLoading = true)
+            updateState(isLoading = true) // Use centralized state update
 
-            Logger.getLogger("Add Album Screen").log(Level.INFO, "Repo Call")
             val result = albumRepository.createAlbum(newAlbum)
             result.onSuccess { createdAlbum ->
-                Logger.getLogger("Add Album Screen").log(Level.INFO, "Success")
-                _successMessage.value = "Album '${createdAlbum.name}' created successfully!"
-            }.onFailure {
-                Logger.getLogger("Add Album Screen").log(Level.INFO, "Fail")
-                Logger.getLogger("Add Album Screen").log(Level.INFO, it.message)
-                _state.value = _state.value.copy(
-                    errorMessage = "Error creating album: ${it.message}",
+                updateSuccessMessage("Album '${createdAlbum.name}' created successfully!")
+                updateState(isLoading = false)
+            }.onFailure { error ->
+                updateState(
+                    errorMessage = "Error creating album: ${error.message}",
                     isLoading = false,
                 )
             }
-
-            _state.value = _state.value.copy(isLoading = false)
         }
     }
 
     fun filterAlbums(query: String) {
-        filterItems(query) { it.name }
+        viewModelScope.launch(defaultDispatcher) {
+            filterItems(query) { it.name }
+        }
     }
 }
