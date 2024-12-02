@@ -25,6 +25,7 @@ import com.example.models.BandDetailDTO
 import com.example.models.CollectorDetailDTO
 import com.example.models.MusicianDetailDTO
 import com.example.vinilosapp.R
+import com.example.vinilosapp.models.AlbumDetail
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
